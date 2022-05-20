@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "546027512896",
+    "project_id": "rodland-farms",
+    "storage_bucket": "rodland-farms.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:546027512896:android:a5f0b54d3ab2da323c6ba5",
+        "android_client_info": {
+          "package_name": "com.trichain.measurement.measurement_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "546027512896-dvt4fc226man5d78vtiql7lidt0nvtjd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.trichain.measurement.measurement_app",
+            "certificate_hash": "b2a709e345bcb141af6add27753f6670aba42397"
+          }
+        },
+        {
+          "client_id": "546027512896-euuv2fhhapkarvjma21ko17mlev2jva6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8YzMMot60Nh8T4TbZBl-568zQSCjLgvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "546027512896-euuv2fhhapkarvjma21ko17mlev2jva6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

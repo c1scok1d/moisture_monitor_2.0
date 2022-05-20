@@ -43,7 +43,7 @@ class _RegisterPageState extends State<RegisterPage> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Colors.black,
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -51,7 +51,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 "Sign Up",
                 style: TextStyle(
                   fontSize: 35,
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -99,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   const Text(
                     "If you already have an Account ?",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 18,
                     ),
                   ),
@@ -115,7 +115,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       " Login",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.blue,
                         fontSize: 18,
                       ),
                     ),
@@ -180,13 +180,13 @@ class _RegisterPageState extends State<RegisterPage> {
         obscureText: obsecureText,
         style: const TextStyle(
           fontSize: 17,
-          color: Colors.white,
+          color: Colors.black,
         ),
         decoration: InputDecoration(
           labelText: name,
           labelStyle: const TextStyle(
             fontSize: 17,
-            color: Colors.white,
+            color: Colors.black,
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),

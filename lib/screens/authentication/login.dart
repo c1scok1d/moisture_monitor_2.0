@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          color: Colors.black,
+          color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
                 "Sign In",
                 style: TextStyle(
                   fontSize: 35,
-                  color: Colors.white,
+                  color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const Text(
                 "Or",
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: Colors.black, fontSize: 18),
               ),
               const SizedBox(
                 height: 10,
@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   const Text(
                     "If you don't have an Account ?",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontSize: 18,
                     ),
                   ),
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                       " Sign Up",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Colors.blue,
                         fontSize: 18,
                       ),
                     ),
@@ -107,7 +107,7 @@ class _LoginPageState extends State<LoginPage> {
                 "Forgot Password ?",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Colors.blue,
                   fontSize: 17,
                 ),
               ),

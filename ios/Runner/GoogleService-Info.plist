@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>546027512896-r6jvc12f7k2fq74h5vjo1ffqntk6h8en.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.546027512896-r6jvc12f7k2fq74h5vjo1ffqntk6h8en</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>546027512896-dvt4fc226man5d78vtiql7lidt0nvtjd.apps.googleusercontent.com</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA_mrGhOAVK9c994g7ziZ9GioExfSzAWBM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>546027512896</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.trichain.measurement.measurementApp</string>
+	<key>PROJECT_ID</key>
+	<string>rodland-farms</string>
+	<key>STORAGE_BUCKET</key>
+	<string>rodland-farms.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:546027512896:ios:57b0c1e97c6301a63c6ba5</string>
+</dict>
+</plist>
