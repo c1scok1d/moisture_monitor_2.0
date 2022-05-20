@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:measurement_app/utils/auth_service.dart';
 import 'package:otp_text_field/otp_field.dart';
 import 'package:otp_text_field/otp_field_style.dart';
@@ -20,15 +21,19 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
   AuthClass authClass = AuthClass();
   String verificationIdFinal = "";
   String smsCode = "";
+
+  var phoneNumber=PhoneNumber(isoCode: 'US');
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black87,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.black87,
+        backgroundColor: Colors.white70,
+        foregroundColor: Colors.black,
         title: const Text(
           "SignUp",
-          style: TextStyle(color: Colors.white, fontSize: 24),
+          style: TextStyle(color: Colors.black, fontSize: 24),
         ),
         centerTitle: true,
       ),
@@ -41,7 +46,7 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
               const SizedBox(
                 height: 150,
               ),
-              textField(),
+              phoneField(),
               const SizedBox(
                 height: 20,
               ),
@@ -59,7 +64,7 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
                     const Text(
                       "Enter 6 digit OTP",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     Expanded(
@@ -114,7 +119,7 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
         width: MediaQuery.of(context).size.width - 34,
         fieldWidth: 58,
         otpFieldStyle: OtpFieldStyle(
-          backgroundColor: const Color(0xff1d1d1d),
+          backgroundColor: const Color(0xffe3e3e3),
         ),
         style: const TextStyle(fontSize: 17),
         textFieldAlignment: MainAxisAlignment.spaceAround,
@@ -132,19 +137,19 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
   Widget ritchTextField() {
     return RichText(
         text: TextSpan(children: [
-          const TextSpan(
-            text: "Send OTP again in",
-            style: TextStyle(fontSize: 16, color: Colors.yellowAccent),
-          ),
-          TextSpan(
-            text: '00: $start',
-            style: const TextStyle(fontSize: 16, color: Colors.pinkAccent),
-          ),
-          const TextSpan(
-            text: "sec",
-            style: TextStyle(fontSize: 16, color: Colors.yellowAccent),
-          ),
-        ]));
+      const TextSpan(
+        text: "Send OTP again in",
+        style: TextStyle(fontSize: 16, color: Colors.black54),
+      ),
+      TextSpan(
+        text: '00: $start',
+        style: const TextStyle(fontSize: 16, color: Colors.pinkAccent),
+      ),
+      const TextSpan(
+        text: "sec",
+        style: TextStyle(fontSize: 16, color: Colors.black54),
+      ),
+    ]));
   }
 
   Widget buttonField() {
@@ -172,59 +177,81 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
     );
   }
 
-  Widget textField() {
+  Widget phoneField() {
     return Container(
-      width: MediaQuery.of(context).size.width - 40,
-      height: 60,
-      decoration: BoxDecoration(
-        color: const Color(0xff1d1d1d),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: TextFormField(
-        controller: phoneController,
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-            border: InputBorder.none,
-            hintText: "Enter your phone Number",
-            hintStyle: const TextStyle(
-              color: Colors.white,
-              fontSize: 17,
-            ),
-            contentPadding:
-            const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-            prefixIcon: const Padding(
-              padding: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-              child: Text(
-                "(+90)",
-                style: TextStyle(color: Colors.white, fontSize: 17),
+        width: MediaQuery.of(context).size.width - 40,
+        height: 60,
+        decoration: BoxDecoration(
+          color: const Color(0xffe1e1e1),
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: InternationalPhoneNumberInput(
+          validator: (String? value) {
+            if (value != null && value.isEmpty == true) {
+              return 'Please enter your phone number';
+            }
+            return null;
+          },
+          selectorConfig: SelectorConfig(
+            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+          ),
+          inputDecoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "Phone Number",
+              hintStyle: const TextStyle(
+                color: Colors.black,
+                fontSize: 17,
               ),
-            ),
-            suffixIcon: InkWell(
-              onTap: wait
-                  ? null
-                  : () async {
-                setState(() {
-                  start = 30;
-                  wait = true;
-                  buttonName = "Resend";
-                });
-                await authClass.verifyPhoneNumber(
-                    "+90${phoneController.text}", context, setData);
-              },
-              child: Padding(
-                padding:
-                const EdgeInsets.symmetric(vertical: 20, horizontal: 17),
-                child: Text(
-                  buttonName,
-                  style: TextStyle(
-                      color: wait ? Colors.grey : Colors.white,
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold),
+              contentPadding:
+              const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+              suffixIcon: InkWell(
+                onTap: wait
+                    ? null
+                    : () async {
+                  if(phoneController.text.trim().isEmpty||phoneController.text.trim().length<10) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text("Please enter your phone number"),
+                      backgroundColor: Colors.red,
+                    ));
+                    return;
+                  }
+                  print("Submitting: " + phoneController.text);
+                  setState(() {
+                    start = 30;
+                    wait = true;
+                    buttonName = "Resend";
+                  });
+                  await authClass.verifyPhoneNumber(
+                      "${phoneController.text}", context, setData);
+                },
+                child: Padding(
+                  padding:
+                  const EdgeInsets.symmetric(vertical: 20, horizontal: 17),
+                  child: Text(
+                    buttonName,
+                    style: TextStyle(
+                        color: wait ? Colors.grey : Colors.black,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
-              ),
-            )),
-      ),
-    );
+              )
+          ),
+          initialValue: phoneNumber,
+          inputBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(
+                color: Color(0xffe1e1e1), width: 5, style: BorderStyle.none),
+          ),
+          onInputChanged: (PhoneNumber value) {
+            print("OnInputChanged:"+value.phoneNumber!);
+            setState(() {
+              phoneController.text = value.phoneNumber!;
+              // phoneNumber = value;
+            });
+          },
+        )
+        );
   }
 
   void setData(String verificationId) {

@@ -1,15 +1,19 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:measurement_app/screens/home_page.dart';
 
 class AuthClass {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    scopes: [
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+  // final GoogleSignIn _googleSignIn = GoogleSignIn(
+  //   scopes: [
+  //     'email',
+  //     'https://www.googleapis.com/auth/contacts.readonly',
+  //   ],
+  // );
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   FirebaseAuth auth = FirebaseAuth.instance;
   final storage = const FlutterSecureStorage();
 
@@ -30,8 +34,22 @@ class AuthClass {
           await auth.signInWithCredential(credential);
 
           storeTokenAndData(userCredential);
-          //TODO go to homepage
+          print("Register success");
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Google Registration success"),
+            ),
+          );
         } catch (e) {
+          if (kDebugMode) {
+            print("-----------------");
+            print(e.toString());
+          }
           final snackbar = SnackBar(content: Text(e.toString()));
           ScaffoldMessenger.of(context).showSnackBar(snackbar);
         }
@@ -40,6 +58,7 @@ class AuthClass {
         ScaffoldMessenger.of(context).showSnackBar(snackbar);
       }
     } catch (e) {
+      print(e);
       final snackbar = SnackBar(content: Text(e.toString()));
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
@@ -50,6 +69,34 @@ class AuthClass {
         key: "token", value: userCredential.credential?.token.toString());
     await storage.write(
         key: "token", value: userCredential.credential?.token.toString());
+  }
+
+  Future<void> signInWithFacebook(BuildContext context) async {
+    // Trigger the sign-in flow
+    final LoginResult loginResult = await FacebookAuth.instance.login();
+
+    // Create a credential from the access token
+    final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
+
+    // Once signed in, return the UserCredential
+
+    UserCredential userCredential =
+    await auth.signInWithCredential(facebookAuthCredential);
+
+    storeTokenAndData(userCredential);
+
+    print("Facebook:Register success");
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => HomePage(),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("Facebook Registration success"),
+      ),
+    );
   }
 
   Future<String?> getToken() async {
@@ -83,6 +130,7 @@ class AuthClass {
           codeSent: codeSent,
           codeAutoRetrievalTimeout: codeAutoRetrievalTimeout);
     } catch (e) {
+      print(e);
       showSnackBar(context, e.toString());
     }
   }
@@ -92,6 +140,7 @@ class AuthClass {
       await _googleSignIn.signOut();
       await auth.signOut();
     } catch (e) {
+      print(e);
       await storage.delete(key: "token");
     }
   }
@@ -107,6 +156,7 @@ class AuthClass {
       //TODO go to homepage
       showSnackBar(context, "You are now Logged in");
     } catch (e) {
+      print(e);
       showSnackBar(context, e.toString());
     }
   }

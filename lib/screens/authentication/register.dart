@@ -70,11 +70,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         MaterialPageRoute(
                             builder: (builder) => const MobileAuthPage()));
                   }),
-                  buttonItem("assets/images/facebook.svg", "Continue with facebook", 30, () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (builder) => const MobileAuthPage()));
+                  buttonItem("assets/images/facebook.svg", "Continue with facebook", 30, () async {
+                    await authClass.signInWithFacebook(context);
                   }),
                 ],
               ),
@@ -103,7 +100,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 15,
               ),
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   const Text(
@@ -131,7 +128,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ],
-              ),
+              ),*/
             ],
           ),
         ),
