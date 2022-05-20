@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:measurement_app/screens/authentication/login.dart';
 import 'package:measurement_app/screens/authentication/mobile_auth.dart';
 import 'package:measurement_app/screens/home_page.dart';
@@ -58,19 +57,30 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 20,
               ),
-              buttonItem("assets/google.svg", "Continue with Google", 25,
-                      () async {
-                    await authClass.googleSignIn(context);
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buttonItem("assets/images/google.svg", "Continue with Google", 25,
+                          () async {
+                        await authClass.googleSignIn(context);
+                      }),
+                  buttonItem("assets/images/phone.svg", "Continue with Phone", 30, () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (builder) => const MobileAuthPage()));
                   }),
+                  buttonItem("assets/images/facebook.svg", "Continue with facebook", 30, () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (builder) => const MobileAuthPage()));
+                  }),
+                ],
+              ),
               const SizedBox(
                 height: 15,
               ),
-              buttonItem("assets/phone.svg", "Continue with Phone", 30, () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (builder) => const MobileAuthPage()));
-              }),
               const SizedBox(
                 height: 10,
               ),
@@ -134,36 +144,26 @@ class _RegisterPageState extends State<RegisterPage> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width - 60,
-        height: 60,
+        width: 100,
+        height: 100,
         child: Card(
           elevation: 8,
-          color: Colors.black,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(50),
               side: const BorderSide(
                 width: 1,
                 color: Colors.grey,
-              )),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                imagePath,
-                height: size,
-                width: size,
               ),
-              const SizedBox(
-                width: 15,
-              ),
-              Text(
-                buttonName,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                ),
-              ),
-            ],
+          ),
+
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: SvgPicture.asset(
+              imagePath,
+              width: size,
+              height: size,
+            ),
           ),
         ),
       ),

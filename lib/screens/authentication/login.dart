@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:measurement_app/screens/authentication/register.dart';
 import 'package:measurement_app/screens/home_page.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:measurement_app/utils/auth_service.dart';
 
 
@@ -43,12 +41,15 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 20,
               ),
-              buttonItem(
-                  "assets/google.svg", "Continue with Google", 25, () {}),
-              const SizedBox(
-                height: 15,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buttonItem(
+                      "assets/images/google.svg", "Continue with Google", 25, () {}),
+                  buttonItem("assets/images/phone.svg", "Continue with Phone", 30, () {}),
+                  buttonItem("assets/images/facebook.svg", "Continue with Phone", 30, () {}),
+                ],
               ),
-              buttonItem("assets/phone.svg", "Continue with Phone", 30, () {}),
               const SizedBox(
                 height: 10,
               ),
@@ -123,36 +124,26 @@ class _LoginPageState extends State<LoginPage> {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width - 60,
-        height: 60,
+        width: 100,
+        height: 100,
         child: Card(
           elevation: 8,
-          color: Colors.black,
+          color: Colors.white,
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15),
-              side: const BorderSide(
-                width: 1,
-                color: Colors.grey,
-              )),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SvgPicture.asset(
-                imagePath,
-                height: size,
-                width: size,
-              ),
-              const SizedBox(
-                width: 15,
-              ),
-              Text(
-                buttonName,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 17,
-                ),
-              ),
-            ],
+            borderRadius: BorderRadius.circular(50),
+            side: const BorderSide(
+              width: 1,
+              color: Colors.grey,
+            ),
+          ),
+
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: SvgPicture.asset(
+              imagePath,
+              width: size,
+              height: size,
+            ),
           ),
         ),
       ),
