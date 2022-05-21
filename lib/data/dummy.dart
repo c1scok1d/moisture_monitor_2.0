@@ -7,7 +7,7 @@ import 'device_record.dart';
 
 class Dummy  {
   Future<List<String>> getDevices(){
-    List<String> devices = ['3C61053EE2F4','3C61053EE2F4','3C61053EE2F4','3C61053EE2F4','3C61053EE2F4'];
+    List<String> devices = ['3C61053EE2F4','3C61053EE2F4','3C61053EE2F4','3C61053EE2F4','3C61053EE2F4','3C61053EE2F4','3C61053EE2F4','3C61053EE2F4'];
     return Future.value(devices);
   }
   Future<List<DeviceRecord>> getRecords(String deviceId) {
