@@ -4,6 +4,8 @@ import 'package:rodland_farms/data/dummy.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import 'device_details.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, this.id}) : super(key: key);
   final String? id;
@@ -62,7 +64,13 @@ class _HomePageState extends State<HomePage> {
                                       DeviceRecord record = snapshot.data!;
                                       print("ID${record.id}");
                                       print("Location${record.location}");
-                                      return Row(
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(context, MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DeviceDetailsScreen(record)));
+                                        },
+                                        child:Row(
                                           mainAxisAlignment:
                                           MainAxisAlignment.start,
                                           children: [
@@ -115,28 +123,27 @@ class _HomePageState extends State<HomePage> {
                                             Column(
                                               crossAxisAlignment:
                                               CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                               children: [
                                                 Text(
                                                   'Sensor:  ${record.sensor}',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                       fontSize: 18,
                                                       fontWeight: FontWeight.bold),
                                                 ),
                                                 Text(
                                                   '${record.temp}°F',
-                                                  style: TextStyle(
+                                                  style: const TextStyle(
                                                     fontSize: 18,
                                                   ),
                                                 ),
                                                 Text.rich(
                                                   TextSpan(
-                                                    style: TextStyle(
+                                                    style: const TextStyle(
                                                       fontSize: 18,
                                                     ),
                                                     children: [
-                                                      WidgetSpan(
+                                                      const WidgetSpan(
                                                         child: Icon(Icons
                                                             .location_on_outlined),
                                                       ),
@@ -154,7 +161,7 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ],
                                             )
-                                          ]);
+                                          ]));
                                     } else {
                                       return const Center(
                                           child: CircularProgressIndicator());

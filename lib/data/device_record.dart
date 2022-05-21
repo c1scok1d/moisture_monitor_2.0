@@ -6,6 +6,7 @@ class DeviceRecord{
   String? humid;
   String? moisture;
   String? readingTime;
+  String? name;
 
   DeviceRecord(
       {this.id,
