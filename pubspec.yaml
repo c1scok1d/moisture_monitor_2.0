@@ -48,6 +48,7 @@ dependencies:
   intl_phone_number_input: ^0.7.0+2
   syncfusion_flutter_gauges: ^20.1.56
   timeago: ^3.2.2
+  syncfusion_flutter_charts: ^20.1.56
 
 dev_dependencies:
   flutter_test:

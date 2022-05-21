@@ -1,3 +1,4 @@
+import 'package:syncfusion_flutter_charts/charts.dart';
 class DeviceRecord{
   String? id;
   String? sensor;
@@ -7,6 +8,8 @@ class DeviceRecord{
   String? moisture;
   String? readingTime;
   String? name;
+
+
 
   DeviceRecord(
       {this.id,
@@ -27,6 +30,10 @@ class DeviceRecord{
     readingTime = json['reading_time'];
   }
 
+  String getGraphTime(){
+    return DateTime.parse(readingTime!).day.toString() + ", " + DateTime.parse(readingTime!).hour.toString() + ":" + DateTime.parse(readingTime!).minute.toString();
+  }
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
@@ -37,5 +44,25 @@ class DeviceRecord{
     data['moisture'] = moisture;
     data['reading_time'] = readingTime;
     return data;
+  }
+}
+
+class ChartData{
+  List<DeviceRecord>? deviceRecords;
+
+  ChartData({this.deviceRecords});
+
+
+
+  List<SplineSeries<DeviceRecord, String>>? getSpineTempData(){
+    return <SplineSeries<DeviceRecord, String>>[
+      SplineSeries<DeviceRecord, String>(
+        dataSource: deviceRecords!,
+        xValueMapper: (DeviceRecord d, _) => d.getGraphTime(),
+        yValueMapper: (DeviceRecord d, _) => num.tryParse(d.temp!),
+        markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Temp',
+      ),
+    ];
   }
 }
