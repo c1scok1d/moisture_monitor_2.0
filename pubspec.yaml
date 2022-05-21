@@ -46,6 +46,7 @@ dependencies:
   path_provider:
   image_picker:
   intl_phone_number_input: ^0.7.0+2
+  syncfusion_flutter_gauges: ^20.1.56
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:measurement_app/screens/authentication/register.dart';
-import 'package:measurement_app/screens/home_page.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:measurement_app/utils/auth_service.dart';
+import 'package:rodland_farms/screens/authentication/register.dart';
+import 'package:rodland_farms/screens/home_page.dart';
+import 'package:rodland_farms/utils/auth_service.dart';
 
 
 class LoginPage extends StatefulWidget {

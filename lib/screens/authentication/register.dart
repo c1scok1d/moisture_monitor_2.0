@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:measurement_app/screens/authentication/login.dart';
-import 'package:measurement_app/screens/authentication/mobile_auth.dart';
-import 'package:measurement_app/screens/home_page.dart';
-import 'package:measurement_app/utils/auth_service.dart';
+import 'package:rodland_farms/screens/home_page.dart';
+import 'package:rodland_farms/utils/auth_service.dart';
+
+import 'mobile_auth.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);

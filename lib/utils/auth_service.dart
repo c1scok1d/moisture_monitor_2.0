@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:measurement_app/screens/home_page.dart';
+import 'package:rodland_farms/screens/home_page.dart';
 
 class AuthClass {
   // final GoogleSignIn _googleSignIn = GoogleSignIn(
