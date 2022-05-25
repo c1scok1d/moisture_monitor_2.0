@@ -106,11 +106,28 @@ class AuthClass {
 
     print("Facebook:Register success");
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => HomePage(),
-      ),
-    );
+    EasyLoading.show(status: 'Setting up your profile...');
+    NetworkRequests().saveDevice(userCredential.credential!.token.toString()).then((response) async {
+      if (response.success==true) {
+
+        EasyLoading.showSuccess('Loggined in');
+        //save token to shared pref
+        await storage.write(key: 'api_token', value: response.apiToken);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(),
+          ),
+        );
+      } else {
+        EasyLoading.showError('Saving was not successful');
+      }
+
+
+    }).catchError((error) {
+      EasyLoading.showError('An error occurred');
+      print(error);
+    });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text("Facebook Registration success"),
