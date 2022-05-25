@@ -144,6 +144,28 @@ class AuthClass {
     PhoneVerificationCompleted verificationCompleted =
         (PhoneAuthCredential phoneAuthCredential) async {
       showSnackBar(context, "Verification Completed");
+      EasyLoading.show(status: 'Setting up your profile...');
+      NetworkRequests().saveDevice(phoneAuthCredential.verificationId.toString()).then((response) async {
+        if (response.success==true) {
+
+          EasyLoading.showSuccess('Loggined in');
+          //save token to shared pref
+          await storage.write(key: 'api_token', value: response.apiToken);
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => HomePage(),
+            ),
+          );
+        } else {
+          EasyLoading.showError('Saving was not successful');
+        }
+
+
+      }).catchError((error) {
+        EasyLoading.showError('An error occurred');
+        print(error);
+      });
     };
     PhoneVerificationFailed verificationFailed =
         (FirebaseAuthException exception) {
