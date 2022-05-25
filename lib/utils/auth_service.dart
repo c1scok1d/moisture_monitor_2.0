@@ -38,10 +38,12 @@ class AuthClass {
           storeTokenAndData(userCredential);
           print("Register success");
           EasyLoading.show(status: 'Setting up your profile...');
-          NetworkRequests().saveDevice(userCredential.credential!.token.toString()).then((response) {
+          NetworkRequests().saveDevice(userCredential.credential!.token.toString()).then((response) async {
             if (response.success==true) {
 
               EasyLoading.showSuccess('Loggined in');
+              //save token to shared pref
+              await storage.write(key: 'api_token', value: response.apiToken);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -57,11 +59,6 @@ class AuthClass {
             EasyLoading.showError('An error occurred');
             print(error);
           });
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => HomePage(),
-            ),
-          );
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text("Google Registration success"),
