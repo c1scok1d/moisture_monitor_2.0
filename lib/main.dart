@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:rodland_farms/data/dummy.dart';
 import 'package:rodland_farms/screens/authentication/register.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
           }
         },
       ),
+      builder: EasyLoading.init(),
     );
   }
   Future<User?> getCurrentUser()  async {

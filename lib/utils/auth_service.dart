@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:rodland_farms/network/network_requests.dart';
 import 'package:rodland_farms/screens/home_page.dart';
 
 class AuthClass {
@@ -35,6 +37,26 @@ class AuthClass {
 
           storeTokenAndData(userCredential);
           print("Register success");
+          EasyLoading.show(status: 'Setting up your profile...');
+          NetworkRequests().saveDevice(userCredential.credential!.token.toString()).then((response) {
+            if (response.success==true) {
+
+              EasyLoading.showSuccess('Loggined in');
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HomePage(),
+                ),
+              );
+            } else {
+              EasyLoading.showError('Saving was not successful');
+            }
+
+
+          }).catchError((error) {
+            EasyLoading.showError('An error occurred');
+            print(error);
+          });
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => HomePage(),
