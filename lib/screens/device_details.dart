@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:rodland_farms/data/device_record.dart';
 import 'package:rodland_farms/data/dummy.dart';
+import 'package:rodland_farms/network/get_device_data_response.dart';
+import 'package:rodland_farms/network/network_requests.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
+import '../network/get_user_devices_response.dart';
+
 class DeviceDetailsScreen extends StatefulWidget {
-  late DeviceRecord deviceRecord;
+  late Devices deviceRecord;
 
   DeviceDetailsScreen(this.deviceRecord);
 
@@ -22,14 +26,14 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.deviceRecord.name!),
+        title: Text(widget.deviceRecord.hostname!),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: FutureBuilder<List<DeviceRecord>>(
-        future: Dummy().getRecords(widget.deviceRecord.name!),
+      body: FutureBuilder<GetDeviceDataResponse>(
+        future: NetworkRequests().getFullDeviceData(widget.deviceRecord.hostname!),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Column(
@@ -39,7 +43,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                   child: SfCartesianChart(
                     plotAreaBorderWidth: 0,
                     title:
-                    ChartTitle(text: 'Temp of ${widget.deviceRecord.name}'),
+                    ChartTitle(text: 'Temp of ${widget.deviceRecord.hostname}'),
                     legend: Legend(isVisible: true),
                     primaryXAxis: CategoryAxis(
                         majorGridLines: const MajorGridLines(width: 0),
@@ -51,7 +55,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                         edgeLabelPlacement: EdgeLabelPlacement.shift,
                         labelFormat: '{value}°F',
                         majorTickLines: const MajorTickLines(size: 0)),
-                    series: ChartData(deviceRecords: snapshot.data!)
+                    series: ChartData(deviceRecords: snapshot.data?.data!)
                         .getSpineTempData(),
                     tooltipBehavior: TooltipBehavior(enable: true),
                   ),

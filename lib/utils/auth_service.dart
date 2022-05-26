@@ -38,7 +38,7 @@ class AuthClass {
           storeTokenAndData(userCredential);
           print("Register success");
           EasyLoading.show(status: 'Setting up your profile...');
-          NetworkRequests().saveDevice(userCredential.credential!.token.toString()).then((response) async {
+          NetworkRequests().saveUser(userCredential.credential!.token.toString()).then((response) async {
             if (response.success==true) {
 
               EasyLoading.showSuccess('Loggined in');
@@ -52,6 +52,7 @@ class AuthClass {
               );
             } else {
               EasyLoading.showError('Saving was not successful');
+              print(response.toJson());
             }
 
 
@@ -107,7 +108,7 @@ class AuthClass {
     print("Facebook:Register success");
 
     EasyLoading.show(status: 'Setting up your profile...');
-    NetworkRequests().saveDevice(userCredential.credential!.token.toString()).then((response) async {
+    NetworkRequests().saveUser(userCredential.credential!.token.toString()).then((response) async {
       if (response.success==true) {
 
         EasyLoading.showSuccess('Loggined in');
@@ -145,7 +146,7 @@ class AuthClass {
         (PhoneAuthCredential phoneAuthCredential) async {
       showSnackBar(context, "Verification Completed");
       EasyLoading.show(status: 'Setting up your profile...');
-      NetworkRequests().saveDevice(phoneAuthCredential.verificationId.toString()).then((response) async {
+      NetworkRequests().saveUser(phoneAuthCredential.verificationId.toString()).then((response) async {
         if (response.success==true) {
 
           EasyLoading.showSuccess('Loggined in');

@@ -1,18 +1,18 @@
 class SaveDeviceResponse {
   bool? success;
-  String? apiToken;
+  String? message;
 
-  SaveDeviceResponse({this.success, this.apiToken});
+  SaveDeviceResponse({this.success, this.message});
 
   SaveDeviceResponse.fromJson(Map<String, dynamic> json) {
     success = json['success'];
-    apiToken = json['api_token'];
+    message = json['message'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['success'] = this.success;
-    data['api_token'] = this.apiToken;
+    data['message'] = this.message;
     return data;
   }
 }
