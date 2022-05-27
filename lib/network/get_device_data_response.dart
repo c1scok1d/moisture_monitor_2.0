@@ -142,6 +142,7 @@ class ChartData{
         yValueMapper: (Records d, _) => d.humidity??0,
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Humidity',
+        legendItemText: 'Humidit',
       ),
     ];
   }
