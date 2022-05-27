@@ -101,4 +101,25 @@ class ChartData{
       ),
     ];
   }
+
+  List<AreaSeries<Records, String>>? getAreaHumidData(){
+    // <ChartSeries<_ChartData, String>>[
+    //   AreaSeries<_ChartData, String>(
+    //       dataSource: data,
+    //       xValueMapper: (_ChartData data, _) => data.x,
+    //       yValueMapper: (_ChartData data, _) => data.y,
+    //       name: 'Gold',
+    //       color: Color.fromRGBO(8, 142, 255, 1))
+    // ];
+    return <AreaSeries<Records, String>>[
+      AreaSeries<Records, String>(
+        dataSource: deviceRecords!,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
+        yValueMapper: (Records d, _) => d.humidity??0,
+        markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Humidity',
+      ),
+    ];
+  }
+
 }
