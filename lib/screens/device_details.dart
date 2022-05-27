@@ -32,41 +32,77 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: FutureBuilder<GetDeviceDataResponse>(
-        future: NetworkRequests().getFullDeviceData(widget.deviceRecord.hostname!),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              children: [
-                Card(
-                  margin: const EdgeInsets.all(8),
-                  child: SfCartesianChart(
-                    plotAreaBorderWidth: 0,
-                    title:
-                    ChartTitle(text: 'Temp of ${widget.deviceRecord.hostname}'),
-                    legend: Legend(isVisible: true),
-                    primaryXAxis: CategoryAxis(
-                        majorGridLines: const MajorGridLines(width: 0),
-                        labelPlacement: LabelPlacement.onTicks),
-                    primaryYAxis: NumericAxis(
-                        minimum: 30,
-                        maximum: 80,
-                        axisLine: const AxisLine(width: 0),
-                        edgeLabelPlacement: EdgeLabelPlacement.shift,
-                        labelFormat: '{value}°F',
-                        majorTickLines: const MajorTickLines(size: 0)),
-                    series: ChartData(deviceRecords: snapshot.data?.data!)
-                        .getSpineTempData(),
-                    tooltipBehavior: TooltipBehavior(enable: true),
+      body: SingleChildScrollView(
+        child: FutureBuilder<GetDeviceDataResponse>(
+          future: NetworkRequests().getFullDeviceData(widget.deviceRecord.hostname!),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return Column(
+                children: [
+                  Card(
+                    margin: const EdgeInsets.all(8),
+                    child: SfCartesianChart(
+                      plotAreaBorderWidth: 0,
+                      title:
+                      ChartTitle(text: 'Temp of ${widget.deviceRecord.hostname}'),
+                      legend: Legend(isVisible: true),
+                      primaryXAxis: CategoryAxis(
+                          majorGridLines: const MajorGridLines(width: 0),
+                          labelPlacement: LabelPlacement.onTicks),
+                      primaryYAxis: NumericAxis(
+                          minimum: 30,
+                          maximum: 80,
+                          axisLine: const AxisLine(width: 0),
+                          edgeLabelPlacement: EdgeLabelPlacement.shift,
+                          labelFormat: '{value}°F',
+                          majorTickLines: const MajorTickLines(size: 0)),
+                      series: ChartData(deviceRecords: snapshot.data?.data!)
+                          .getSpineTempData(),
+                      tooltipBehavior: TooltipBehavior(enable: true),
+                    ),
                   ),
-                )
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Card(
+                    margin: const EdgeInsets.all(8),
+                    child: SfCartesianChart(
+                      plotAreaBorderWidth: 0,
+                      title:
+                      ChartTitle(text: 'Humidity of ${widget.deviceRecord.hostname}'),
+                      legend: Legend(isVisible: true),
+                      primaryXAxis: CategoryAxis(
+                          majorGridLines: const MajorGridLines(width: 0),
+                          labelPlacement: LabelPlacement.onTicks),
+                      primaryYAxis: NumericAxis(
+                          minimum: 0,
+                          maximum: 100,
+                          axisLine: const AxisLine(width: 0),
+                          edgeLabelPlacement: EdgeLabelPlacement.shift,
+                          labelFormat: '{value}%',
+                          majorTickLines: const MajorTickLines(size: 0)),
+                      series: ChartData(deviceRecords: snapshot.data?.data!)
+                          .getAreaHumidData(),
+                      tooltipBehavior: TooltipBehavior(enable: true),
+                    ),
+                  ),
+                  Card(
+                      margin: const EdgeInsets.all(8),
+                      child: SfCartesianChart(
+                        primaryXAxis: CategoryAxis(),
+                        primaryYAxis: NumericAxis(minimum: 0, maximum: 40, interval: 10),
+                        tooltipBehavior: TooltipBehavior(enable: true),
+                        series: ChartData(deviceRecords: snapshot.data?.data!)
+                            .getAreaHumidData(),)
+                  )
 
-              ],
-            );
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+                ],
+              );
+            } else {
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
       ),
     );
   }
