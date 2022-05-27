@@ -78,7 +78,9 @@ class Records {
     return data;
   }
   String getGraphTime(){
-    return DateTime.parse(createdAt!).day.toString() + ", " + DateTime.parse(createdAt!).hour.toString() + ":" + DateTime.parse(createdAt!).minute.toString();
+    return DateTime.parse(createdAt!).hour.toString()+":"+DateTime.parse(createdAt!).minute.toString();
+    // return DateTime.parse(createdAt!).month.toString()+"/"+DateTime.parse(createdAt!).day.toString()+"/"+DateTime.parse(createdAt!).year.toString()+"-"+DateTime.parse(createdAt!).hour.toString()+":"+DateTime.parse(createdAt!).minute.toString()+":"+DateTime.parse(createdAt!).second.toString();
+    // return DateTime.parse(createdAt!).day.toString() + ", " + DateTime.parse(createdAt!).hour.toString() + ":" + DateTime.parse(createdAt!).minute.toString();
   }
 }
 
@@ -94,8 +96,11 @@ class ChartData{
     return <SplineSeries<Records, String>>[
       SplineSeries<Records, String>(
         dataSource: deviceRecords!,
-        xValueMapper: (Records d, _) => d.getGraphTime(),
+        xValueMapper: (Records d, _) => d.createdAt,
         yValueMapper: (Records d, _) => d.temperature??0,
+        sortFieldValueMapper: (Records d, _) => d.createdAt,
+        sortingOrder: SortingOrder.ascending,
+        dataLabelMapper: (Records d, _) => d.createdAt,
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Temp',
       ),
