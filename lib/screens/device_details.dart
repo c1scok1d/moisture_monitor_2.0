@@ -55,9 +55,9 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                         legend: Legend(
                             isVisible: true,
                             overflowMode: LegendItemOverflowMode.scroll),
-                        primaryXAxis: DateTimeAxis(
+                        primaryXAxis: DateTimeCategoryAxis(
                           majorGridLines: const MajorGridLines(width: 0),
-                          dateFormat: DateFormat.Hm(),
+                          dateFormat: DateFormat('h:mm a'),
                         ),
                         primaryYAxis: NumericAxis(
                             minimum: 0,
@@ -82,9 +82,9 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                             text:
                                 'Humidity of ${widget.deviceRecord.hostname}'),
                         legend: Legend(isVisible: true),
-                        primaryXAxis: DateTimeAxis(
+                        primaryXAxis: DateTimeCategoryAxis(
                           majorGridLines: const MajorGridLines(width: 0),
-                          dateFormat: DateFormat.Hm(),
+                          dateFormat: DateFormat('h:mm a'),
                         ),
                         primaryYAxis: NumericAxis(
                             minimum: 0,

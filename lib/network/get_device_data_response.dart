@@ -77,8 +77,28 @@ class Records {
     data['updated_at'] = this.updatedAt;
     return data;
   }
-  String getGraphTime(){
-    return DateTime.parse(createdAt!).hour.toString()+":"+DateTime.parse(createdAt!).minute.toString();
+  DateTime getGraphTime(){
+    // print(createdAt!);
+    print(DateTime.parse(createdAt!).toIso8601String());
+
+
+    String isoString = DateTime.parse(createdAt!).toIso8601String(); // say "2020-08-20 01:30:00.000Z" in ISO8601 format.
+
+    // On conversion, changes to "2020-08-20 01:30:00.000"
+
+    String convertedString = isoString.replaceAll(RegExp(r'Z'), '');
+    convertedString = convertedString.replaceAll('T', ' ');
+    convertedString = convertedString.replaceAll('.000', '');
+print(convertedString);
+    // The converted timestamp string is then parsed to DateTime type and returned
+
+    // toxValueMapper
+
+    DateTime correctTime = DateTime.parse(convertedString);
+
+    return correctTime; //returned the CorrectTimestamp
+    return DateTime.parse(createdAt!);
+    // return DateTime.parse(createdAt!).hour.toString()+":"+DateTime.parse(createdAt!).minute.toString();
     // return DateTime.parse(createdAt!).month.toString()+"/"+DateTime.parse(createdAt!).day.toString()+"/"+DateTime.parse(createdAt!).year.toString()+"-"+DateTime.parse(createdAt!).hour.toString()+":"+DateTime.parse(createdAt!).minute.toString()+":"+DateTime.parse(createdAt!).second.toString();
     // return DateTime.parse(createdAt!).day.toString() + ", " + DateTime.parse(createdAt!).hour.toString() + ":" + DateTime.parse(createdAt!).minute.toString();
   }
@@ -92,22 +112,21 @@ class ChartData{
 
 
 
-  List<SplineSeries<Records, String>>? getSpineTempData(){
-    return <SplineSeries<Records, String>>[
-      SplineSeries<Records, String>(
+  List<SplineSeries<Records, DateTime>>? getSpineTempData(){
+    return <SplineSeries<Records, DateTime>>[
+      SplineSeries<Records, DateTime>(
         dataSource: deviceRecords!,
-        xValueMapper: (Records d, _) => d.createdAt,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
         yValueMapper: (Records d, _) => d.temperature??0,
         sortFieldValueMapper: (Records d, _) => d.createdAt,
         sortingOrder: SortingOrder.ascending,
-        dataLabelMapper: (Records d, _) => d.createdAt,
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Temp',
       ),
     ];
   }
 
-  List<AreaSeries<Records, String>>? getAreaHumidData(){
+  List<AreaSeries<Records, DateTime>>? getAreaHumidData(){
     // <ChartSeries<_ChartData, String>>[
     //   AreaSeries<_ChartData, String>(
     //       dataSource: data,
@@ -116,8 +135,8 @@ class ChartData{
     //       name: 'Gold',
     //       color: Color.fromRGBO(8, 142, 255, 1))
     // ];
-    return <AreaSeries<Records, String>>[
-      AreaSeries<Records, String>(
+    return <AreaSeries<Records, DateTime>>[
+      AreaSeries<Records, DateTime>(
         dataSource: deviceRecords!,
         xValueMapper: (Records d, _) => d.getGraphTime(),
         yValueMapper: (Records d, _) => d.humidity??0,
