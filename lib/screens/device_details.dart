@@ -46,76 +46,145 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                 print(snapshot.data?.data.toString());
                 return Column(
                   children: [
-                    Card(
-                      margin: const EdgeInsets.all(8),
-                      child: SfCartesianChart(
-                        plotAreaBorderWidth: 0,
-                        title: ChartTitle(
-                            text: 'Temp of ${widget.deviceRecord.hostname}'),
-                        legend: Legend(
-                            isVisible: true,
-                            position: LegendPosition.bottom,
-                            overflowMode: LegendItemOverflowMode.scroll),
-                        primaryXAxis: DateTimeCategoryAxis(
-                          majorGridLines: const MajorGridLines(width: 0),
-                          dateFormat: DateFormat('h:mm a'),
-                          // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
-                          // labelRotation: 90,
-                        ),
-                        primaryYAxis: NumericAxis(
-                            minimum: 0,
-                            maximum: 80,
-                            axisLine: const AxisLine(width: 0),
-                            edgeLabelPlacement: EdgeLabelPlacement.shift,
-                            labelFormat: '{value}°F',
-                            majorTickLines: const MajorTickLines(size: 0)),
-                        series: ChartData(deviceRecords: snapshot.data?.data!)
-                            .getSpineTempData(),
-                        tooltipBehavior: TooltipBehavior(enable: true),
+                    Visibility(
+                        visible: snapshot.data?.data != null &&
+                            snapshot.data?.data?.isNotEmpty == true &&
+                            snapshot.data?.data![0].temperature != 0,
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          child: SfCartesianChart(
+                            plotAreaBorderWidth: 0,
+                            title: ChartTitle(
+                                text:
+                                    'Temp of ${widget.deviceRecord.hostname}'),
+                            legend: Legend(
+                                isVisible: true,
+                                position: LegendPosition.bottom,
+                                overflowMode: LegendItemOverflowMode.scroll),
+                            primaryXAxis: DateTimeCategoryAxis(
+                              majorGridLines: const MajorGridLines(width: 0),
+                              dateFormat: DateFormat('h:mm a'),
+                              // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
+                              // labelRotation: 90,
+                            ),
+                            primaryYAxis: NumericAxis(
+                                minimum: 0,
+                                maximum: 80,
+                                axisLine: const AxisLine(width: 0),
+                                edgeLabelPlacement: EdgeLabelPlacement.shift,
+                                labelFormat: '{value}°F',
+                                majorTickLines: const MajorTickLines(size: 0)),
+                            series:
+                                ChartData(deviceRecords: snapshot.data?.data!)
+                                    .getSpineTempData(),
+                            tooltipBehavior: TooltipBehavior(enable: true),
+                          ),
+                        )),
+                    Visibility(
+                      visible: snapshot.data?.data != null &&
+                          snapshot.data?.data?.isNotEmpty == true &&
+                          snapshot.data?.data![0].temperature != 0,
+                      child: SizedBox(
+                        height: 20,
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Card(
-                      margin: const EdgeInsets.all(8),
-                      child: SfCartesianChart(
-                        plotAreaBorderWidth: 0,
-                        title: ChartTitle(
-                            text:
-                                'Humidity of ${widget.deviceRecord.hostname}'),
-                        legend: Legend(isVisible: true,position: LegendPosition.bottom),
-                        primaryXAxis: DateTimeCategoryAxis(
-                          majorGridLines: const MajorGridLines(width: 0),
-                          dateFormat: DateFormat('h:mm a'),
+                    Visibility(
+                      visible: snapshot.data?.data != null &&
+                          snapshot.data?.data?.isNotEmpty == true &&
+                          snapshot.data?.data![0].humidity != 0,
+                      child: Card(
+                        margin: const EdgeInsets.all(8),
+                        child: SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          title: ChartTitle(
+                              text:
+                                  'Humidity of ${widget.deviceRecord.hostname}'),
+                          legend: Legend(
+                              isVisible: true, position: LegendPosition.bottom),
+                          primaryXAxis: DateTimeCategoryAxis(
+                            majorGridLines: const MajorGridLines(width: 0),
+                            dateFormat: DateFormat('h:mm a'),
+                          ),
+                          primaryYAxis: NumericAxis(
+                              minimum: 0,
+                              maximum: (List.generate(
+                                              snapshot.data?.data?.length ?? 0,
+                                              (index) => snapshot.data?.data
+                                                  ?.elementAt(index)
+                                                  .humidity
+                                                  ?.toDouble()
+                                                  .round()).cast<num>().reduce(
+                                              max) ??
+                                          100)
+                                      .toDouble() *
+                                  1.4,
+                              axisLine: const AxisLine(width: 0),
+                              edgeLabelPlacement: EdgeLabelPlacement.shift,
+                              labelFormat: '{value}%',
+                              majorTickLines: const MajorTickLines(size: 0)),
+                          series: ChartData(deviceRecords: snapshot.data?.data!)
+                              .getAreaHumidData(),
+                          tooltipBehavior: TooltipBehavior(enable: true),
                         ),
-                        primaryYAxis: NumericAxis(
-                            minimum: 0,
-                            maximum: (List.generate(
-                                            snapshot.data?.data?.length ?? 0,
-                                            (index) => snapshot.data?.data
-                                                ?.elementAt(index)
-                                                .humidity
-                                                ?.toDouble()
-                                                .round()).cast<num>().reduce(
-                                            max) ??
-                                        100)
-                                    .toDouble() *
-                                1.4,
-                            axisLine: const AxisLine(width: 0),
-                            edgeLabelPlacement: EdgeLabelPlacement.shift,
-                            labelFormat: '{value}%',
-                            majorTickLines: const MajorTickLines(size: 0)),
-                        series: ChartData(deviceRecords: snapshot.data?.data!)
-                            .getAreaHumidData(),
-                        tooltipBehavior: TooltipBehavior(enable: true),
+                      ),
+                    ),
+                    Visibility(
+                      visible: snapshot.data?.data != null &&
+                          snapshot.data?.data?.isNotEmpty == true &&
+                          snapshot.data?.data![0].humidity != 0,
+                      child: SizedBox(
+                        height: 20,
+                      ),
+                    ),
+                    Visibility(
+                      visible: snapshot.data?.data != null &&
+                          snapshot.data?.data?.isNotEmpty == true &&
+                          snapshot.data?.data![0].vpd != 0,
+                      child: Card(
+                        margin: const EdgeInsets.all(8),
+                        child: SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          title: ChartTitle(
+                              text: 'VPD of ${widget.deviceRecord.hostname}'),
+                          legend: Legend(
+                              isVisible: true,
+                              position: LegendPosition.bottom,
+                              overflowMode: LegendItemOverflowMode.scroll),
+                          primaryXAxis: DateTimeCategoryAxis(
+                            majorGridLines: const MajorGridLines(width: 0),
+                            dateFormat: DateFormat('h:mm a'),
+                            // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
+                            // labelRotation: 90,
+                          ),
+                          primaryYAxis: NumericAxis(
+                              minimum: 0,
+                              maximum: (List.generate(
+                              snapshot.data?.data?.length ?? 0,
+              (index) => snapshot.data?.data
+                  ?.elementAt(index)
+                  .vpd
+                  ?.toDouble()
+                  .round()).cast<num>().reduce(
+              max) ??
+              100)
+                  .toDouble() *
+              1.4,
+                              axisLine: const AxisLine(width: 0),
+                              edgeLabelPlacement: EdgeLabelPlacement.shift,
+                              // labelFormat: '{value}°F',
+                              majorTickLines: const MajorTickLines(size: 0)),
+                          series: ChartData(deviceRecords: snapshot.data?.data!)
+                              .getSpineVpdData(),
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                        ),
                       ),
                     ),
                   ],
                 );
               } else {
                 return Container(
-                    height: MediaQuery.of(context).size.height,child: const Center(child: CircularProgressIndicator()));
+                    height: MediaQuery.of(context).size.height,
+                    child: const Center(child: CircularProgressIndicator()));
               }
             },
           ),

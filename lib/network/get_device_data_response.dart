@@ -34,6 +34,7 @@ class Records {
   int? temperature;
   int? humidity;
   int? moisture;
+  int? vpd;
   String? readAt;
   String? createdAt;
   String? updatedAt;
@@ -46,6 +47,7 @@ class Records {
         this.temperature,
         this.humidity,
         this.moisture,
+        this.vpd,
         this.readAt,
         this.createdAt,
         this.updatedAt});
@@ -58,6 +60,7 @@ class Records {
     temperature = json['temperature'];
     humidity = json['humidity'];
     moisture = json['moisture'];
+    vpd = json['vpd'];
     readAt = json['read_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
@@ -72,6 +75,7 @@ class Records {
     data['temperature'] = this.temperature;
     data['humidity'] = this.humidity;
     data['moisture'] = this.moisture;
+    data['vpd'] = this.vpd;
     data['read_at'] = this.readAt;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
@@ -122,6 +126,21 @@ class ChartData{
         sortingOrder: SortingOrder.ascending,
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Temp',
+      ),
+    ];
+  }
+
+
+  List<SplineSeries<Records, DateTime>>? getSpineVpdData(){
+    return <SplineSeries<Records, DateTime>>[
+      SplineSeries<Records, DateTime>(
+        dataSource: deviceRecords!,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
+        yValueMapper: (Records d, _) => d.vpd??0,
+        sortFieldValueMapper: (Records d, _) => d.createdAt,
+        sortingOrder: SortingOrder.ascending,
+        markerSettings: const MarkerSettings(isVisible: true),
+        name: 'VPD',
       ),
     ];
   }
