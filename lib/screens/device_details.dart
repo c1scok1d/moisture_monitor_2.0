@@ -58,9 +58,9 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                             overflowMode: LegendItemOverflowMode.scroll),
                         primaryXAxis: DateTimeCategoryAxis(
                           majorGridLines: const MajorGridLines(width: 0),
-                          // dateFormat: DateFormat('h:mm a'),
-                          dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
-                          labelRotation: 90,
+                          dateFormat: DateFormat('h:mm a'),
+                          // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
+                          // labelRotation: 90,
                         ),
                         primaryYAxis: NumericAxis(
                             minimum: 0,
@@ -114,7 +114,8 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                   ],
                 );
               } else {
-                return Center(child: CircularProgressIndicator());
+                return Container(
+                    height: MediaQuery.of(context).size.height,child: const Center(child: CircularProgressIndicator()));
               }
             },
           ),
