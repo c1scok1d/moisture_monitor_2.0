@@ -30,7 +30,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Container(
         color: Colors.white,
-        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        child:
+        SingleChildScrollView(
+          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           const SizedBox(height: 40),
           Stack(
             children: [
@@ -254,6 +256,7 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ]),
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

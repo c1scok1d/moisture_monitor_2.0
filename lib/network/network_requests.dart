@@ -72,6 +72,7 @@ class NetworkRequests {
   }
 
   Future<GetDeviceDataResponse> getFullDeviceData(String hostname) async {
+    // await Future.delayed(Duration(seconds: 100));
     String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
     final response = await http.get(Uri.parse(baseUrl +
         "/user/devices/" +
