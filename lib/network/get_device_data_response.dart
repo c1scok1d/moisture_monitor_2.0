@@ -41,16 +41,16 @@ class Records {
 
   Records(
       {this.id,
-        this.deviceId,
-        this.sensor,
-        this.location,
-        this.temperature,
-        this.humidity,
-        this.moisture,
-        this.vpd,
-        this.readAt,
-        this.createdAt,
-        this.updatedAt});
+      this.deviceId,
+      this.sensor,
+      this.location,
+      this.temperature,
+      this.humidity,
+      this.moisture,
+      this.vpd,
+      this.readAt,
+      this.createdAt,
+      this.updatedAt});
 
   Records.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -81,19 +81,20 @@ class Records {
     data['updated_at'] = this.updatedAt;
     return data;
   }
-  DateTime getGraphTime(){
+
+  DateTime getGraphTime() {
     // print(createdAt!);
     print(DateTime.parse(createdAt!).toIso8601String());
 
-
-    String isoString = DateTime.parse(createdAt!).toIso8601String(); // say "2020-08-20 01:30:00.000Z" in ISO8601 format.
+    String isoString = DateTime.parse(createdAt!)
+        .toIso8601String(); // say "2020-08-20 01:30:00.000Z" in ISO8601 format.
 
     // On conversion, changes to "2020-08-20 01:30:00.000"
 
     String convertedString = isoString.replaceAll(RegExp(r'Z'), '');
     convertedString = convertedString.replaceAll('T', ' ');
     convertedString = convertedString.replaceAll('.000', '');
-print(convertedString);
+    print(convertedString);
     // The converted timestamp string is then parsed to DateTime type and returned
 
     // toxValueMapper
@@ -108,20 +109,17 @@ print(convertedString);
   }
 }
 
-
-class ChartData{
+class ChartData {
   List<Records>? deviceRecords;
 
   ChartData({this.deviceRecords});
 
-
-
-  List<SplineSeries<Records, DateTime>>? getSpineTempData(){
+  List<SplineSeries<Records, DateTime>>? getSpineTempData() {
     return <SplineSeries<Records, DateTime>>[
       SplineSeries<Records, DateTime>(
         dataSource: deviceRecords!,
         xValueMapper: (Records d, _) => d.getGraphTime(),
-        yValueMapper: (Records d, _) => d.temperature??0,
+        yValueMapper: (Records d, _) => d.temperature ?? 0,
         sortFieldValueMapper: (Records d, _) => d.createdAt,
         sortingOrder: SortingOrder.ascending,
         markerSettings: const MarkerSettings(isVisible: true),
@@ -130,13 +128,12 @@ class ChartData{
     ];
   }
 
-
-  List<SplineSeries<Records, DateTime>>? getSpineVpdData(){
+  List<SplineSeries<Records, DateTime>>? getSpineVpdData() {
     return <SplineSeries<Records, DateTime>>[
       SplineSeries<Records, DateTime>(
         dataSource: deviceRecords!,
         xValueMapper: (Records d, _) => d.getGraphTime(),
-        yValueMapper: (Records d, _) => d.vpd??0,
+        yValueMapper: (Records d, _) => d.vpd ?? 0,
         sortFieldValueMapper: (Records d, _) => d.createdAt,
         sortingOrder: SortingOrder.ascending,
         markerSettings: const MarkerSettings(isVisible: true),
@@ -145,7 +142,7 @@ class ChartData{
     ];
   }
 
-  List<AreaSeries<Records, DateTime>>? getAreaHumidData(){
+  List<AreaSeries<Records, DateTime>>? getAreaHumidData() {
     // <ChartSeries<_ChartData, String>>[
     //   AreaSeries<_ChartData, String>(
     //       dataSource: data,
@@ -158,12 +155,11 @@ class ChartData{
       AreaSeries<Records, DateTime>(
         dataSource: deviceRecords!,
         xValueMapper: (Records d, _) => d.getGraphTime(),
-        yValueMapper: (Records d, _) => d.humidity??0,
+        yValueMapper: (Records d, _) => d.humidity ?? 0,
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Humidity',
         legendItemText: 'Humidit',
       ),
     ];
   }
-
 }
