@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rodland_farms/data/device_record.dart';
@@ -305,9 +306,11 @@ class _HomePageState extends State<HomePage> {
                           Navigator.of(context).pop();
                           EasyLoading.show(status: 'Adding device...');
                           NetworkRequests().saveDevice(_controller.text).then(
-                              (value) {
+                              (value) async {
                             EasyLoading.dismiss();
                             if (value.success == true) {
+                              print("Adding to firebase:");
+                              await FirebaseMessaging.instance.subscribeToTopic("host_"+_controller.text);
                               EasyLoading.showSuccess('Device added');
                               setState(() {
                                 _devices=NetworkRequests().getUserDevices();
