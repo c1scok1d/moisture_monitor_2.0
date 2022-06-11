@@ -1,10 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:rodland_farms/data/device_record.dart';
-import 'package:rodland_farms/data/dummy.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
 import 'package:rodland_farms/screens/authentication/register.dart';
