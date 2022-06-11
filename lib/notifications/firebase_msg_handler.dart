@@ -1,14 +1,17 @@
+import 'dart:ffi';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-class FirebaseMsgHandler{
-
+class FirebaseMsgHandler {
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   late AndroidNotificationChannel channel;
+
   FirebaseMsgHandler();
+
   init() async {
     await Firebase.initializeApp();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -16,34 +19,36 @@ class FirebaseMsgHandler{
       'high_importance_channel', // id
       'Gage Readings', // title
       description:
-      'This channel is used for showing when gage readings go below certain level.',
+          'This channel is used for showing when gage readings go below certain level.',
       // description
       importance: Importance.high,
     );
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
   }
-  String sampleData=
-      'data:{'
+
+  String sampleData = 'data:{'
       '"hostname":"abcd",'
       '"component":"humidity",'
       '"value":"50",'
       '"message":"2020-01-01T00:00:00.000Z"'
       '}';
+
   Future<void> onBackgroundMessage(RemoteMessage message) async {
-    print('Handling a background message ${message.messageId}: ${message.data['hostname']}');
-    if(message.data.containsKey('hostname')){
+    print(
+        'Handling a background message ${message.messageId}: ${message.data['hostname']}');
+    if (message.data.containsKey('hostname')) {
       showMessage(message);
-    }else{
+    } else {
       print('No hostname found in message');
     }
   }
 
   Future<void> showMessage(RemoteMessage message) async {
-    print('Showing message:'+message.data['hostname']);
+    print('Showing message:' + message.data['hostname']);
 
     await Firebase.initializeApp();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -51,34 +56,30 @@ class FirebaseMsgHandler{
       'high_importance_channel', // id
       'Gage Readings', // title
       description:
-      'This channel is used for showing when gage readings go below certain level.',
+          'This channel is used for showing when gage readings go below certain level.',
       // description
       importance: Importance.high,
     );
 
     await flutterLocalNotificationsPlugin
         .resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>()
+            AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null && !kIsWeb) {
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        message.data['hostname'],
-        message.data['message'],
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            icon: 'ic_launcher',
-          ),
-          iOS: IOSNotificationDetails(
-            presentBadge: true,
-            presentSound: true,
-          ),
+    flutterLocalNotificationsPlugin.show(
+      int.parse(message.data['id'].toString()),
+      message.data['hostname'],
+      message.data['message'],
+      NotificationDetails(
+        android: AndroidNotificationDetails(
+          channel.id,
+          channel.name,
+          icon: 'ic_launcher',
         ),
-      );
-    }
+        iOS: IOSNotificationDetails(
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
+    );
   }
 }

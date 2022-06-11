@@ -5,6 +5,8 @@
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
     </queries>
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
    <application
         android:label="measurement_app"
         android:name="${applicationName}"
@@ -37,5 +39,10 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+       <!-- A custom Android Notification Channel to deliver FCM notifications on a non-default channel -->
+       <meta-data
+           android:name="com.google.firebase.messaging.default_notification_channel_id"
+           android:value="high_importance_channel" />
     </application>
 </manifest>

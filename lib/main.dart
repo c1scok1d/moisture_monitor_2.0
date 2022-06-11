@@ -43,15 +43,21 @@ final BehaviorSubject<ReceivedNotification> didReceiveLocalNotificationSubject =
     BehaviorSubject<ReceivedNotification>();
 final BehaviorSubject<String?> selectNotificationSubject =
     BehaviorSubject<String?>();
-
+Future<void> onBackgroundMessage(RemoteMessage message) async {
+  print('MAIN:onBackgroundMessage: ${message.messageId}');
+  FirebaseMsgHandler().onBackgroundMessage(message);
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
 
-  FirebaseMessaging.onBackgroundMessage(
-      FirebaseMsgHandler().onBackgroundMessage);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('onMessage: $message');
+    FirebaseMsgHandler().showMessage(message);
+  });
 
+  FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
   if (!kIsWeb) {
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
@@ -119,12 +125,6 @@ Future<void> main() async {
       sound: true,
     );
   }
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('onMessage: $message');
-    FirebaseMsgHandler().showMessage(message);
-
-  });
   runApp(const MyApp());
 }
 
