@@ -1,8 +1,10 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
+import 'package:rodland_farms/network/images_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
 import 'package:rodland_farms/screens/authentication/register.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -126,147 +128,161 @@ class _HomePageState extends State<HomePage> {
                                         print("ID${record.id}");
                                         print("Location${record.image}");
                                         return InkWell(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          DeviceDetailsScreen(
-                                                              device)));
-                                            },
-                                            child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 120,
-                                                    child: SfRadialGauge(axes: <
-                                                        RadialAxis>[
-                                                      RadialAxis(
-                                                          minimum: -58,
-                                                          maximum: 134,
-                                                          ranges: <GaugeRange>[
-                                                            GaugeRange(
-                                                                startValue: -58,
-                                                                endValue: 6,
-                                                                color: Colors
-                                                                    .orange),
-                                                            GaugeRange(
-                                                                startValue: 6,
-                                                                endValue: 70,
-                                                                color: Colors
-                                                                    .green),
-                                                            GaugeRange(
-                                                                startValue: 70,
-                                                                endValue: 134,
-                                                                color:
-                                                                    Colors.red)
-                                                          ],
-                                                          pointers: <
-                                                              GaugePointer>[
-                                                            NeedlePointer(
-                                                              value: record
-                                                                      .temperature
-                                                                      ?.toDouble() ??
-                                                                  0,
-                                                              needleEndWidth: 3,
-                                                            )
-                                                          ],
-                                                          annotations: <
-                                                              GaugeAnnotation>[
-                                                            GaugeAnnotation(
-                                                                widget: Container(
-                                                                    child: Text(
-                                                                        '${record.temperature}°F',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            fontWeight: FontWeight
-                                                                                .bold))),
-                                                                angle: 90,
-                                                                positionFactor:
-                                                                    0.7)
-                                                          ]),
-                                                    ]),
-                                                  ),
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceEvenly,
-                                                    children: [
-                                                      Text(
-                                                        'Sensor:  ${record.sensor}',
-                                                        style: const TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                          onTap: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        DeviceDetailsScreen(
+                                                            device)));
+                                          },
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: SfRadialGauge(axes: <
+                                                      RadialAxis>[
+                                                    RadialAxis(
+                                                        minimum: -58,
+                                                        maximum: 134,
+                                                        ranges: <GaugeRange>[
+                                                          GaugeRange(
+                                                              startValue: -58,
+                                                              endValue: 6,
+                                                              color: Colors
+                                                                  .orange),
+                                                          GaugeRange(
+                                                              startValue: 6,
+                                                              endValue: 70,
+                                                              color:
+                                                                  Colors.green),
+                                                          GaugeRange(
+                                                              startValue: 70,
+                                                              endValue: 134,
+                                                              color: Colors.red)
+                                                        ],
+                                                        pointers: <
+                                                            GaugePointer>[
+                                                          NeedlePointer(
+                                                            value: record
+                                                                    .temperature
+                                                                    ?.toDouble() ??
+                                                                0,
+                                                            needleEndWidth: 3,
+                                                          )
+                                                        ],
+                                                        annotations: <
+                                                            GaugeAnnotation>[
+                                                          GaugeAnnotation(
+                                                              widget: Container(
+                                                                  child: Text(
+                                                                      '${record.temperature}°F',
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontWeight: FontWeight
+                                                                              .bold))),
+                                                              angle: 90,
+                                                              positionFactor:
+                                                                  0.7)
+                                                        ]),
+                                                  ]),
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  children: [
+                                                    Text(
+                                                      'Sensor:  ${record.sensor}',
+                                                      style: const TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    Text(
+                                                      '${record.temperature}°F',
+                                                      style: const TextStyle(
+                                                        fontSize: 18,
                                                       ),
-                                                      Text(
-                                                        '${record.temperature}°F',
+                                                    ),
+                                                    Text.rich(
+                                                      TextSpan(
                                                         style: const TextStyle(
                                                           fontSize: 18,
                                                         ),
-                                                      ),
-                                                      Text.rich(
-                                                        TextSpan(
-                                                          style:
-                                                              const TextStyle(
-                                                            fontSize: 18,
+                                                        children: [
+                                                          const WidgetSpan(
+                                                            child: Icon(Icons
+                                                                .location_on_outlined),
                                                           ),
-                                                          children: [
-                                                            const WidgetSpan(
-                                                              child: Icon(Icons
-                                                                  .location_on_outlined),
-                                                            ),
-                                                            TextSpan(
-                                                              text:
-                                                                  '${record.location}',
-                                                            )
-                                                          ],
+                                                          TextSpan(
+                                                            text:
+                                                                '${record.location}',
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      '${timeago.format(DateTime.parse(record.createdAt!))}',
+                                                      style: TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                  ],
+                                                ),
+                                                SizedBox(
+                                                  width: 20,
+                                                ),
+                                                record.image == null
+                                                    ? Container()
+                                                    : Card(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius.only(
+                                                                  topRight: Radius
+                                                                      .circular(
+                                                                          10),
+                                                                  bottomRight:
+                                                                      Radius.circular(
+                                                                          10)),
                                                         ),
-                                                      ),
-                                                      Text(
-                                                        '${timeago.format(DateTime.parse(record.createdAt!))}',
-                                                        style: TextStyle(
-                                                            fontSize: 18,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    width: 20,
-                                                  ),
-                                                  record.image == null
-                                                      ? Container()
-                                                      : Card(
-
-                                                      shape: RoundedRectangleBorder(
-                                                        borderRadius: BorderRadius.only(
-                                                            topRight: Radius.circular(10),
-                                                            bottomRight: Radius.circular(10)),
-
-                                                      ),
+                                                        child: GestureDetector(
+                                                          onTap: () {
+                                                            showImageDialog(
+                                                                context,
+                                                                device.hostname,
+                                                                record.image);
+                                                          },
                                                           child: SizedBox(
                                                             width: 100,
                                                             height: 130,
                                                             child:
                                                                 Image.network(
                                                               'https://athome.rodlandfarms.com/uploads/${record.image}',
-                                                              fit: BoxFit.fitHeight,
-                                                                  alignment: Alignment.centerRight,
-                                                                  colorBlendMode: BlendMode.darken,
+                                                              fit: BoxFit
+                                                                  .fitHeight,
+                                                              alignment: Alignment
+                                                                  .centerRight,
+                                                              colorBlendMode:
+                                                                  BlendMode
+                                                                      .darken,
                                                             ),
-                                                          ))
-                                                ]));
+                                                          ),
+                                                        ),
+                                                      ),
+                                              ]),
+                                        );
                                       } else {
                                         return const Center(
                                             child: CircularProgressIndicator());
@@ -363,5 +379,85 @@ class _HomePageState extends State<HomePage> {
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  void showImageDialog(BuildContext context, String? hostname, String? image) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("${hostname} Images"),
+                SizedBox(
+                  width: 10,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Icon(Icons.close),
+                ),
+              ],
+            ),
+            content: FutureBuilder<ImagesResponse>(
+                future: NetworkRequests().getAllImages(hostname!),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData &&
+                      (snapshot.data?.data!.length ?? 0 == 0) == true) {
+                    return Center(
+                      child: Text("No images"),
+                    );
+                  }
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: SizedBox(
+                        width: 100,
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
+                  return SingleChildScrollView(
+                      child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.6,
+                    child: CarouselSlider(
+                        items: snapshot.data?.data?.map((i) {
+                          print("Name:${i.name}");
+                          return Builder(
+                            builder: (BuildContext context) {
+                              return Container(
+                                height: MediaQuery.of(context).size.height * 0.6,
+                                width:
+                                    MediaQuery.of(context).size.width*0.7,
+                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                child: Image.network(
+                                  'https://athome.rodlandfarms.com/uploads/${i.name}',
+                                  fit: BoxFit.fitHeight,
+                                ),
+                              );
+                            },
+                          );
+                        }).toList(),
+                        options: CarouselOptions(
+                          /*height: 100,
+                      aspectRatio: 16/9,*/
+                          viewportFraction: 0.8,
+                          initialPage: 0,
+                          enableInfiniteScroll: false,
+                          reverse: false,
+                          autoPlay: true,
+                          autoPlayInterval: Duration(seconds: 3),
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 800),
+                          autoPlayCurve: Curves.fastOutSlowIn,
+                          enlargeCenterPage: true,
+                          scrollDirection: Axis.horizontal,
+                        ),),
+                  ),);
+                }),
+          );
+        });
   }
 }

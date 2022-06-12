@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rodland_farms/network/get_user_devices_response.dart';
+import 'package:rodland_farms/network/images_response.dart';
 import 'package:rodland_farms/network/save_device_response.dart';
 import 'package:rodland_farms/network/save_user_response.dart';
 import 'package:http/http.dart' as http;
@@ -88,6 +89,29 @@ class NetworkRequests {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       return GetDeviceDataResponse(
+        success: false,
+        data: [],
+      );
+    }
+  }
+
+  Future<ImagesResponse> getAllImages(String hostname) async {
+    // await Future.delayed(Duration(seconds: 100));
+    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
+    final response = await http.get(Uri.parse(baseUrl +
+        "/user/" +
+        hostname +
+        "/images?api_token=" +
+        apiToken!));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return ImagesResponse.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      return ImagesResponse(
         success: false,
         data: [],
       );
