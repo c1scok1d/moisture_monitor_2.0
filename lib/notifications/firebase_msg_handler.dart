@@ -48,7 +48,7 @@ class FirebaseMsgHandler {
   }
 
   Future<void> showMessage(RemoteMessage message) async {
-    print('Showing message:' + message.data['hostname']);
+    print('Showing message:' + message.data['id']);
 
     await Firebase.initializeApp();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -65,8 +65,14 @@ class FirebaseMsgHandler {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(channel);
+    var id = 0;
+    if((message.data['id'].contains('.'))){
+      id = int.parse(message.data['id'].split('.')[0]);
+    } else {
+      id = int.parse(message.data['id']);
+    }
     flutterLocalNotificationsPlugin.show(
-      int.parse(message.data['id'].toString()),
+      id,
       message.data['hostname'],
       message.data['message'],
       NotificationDetails(
