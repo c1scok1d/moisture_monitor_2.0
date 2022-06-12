@@ -38,6 +38,7 @@ class Records {
   String? readAt;
   String? createdAt;
   String? updatedAt;
+  String? image;
 
   Records(
       {this.id,
@@ -50,7 +51,8 @@ class Records {
       this.vpd,
       this.readAt,
       this.createdAt,
-      this.updatedAt});
+      this.updatedAt,
+      this.image});
 
   Records.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -64,6 +66,7 @@ class Records {
     readAt = json['read_at'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    image = json['image'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +82,7 @@ class Records {
     data['read_at'] = this.readAt;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['image'] = this.image;
     return data;
   }
 

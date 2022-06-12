@@ -20,7 +20,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  var _devices=NetworkRequests().getUserDevices();
+  var _devices = NetworkRequests().getUserDevices();
 
   @override
   Widget build(BuildContext context) {
@@ -28,237 +28,269 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Container(
         color: Colors.white,
-        child:
-        SingleChildScrollView(
+        child: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-          const SizedBox(height: 40),
-          Stack(
-            children: [
-              Center(
-                child: const CircleAvatar(
-                  radius: 50,
-                ),
-              ),
-              Align(
-                alignment: Alignment.topRight,
-                child: Container(
-                  margin: const EdgeInsets.only(right: 20, top: 20),
-                  child: GestureDetector(
-                    onTap: () async {
-                      //logout()
-                      await FirebaseAuth.instance.signOut();
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (context) => RegisterPage(),
-                        ),
-                      );
-                    },
-                    child: const Icon(
-                      Icons.logout,
-                      size: 30,
-                    ),
+            const SizedBox(height: 40),
+            Stack(
+              children: [
+                Center(
+                  child: const CircleAvatar(
+                    radius: 50,
                   ),
                 ),
-              )
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          const Text(
-            "Hello Rodland Farmer,\nWelcome to your dashboard",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Container(
-            color: Colors.grey[200],
-            height: MediaQuery.of(context).size.height - 250,
-            child: FutureBuilder<GetUserDeviceResponse>(
-              future: _devices,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data?.devices?.isEmpty == true) {
-                    return Center(
-                      child: const Text(
-                        "You have no devices",
-                        style: TextStyle(fontSize: 20),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    margin: const EdgeInsets.only(right: 20, top: 20),
+                    child: GestureDetector(
+                      onTap: () async {
+                        //logout()
+                        await FirebaseAuth.instance.signOut();
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (context) => RegisterPage(),
+                          ),
+                        );
+                      },
+                      child: const Icon(
+                        Icons.logout,
+                        size: 30,
                       ),
-                    );
-                  }
-                  return ListView.builder(
-                    itemCount: snapshot.data?.devices?.length ?? 0,
-                    padding: const EdgeInsets.all(8),
-                    itemBuilder: (context, index) {
-                      print("List<String>:" + snapshot.connectionState.name);
-                      if (snapshot.hasData) {
-                        Devices device = snapshot.data!.devices![index];
-                        return Container(
-                            height: 130,
-                            child: Card(
-                              child: FutureBuilder<GetDeviceDataResponse>(
-                                  future: NetworkRequests()
-                                      .getLatestDeviceData(device.hostname!),
-                                  builder: (context, snapshot) {
-                                    print("DeviceRecord:" +
-                                        snapshot.connectionState.name);
-                                    if (snapshot.hasData) {
-                                      if (snapshot.data?.data?.isEmpty ==
-                                          true) {
-                                        return Center(
-                                          child: const Text(
-                                            "No data available",
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        );
-                                      }
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            const Text(
+              "Hello Rodland Farmer,\nWelcome to your dashboard",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.normal,
+              ),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Container(
+              color: Colors.grey[200],
+              height: MediaQuery.of(context).size.height - 250,
+              child: FutureBuilder<GetUserDeviceResponse>(
+                future: _devices,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data?.devices?.isEmpty == true) {
+                      return Center(
+                        child: const Text(
+                          "You have no devices",
+                          style: TextStyle(fontSize: 20),
+                        ),
+                      );
+                    }
+                    return ListView.builder(
+                      itemCount: snapshot.data?.devices?.length ?? 0,
+                      padding: const EdgeInsets.all(8),
+                      itemBuilder: (context, index) {
+                        print("List<String>:" + snapshot.connectionState.name);
+                        if (snapshot.hasData) {
+                          Devices device = snapshot.data!.devices![index];
+                          return Container(
+                              height: 130,
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: FutureBuilder<GetDeviceDataResponse>(
+                                    future: NetworkRequests()
+                                        .getLatestDeviceData(device.hostname!),
+                                    builder: (context, snapshot) {
+                                      print("DeviceRecord:" +
+                                          snapshot.connectionState.name);
+                                      if (snapshot.hasData) {
+                                        if (snapshot.data?.data?.isEmpty ==
+                                            true) {
+                                          return Center(
+                                            child: const Text(
+                                              "No data available",
+                                              style: TextStyle(fontSize: 20),
+                                            ),
+                                          );
+                                        }
 
-                                      Records record = snapshot.data!.data![0];
+                                        Records record =
+                                            snapshot.data!.data![0];
 
-                                      print("ID${record.id}");
-                                      print("Location${record.location}");
-                                      return InkWell(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        DeviceDetailsScreen(
-                                                            device)));
-                                          },
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  width: 120,
-                                                  child: SfRadialGauge(axes: <
-                                                      RadialAxis>[
-                                                    RadialAxis(
-                                                        minimum: -58,
-                                                        maximum: 134,
-                                                        ranges: <GaugeRange>[
-                                                          GaugeRange(
-                                                              startValue: -58,
-                                                              endValue: 6,
-                                                              color: Colors
-                                                                  .orange),
-                                                          GaugeRange(
-                                                              startValue: 6,
-                                                              endValue: 70,
-                                                              color:
-                                                                  Colors.green),
-                                                          GaugeRange(
-                                                              startValue: 70,
-                                                              endValue: 134,
-                                                              color: Colors.red)
-                                                        ],
-                                                        pointers: <
-                                                            GaugePointer>[
-                                                          NeedlePointer(
-                                                            value: record
-                                                                    .temperature
-                                                                    ?.toDouble() ??
-                                                                0,
-                                                            needleEndWidth: 3,
-                                                          )
-                                                        ],
-                                                        annotations: <
-                                                            GaugeAnnotation>[
-                                                          GaugeAnnotation(
-                                                              widget: Container(
-                                                                  child: Text(
-                                                                      '${record.temperature}°F',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          fontWeight: FontWeight
-                                                                              .bold))),
-                                                              angle: 90,
-                                                              positionFactor:
-                                                                  0.7)
-                                                        ]),
-                                                  ]),
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  children: [
-                                                    Text(
-                                                      'Sensor:  ${record.sensor}',
-                                                      style: const TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                    Text(
-                                                      '${record.temperature}°F',
-                                                      style: const TextStyle(
-                                                        fontSize: 18,
+                                        print("ID${record.id}");
+                                        print("Location${record.image}");
+                                        return InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          DeviceDetailsScreen(
+                                                              device)));
+                                            },
+                                            child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceBetween,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 120,
+                                                    child: SfRadialGauge(axes: <
+                                                        RadialAxis>[
+                                                      RadialAxis(
+                                                          minimum: -58,
+                                                          maximum: 134,
+                                                          ranges: <GaugeRange>[
+                                                            GaugeRange(
+                                                                startValue: -58,
+                                                                endValue: 6,
+                                                                color: Colors
+                                                                    .orange),
+                                                            GaugeRange(
+                                                                startValue: 6,
+                                                                endValue: 70,
+                                                                color: Colors
+                                                                    .green),
+                                                            GaugeRange(
+                                                                startValue: 70,
+                                                                endValue: 134,
+                                                                color:
+                                                                    Colors.red)
+                                                          ],
+                                                          pointers: <
+                                                              GaugePointer>[
+                                                            NeedlePointer(
+                                                              value: record
+                                                                      .temperature
+                                                                      ?.toDouble() ??
+                                                                  0,
+                                                              needleEndWidth: 3,
+                                                            )
+                                                          ],
+                                                          annotations: <
+                                                              GaugeAnnotation>[
+                                                            GaugeAnnotation(
+                                                                widget: Container(
+                                                                    child: Text(
+                                                                        '${record.temperature}°F',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontWeight: FontWeight
+                                                                                .bold))),
+                                                                angle: 90,
+                                                                positionFactor:
+                                                                    0.7)
+                                                          ]),
+                                                    ]),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      Text(
+                                                        'Sensor:  ${record.sensor}',
+                                                        style: const TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
                                                       ),
-                                                    ),
-                                                    Text.rich(
-                                                      TextSpan(
+                                                      Text(
+                                                        '${record.temperature}°F',
                                                         style: const TextStyle(
                                                           fontSize: 18,
                                                         ),
-                                                        children: [
-                                                          const WidgetSpan(
-                                                            child: Icon(Icons
-                                                                .location_on_outlined),
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                '${record.location}',
-                                                          )
-                                                        ],
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      '${timeago.format(DateTime.parse(record.createdAt!))}',
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                    ),
-                                                  ],
-                                                )
-                                              ]));
-                                    } else {
-                                      return const Center(
-                                          child: CircularProgressIndicator());
-                                    }
-                                  }),
-                            ));
-                      } else {
-                        print("No data");
-                        return Container();
-                      }
-                    },
-                  );
-                } else {
-                  return Center(child: CircularProgressIndicator());
-                }
-              },
+                                                      Text.rich(
+                                                        TextSpan(
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 18,
+                                                          ),
+                                                          children: [
+                                                            const WidgetSpan(
+                                                              child: Icon(Icons
+                                                                  .location_on_outlined),
+                                                            ),
+                                                            TextSpan(
+                                                              text:
+                                                                  '${record.location}',
+                                                            )
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        '${timeago.format(DateTime.parse(record.createdAt!))}',
+                                                        style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  SizedBox(
+                                                    width: 20,
+                                                  ),
+                                                  record.image == null
+                                                      ? Container()
+                                                      : Card(
+
+                                                      shape: RoundedRectangleBorder(
+                                                        borderRadius: BorderRadius.only(
+                                                            topRight: Radius.circular(10),
+                                                            bottomRight: Radius.circular(10)),
+
+                                                      ),
+                                                          child: SizedBox(
+                                                            width: 100,
+                                                            height: 130,
+                                                            child:
+                                                                Image.network(
+                                                              'https://athome.rodlandfarms.com/uploads/${record.image}',
+                                                              fit: BoxFit.fitHeight,
+                                                                  alignment: Alignment.centerRight,
+                                                                  colorBlendMode: BlendMode.darken,
+                                                            ),
+                                                          ))
+                                                ]));
+                                      } else {
+                                        return const Center(
+                                            child: CircularProgressIndicator());
+                                      }
+                                    }),
+                              ));
+                        } else {
+                          print("No data");
+                          return Container();
+                        }
+                      },
+                    );
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
             ),
-          ),
-        ]),
+          ]),
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          var _controller=TextEditingController();
+          var _controller = TextEditingController();
           //create dialog
           showDialog(
               context: context,
@@ -302,15 +334,17 @@ class _HomePageState extends State<HomePage> {
                         } else {
                           Navigator.of(context).pop();
                           EasyLoading.show(status: 'Adding device...');
-                          NetworkRequests().saveDevice(_controller.text).then(
-                              (value) async {
+                          NetworkRequests()
+                              .saveDevice(_controller.text)
+                              .then((value) async {
                             EasyLoading.dismiss();
                             if (value.success == true) {
                               print("Adding to firebase:");
-                              await FirebaseMessaging.instance.subscribeToTopic("host_"+_controller.text);
+                              await FirebaseMessaging.instance
+                                  .subscribeToTopic("host_" + _controller.text);
                               EasyLoading.showSuccess('Device added');
                               setState(() {
-                                _devices=NetworkRequests().getUserDevices();
+                                _devices = NetworkRequests().getUserDevices();
                               });
                             } else {
                               EasyLoading.showError('Error adding device');
@@ -319,7 +353,6 @@ class _HomePageState extends State<HomePage> {
                             EasyLoading.dismiss();
                             EasyLoading.showError('Error adding device');
                           });
-
                         }
                       },
                     )
