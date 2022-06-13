@@ -414,7 +414,7 @@ class _HomePageState extends State<HomePage> {
                     return Center(
                       child: SizedBox(
                         width: 100,
-                        height: MediaQuery.of(context).size.height * 0.6,
+                        height: 100,
                         child: CircularProgressIndicator(),
                       ),
                     );

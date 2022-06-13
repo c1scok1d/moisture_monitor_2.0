@@ -45,5 +45,19 @@
 	<false/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
+	<!-- Google Sign-in Section -->
+    <key>CFBundleURLTypes</key>
+    <array>
+    	<dict>
+    		<key>CFBundleTypeRole</key>
+    		<string>Editor</string>
+    		<key>CFBundleURLSchemes</key>
+    		<array>
+    			<!-- Copied from GoogleService-Info.plist key REVERSED_CLIENT_ID -->
+    			<string>com.googleusercontent.apps.546027512896-r6jvc12f7k2fq74h5vjo1ffqntk6h8en</string>
+    		</array>
+    	</dict>
+    </array>
+    <!-- End of the Google Sign-in Section -->
 </dict>
 </plist>
