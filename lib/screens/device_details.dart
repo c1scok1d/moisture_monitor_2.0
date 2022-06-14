@@ -81,7 +81,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                                   1.4,
                               axisLine: const AxisLine(width: 0),
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
-                              // labelFormat: '{value}°F',
+                              labelFormat: '{value}%',
                               majorTickLines: const MajorTickLines(size: 0)),
                           series: ChartData(deviceRecords: snapshot.data?.data!)
                               .getSpineMoistureData(),
