@@ -28,10 +28,12 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    if (FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser?.displayName?.isNotEmpty == true) {
+    if (FirebaseAuth.instance.currentUser != null &&
+        FirebaseAuth.instance.currentUser?.displayName?.isNotEmpty == true) {
       name = (FirebaseAuth.instance.currentUser?.displayName)!;
     }
-    if(FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser?.photoURL?.isNotEmpty == true){
+    if (FirebaseAuth.instance.currentUser != null &&
+        FirebaseAuth.instance.currentUser?.photoURL?.isNotEmpty == true) {
       _profileImage = (FirebaseAuth.instance.currentUser?.photoURL)!;
     }
     print("HomePage: ${widget.id}");
@@ -44,9 +46,11 @@ class _HomePageState extends State<HomePage> {
             Stack(
               children: [
                 Center(
-                  child:  CircleAvatar(
+                  child: CircleAvatar(
                     radius: 50,
-                    backgroundImage: NetworkImage(_profileImage==""?"https://www.shareicon.net/download/128x128//2016/07/26/802016_man_512x512.png":_profileImage),
+                    backgroundImage: NetworkImage(_profileImage == ""
+                        ? "https://www.shareicon.net/download/128x128//2016/07/26/802016_man_512x512.png"
+                        : _profileImage),
                   ),
                 ),
                 Align(
@@ -146,63 +150,68 @@ class _HomePageState extends State<HomePage> {
                                                             device)));
                                           },
                                           child: Row(
-                                              mainAxisAlignment:
+                                              /*mainAxisAlignment:
                                                   MainAxisAlignment
-                                                      .spaceBetween,
+                                                      .spaceBetween,*/
+
                                               children: [
-                                                SizedBox(
-                                                  width: 120,
-                                                  child: SfRadialGauge(axes: <
-                                                      RadialAxis>[
-                                                    RadialAxis(
-                                                        minimum: -58,
-                                                        maximum: 134,
-                                                        ranges: <GaugeRange>[
-                                                          GaugeRange(
-                                                              startValue: -58,
-                                                              endValue: 6,
-                                                              color: Colors
-                                                                  .orange),
-                                                          GaugeRange(
-                                                              startValue: 6,
-                                                              endValue: 70,
-                                                              color:
-                                                                  Colors.green),
-                                                          GaugeRange(
-                                                              startValue: 70,
-                                                              endValue: 134,
-                                                              color: Colors.red)
-                                                        ],
-                                                        pointers: <
-                                                            GaugePointer>[
-                                                          NeedlePointer(
-                                                            value: record
-                                                                    .temperature
-                                                                    ?.toDouble() ??
-                                                                0,
-                                                            needleEndWidth: 3,
-                                                          )
-                                                        ],
-                                                        annotations: <
-                                                            GaugeAnnotation>[
-                                                          GaugeAnnotation(
-                                                              widget: Container(
-                                                                  child: Text(
-                                                                      '${record.temperature}°F',
-                                                                      style: TextStyle(
-                                                                          fontSize:
-                                                                              12,
-                                                                          fontWeight: FontWeight
-                                                                              .bold))),
-                                                              angle: 90,
-                                                              positionFactor:
-                                                                  0.7)
-                                                        ]),
-                                                  ]),
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: SizedBox(
+                                                    width: 120,
+                                                    child: SfRadialGauge(axes: <
+                                                        RadialAxis>[
+                                                      RadialAxis(
+                                                          minimum: -58,
+                                                          maximum: 134,
+                                                          ranges: <GaugeRange>[
+                                                            GaugeRange(
+                                                                startValue: -58,
+                                                                endValue: 6,
+                                                                color: Colors
+                                                                    .orange),
+                                                            GaugeRange(
+                                                                startValue: 6,
+                                                                endValue: 70,
+                                                                color: Colors
+                                                                    .green),
+                                                            GaugeRange(
+                                                                startValue: 70,
+                                                                endValue: 134,
+                                                                color:
+                                                                    Colors.red)
+                                                          ],
+                                                          pointers: <
+                                                              GaugePointer>[
+                                                            NeedlePointer(
+                                                              value: record
+                                                                      .temperature
+                                                                      ?.toDouble() ??
+                                                                  0,
+                                                              needleEndWidth: 3,
+                                                            )
+                                                          ],
+                                                          annotations: <
+                                                              GaugeAnnotation>[
+                                                            GaugeAnnotation(
+                                                                widget: Container(
+                                                                    child: Text(
+                                                                        '${record.temperature}°F',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                12,
+                                                                            fontWeight: FontWeight
+                                                                                .bold))),
+                                                                angle: 90,
+                                                                positionFactor:
+                                                                    0.7)
+                                                          ]),
+                                                    ]),
+                                                  ),
                                                 ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
+                                                Expanded(
+                                                  flex: 6,
+                                                child:
                                                 Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
@@ -248,10 +257,8 @@ class _HomePageState extends State<HomePage> {
                                                               FontWeight.bold),
                                                     ),
                                                   ],
-                                                ),
-                                                SizedBox(
-                                                  width: 20,
-                                                ),
+                                                ),),
+                                                Expanded(flex:2, child:
                                                 record.image == null
                                                     ? Container()
                                                     : Card(
@@ -289,7 +296,7 @@ class _HomePageState extends State<HomePage> {
                                                             ),
                                                           ),
                                                         ),
-                                                      ),
+                                                      ),),
                                               ]),
                                         );
                                       } else {
