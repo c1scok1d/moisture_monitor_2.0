@@ -156,19 +156,33 @@ class _HomePageState extends State<HomePage> {
 
                                               children: [
                                                 Expanded(
-                                                  flex: 3,
+                                                  flex: 2,
                                                   child: SizedBox(
                                                     width: 100,
                                                     child: SfRadialGauge(
+                                                      //title: const GaugeTitle(text: 'Moisture', borderWidth: 10),
                                                         enableLoadingAnimation: true, animationDuration: 4500,
                                                         axes: <RadialAxis>[
-                                                      RadialAxis(
-                                                          minimum: 0,
-                                                          maximum: 100,
-                                                          ranges: <GaugeRange>[
-                                                            GaugeRange(startValue: 40,endValue: 100,color: Colors.green,startWidth: 10,endWidth: 10),
-                                                            GaugeRange(startValue: 21,endValue: 39,color: Colors.orange,startWidth: 10,endWidth: 10),
-                                                            GaugeRange(startValue: 0,endValue: 20,color: Colors.red,startWidth: 10,endWidth: 10)],
+                                                        RadialAxis(showLabels: false, showAxisLine: false, showTicks: false,
+                                                            minimum: 0, maximum: 99,
+                                                            ranges: <GaugeRange>[GaugeRange(startValue: 0, endValue: 33,
+                                                                color: Color(0xFFFE2A25), label: 'Dry',
+                                                                sizeUnit: GaugeSizeUnit.factor,
+                                                                labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:  12),
+                                                                startWidth: 0.65, endWidth: 0.65
+                                                            ),GaugeRange(startValue: 33, endValue: 66,
+                                                              color:Color(0xFFFFBA00), label: 'Moderate',
+                                                              labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:   12),
+                                                              startWidth: 0.65, endWidth: 0.65, sizeUnit: GaugeSizeUnit.factor,
+                                                            ),
+                                                              GaugeRange(startValue: 66, endValue: 99,
+                                                                color:Color(0xFF00AB47), label: 'Good',
+                                                                labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:   12),
+                                                                sizeUnit: GaugeSizeUnit.factor,
+                                                                startWidth: 0.65, endWidth: 0.65,
+                                                              ),
+
+                                                            ],
                                                           pointers: <
                                                               GaugePointer>[
                                                             NeedlePointer(
@@ -176,29 +190,25 @@ class _HomePageState extends State<HomePage> {
                                                                       .moisture
                                                                       ?.toDouble() ??
                                                                   0,
-                                                              needleEndWidth: 3,
+                                                              needleEndWidth: 1,
                                                             )
                                                           ],
                                                           annotations: <
                                                               GaugeAnnotation>[
                                                             GaugeAnnotation(
                                                                 widget: Container(
-                                                                    child: Text(
-                                                                        '${record.moisture}%',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                12,
-                                                                            fontWeight: FontWeight
-                                                                                .bold))),
+                                                                    child: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
                                                                 angle: 90,
                                                                 positionFactor:
-                                                                    0.7)
+                                                                    .8)
                                                           ]),
                                                     ]),
                                                   ),
                                                 ),
+                                                const SizedBox(width: 10),
+
                                                 Expanded(
-                                                  flex: 6,
+                                                  flex: 4,
                                                 child:
                                                 Column(
                                                   crossAxisAlignment:
@@ -212,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                                                         // Note: Styles for TextSpans must be explicitly defined.
                                                         // Child text spans will inherit styles from parent
                                                         style: const TextStyle(
-                                                          fontSize: 14.0,
+                                                          fontSize: 14,
                                                           color: Colors.black,
                                                         ),
                                                         children: <TextSpan>[
@@ -226,7 +236,7 @@ class _HomePageState extends State<HomePage> {
                                                       // Note: Styles for TextSpans must be explicitly defined.
                                                       // Child text spans will inherit styles from parent
                                                       style: const TextStyle(
-                                                        fontSize: 14.0,
+                                                        fontSize: 14,
                                                         color: Colors.black,
                                                       ),
                                                       children: <TextSpan>[
@@ -289,15 +299,15 @@ class _HomePageState extends State<HomePage> {
                                                                 record.image);
                                                           },
                                                           child: SizedBox(
-                                                            width: 100,
-                                                            height: 130,
+                                                            width: 75,
+                                                            height: 75,
                                                             child:
                                                                 Image.network(
                                                               'https://athome.rodlandfarms.com/uploads/${record.image}',
                                                               fit: BoxFit
                                                                   .fitHeight,
                                                               alignment: Alignment
-                                                                  .centerRight,
+                                                                  .center,
                                                               colorBlendMode:
                                                                   BlendMode
                                                                       .darken,
