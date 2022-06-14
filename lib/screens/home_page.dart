@@ -30,7 +30,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null &&
         FirebaseAuth.instance.currentUser?.displayName?.isNotEmpty == true) {
-      name = (FirebaseAuth.instance.currentUser?.displayName)!;
+      var foo = (FirebaseAuth.instance.currentUser?.displayName)!.split(" ");
+      name = foo[0].trim();
     }
     if (FirebaseAuth.instance.currentUser != null &&
         FirebaseAuth.instance.currentUser?.photoURL?.isNotEmpty == true) {
@@ -47,10 +48,12 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Center(
                   child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(_profileImage == ""
+                      radius: 70,
+                      backgroundColor: Colors.transparent,
+                      child: Image.asset('assets/images/logo.png'),
+                    /*backgroundImage: NetworkImage(_profileImage == ""
                         ? "https://www.shareicon.net/download/128x128//2016/07/26/802016_man_512x512.png"
-                        : _profileImage),
+                        : _profileImage),*/
                   ),
                 ),
                 Align(
