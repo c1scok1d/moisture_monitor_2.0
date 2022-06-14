@@ -276,12 +276,18 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   ],
                                                 ),),
-                                                Expanded(flex:2, child:
-                                                record.image == null
+                                          Visibility(
+                                              visible: snapshot.data?.data != null &&
+                                                  snapshot.data?.data?.isNotEmpty == true &&
+                                                  snapshot.data?.data![0].image?.isNotEmpty == true,
+                                            child:
+                                                Expanded(
+                                                  flex:2,
+                                                  child: record.image == null
                                                     ? Container()
                                                     : Card(
                                                         shape:
-                                                            RoundedRectangleBorder(
+                                                            const RoundedRectangleBorder(
                                                           borderRadius:
                                                               BorderRadius.only(
                                                                   topRight: Radius
@@ -315,7 +321,7 @@ class _HomePageState extends State<HomePage> {
                                                           ),
                                                         ),
                                                       ),),
-                                              ]),
+                                          )]),
                                         );
                                       } else {
                                         return const Center(
