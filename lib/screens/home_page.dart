@@ -158,34 +158,22 @@ class _HomePageState extends State<HomePage> {
                                                 Expanded(
                                                   flex: 3,
                                                   child: SizedBox(
-                                                    width: 120,
-                                                    child: SfRadialGauge(axes: <
-                                                        RadialAxis>[
+                                                    width: 100,
+                                                    child: SfRadialGauge(
+                                                        enableLoadingAnimation: true, animationDuration: 4500,
+                                                        axes: <RadialAxis>[
                                                       RadialAxis(
-                                                          minimum: -58,
-                                                          maximum: 134,
+                                                          minimum: 0,
+                                                          maximum: 100,
                                                           ranges: <GaugeRange>[
-                                                            GaugeRange(
-                                                                startValue: -58,
-                                                                endValue: 6,
-                                                                color: Colors
-                                                                    .orange),
-                                                            GaugeRange(
-                                                                startValue: 6,
-                                                                endValue: 70,
-                                                                color: Colors
-                                                                    .green),
-                                                            GaugeRange(
-                                                                startValue: 70,
-                                                                endValue: 134,
-                                                                color:
-                                                                    Colors.red)
-                                                          ],
+                                                            GaugeRange(startValue: 40,endValue: 100,color: Colors.green,startWidth: 10,endWidth: 10),
+                                                            GaugeRange(startValue: 21,endValue: 39,color: Colors.orange,startWidth: 10,endWidth: 10),
+                                                            GaugeRange(startValue: 0,endValue: 20,color: Colors.red,startWidth: 10,endWidth: 10)],
                                                           pointers: <
                                                               GaugePointer>[
                                                             NeedlePointer(
                                                               value: record
-                                                                      .temperature
+                                                                      .moisture
                                                                       ?.toDouble() ??
                                                                   0,
                                                               needleEndWidth: 3,
@@ -196,7 +184,7 @@ class _HomePageState extends State<HomePage> {
                                                             GaugeAnnotation(
                                                                 widget: Container(
                                                                     child: Text(
-                                                                        '${record.temperature}°F',
+                                                                        '${record.moisture}%',
                                                                         style: TextStyle(
                                                                             fontSize:
                                                                                 12,
@@ -217,44 +205,64 @@ class _HomePageState extends State<HomePage> {
                                                       CrossAxisAlignment.start,
                                                   mainAxisAlignment:
                                                       MainAxisAlignment
-                                                          .spaceEvenly,
+                                                          .center,
                                                   children: [
-                                                    Text(
-                                                      'Sensor:  ${record.sensor}',
-                                                      style: const TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold),
+                                                    Text.rich(
+                                                      TextSpan(
+                                                        // Note: Styles for TextSpans must be explicitly defined.
+                                                        // Child text spans will inherit styles from parent
+                                                        style: const TextStyle(
+                                                          fontSize: 14.0,
+                                                          color: Colors.black,
+                                                        ),
+                                                        children: <TextSpan>[
+                                                          const TextSpan(text: 'Sensor: ',style: TextStyle(fontWeight: FontWeight.bold)),
+                                                          TextSpan(text: '${record.sensor}'),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    Text(
-                                                      '${record.temperature}°F',
+                                                  Text.rich(
+                                                    TextSpan(
+                                                      // Note: Styles for TextSpans must be explicitly defined.
+                                                      // Child text spans will inherit styles from parent
                                                       style: const TextStyle(
-                                                        fontSize: 18,
+                                                        fontSize: 14.0,
+                                                        color: Colors.black,
+                                                      ),
+                                                      children: <TextSpan>[
+                                                        const TextSpan(text: 'Moisture: ',style: TextStyle(fontWeight: FontWeight.bold)),
+                                                        TextSpan(text: '${record.moisture}%', style: TextStyle(
+                                                        color: ( record.moisture! < 20 ? Colors.red : Colors.green),)),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                    Text.rich(
+                                                      TextSpan(
+                                                        style: const TextStyle(
+                                                          fontSize: 14,
+                                                          color: Colors.black,
+                                                        ),
+                                                        children: <TextSpan>[
+                                                        /*  const WidgetSpan(
+                                                            child: Icon(Icons
+                                                                .location_on_outlined),
+                                                          ),*/
+                                                          const TextSpan(text: 'Location: ',style: TextStyle(fontWeight: FontWeight.bold)),
+                                                          TextSpan(text: '${record.location}')
+                                                        ],
                                                       ),
                                                     ),
                                                     Text.rich(
                                                       TextSpan(
                                                         style: const TextStyle(
-                                                          fontSize: 18,
+                                                          fontSize: 14,
+                                                          color: Colors.black,
                                                         ),
-                                                        children: [
-                                                          const WidgetSpan(
-                                                            child: Icon(Icons
-                                                                .location_on_outlined),
-                                                          ),
-                                                          TextSpan(
-                                                            text:
-                                                                '${record.location}',
-                                                          )
+                                                        children: <TextSpan>[
+                                                          const TextSpan(text: 'Last seen: ',style: TextStyle(fontWeight: FontWeight.bold)),
+                                                          TextSpan(text: '${timeago.format(DateTime.parse(record.createdAt!))}')
                                                         ],
                                                       ),
-                                                    ),
-                                                    Text(
-                                                      '${timeago.format(DateTime.parse(record.createdAt!))}',
-                                                      style: TextStyle(
-                                                          fontSize: 18,
-                                                          fontWeight:
-                                                              FontWeight.bold),
                                                     ),
                                                   ],
                                                 ),),
