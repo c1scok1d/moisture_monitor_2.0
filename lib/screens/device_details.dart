@@ -47,6 +47,49 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                 return Column(
                   children: [
                     Visibility(
+                      visible: snapshot.data?.data != null &&
+                          snapshot.data?.data?.isNotEmpty == true &&
+                          snapshot.data?.data![0].moisture != 0,
+                      child: Card(
+                        margin: const EdgeInsets.all(8),
+                        child: SfCartesianChart(
+                          plotAreaBorderWidth: 0,
+                          title: ChartTitle(
+                              text: 'Moisture'),
+                          legend: Legend(
+                              isVisible: true,
+                              position: LegendPosition.bottom,
+                              overflowMode: LegendItemOverflowMode.scroll),
+                          primaryXAxis: DateTimeCategoryAxis(
+                            majorGridLines: const MajorGridLines(width: 0),
+                            dateFormat: DateFormat('h:mm a'),
+                            // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
+                            // labelRotation: 90,
+                          ),
+                          primaryYAxis: NumericAxis(
+                              minimum: 0,
+                              maximum: (List.generate(
+                                  snapshot.data?.data?.length ?? 0,
+                                      (index) => snapshot.data?.data
+                                      ?.elementAt(index)
+                                      .moisture
+                                      ?.toDouble()
+                                      .round()).cast<num>().reduce(
+                                  max) ??
+                                  100)
+                                  .toDouble() *
+                                  1.4,
+                              axisLine: const AxisLine(width: 0),
+                              edgeLabelPlacement: EdgeLabelPlacement.shift,
+                              // labelFormat: '{value}°F',
+                              majorTickLines: const MajorTickLines(size: 0)),
+                          series: ChartData(deviceRecords: snapshot.data?.data!)
+                              .getSpineMoistureData(),
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                        ),
+                      ),
+                    ),
+                    Visibility(
                         visible: snapshot.data?.data != null &&
                             snapshot.data?.data?.isNotEmpty == true &&
                             snapshot.data?.data![0].temperature != 0,
@@ -56,7 +99,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                             plotAreaBorderWidth: 0,
                             title: ChartTitle(
                                 text:
-                                    'Temp of ${widget.deviceRecord.hostname}'),
+                                    'Temperature'),
                             legend: Legend(
                                 isVisible: true,
                                 position: LegendPosition.bottom,
@@ -98,7 +141,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           plotAreaBorderWidth: 0,
                           title: ChartTitle(
                               text:
-                                  'Humidity of ${widget.deviceRecord.hostname}'),
+                                  'Humidity'),
                           legend: Legend(
                               isVisible: true, position: LegendPosition.bottom),
                           primaryXAxis: DateTimeCategoryAxis(
@@ -145,7 +188,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                         child: SfCartesianChart(
                           plotAreaBorderWidth: 0,
                           title: ChartTitle(
-                              text: 'VPD of ${widget.deviceRecord.hostname}'),
+                              text: 'VPD'),
                           legend: Legend(
                               isVisible: true,
                               position: LegendPosition.bottom,
@@ -160,9 +203,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                               minimum: 0,
                               maximum: (List.generate(
                               snapshot.data?.data?.length ?? 0,
-              (index) => snapshot.data?.data
-                  ?.elementAt(index)
-                  .vpd
+              (index) => snapshot.data?.data?.elementAt(index).vpd
                   ?.toDouble()
                   .round()).cast<num>().reduce(
               max) ??
