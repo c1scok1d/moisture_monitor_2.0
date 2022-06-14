@@ -69,7 +69,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                             ),
                             primaryYAxis: NumericAxis(
                                 minimum: 0,
-                                maximum: 80,
+                                maximum: 100,
                                 axisLine: const AxisLine(width: 0),
                                 edgeLabelPlacement: EdgeLabelPlacement.shift,
                                 labelFormat: '{value}°F',
