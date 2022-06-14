@@ -113,7 +113,7 @@ class _HomePageState extends State<HomePage> {
                         if (snapshot.hasData) {
                           Devices device = snapshot.data!.devices![index];
                           return Container(
-                              height: 130,
+                              height: 100,
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
@@ -299,8 +299,8 @@ class _HomePageState extends State<HomePage> {
                                                                 record.image);
                                                           },
                                                           child: SizedBox(
-                                                            width: 75,
-                                                            height: 75,
+                                                            //width: 75,
+                                                            //height: 75,
                                                             child:
                                                                 Image.network(
                                                               'https://athome.rodlandfarms.com/uploads/${record.image}',
