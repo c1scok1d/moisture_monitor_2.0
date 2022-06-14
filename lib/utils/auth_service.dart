@@ -36,7 +36,8 @@ class AuthClass {
           await auth.signInWithCredential(credential);
 
           storeTokenAndData(userCredential);
-          print("Register success");
+          print("Register success:${userCredential.user?.displayName}");
+          print("Register success2:${FirebaseAuth.instance.currentUser?.displayName}");
           EasyLoading.show(status: 'Setting up your profile...');
           NetworkRequests().saveUser(userCredential.credential!.token.toString()).then((response) async {
             if (response.success==true) {

@@ -23,9 +23,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _devices = NetworkRequests().getUserDevices();
+  var name = "Rodland Farmers";
 
   @override
   Widget build(BuildContext context) {
+    if (FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser?.displayName?.isNotEmpty == true) {
+      name = (FirebaseAuth.instance.currentUser?.displayName)!;
+    }
     print("HomePage: ${widget.id}");
     return Scaffold(
       body: Container(
@@ -66,8 +70,8 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            const Text(
-              "Hello Rodland Farmer,\nWelcome to your dashboard",
+            Text(
+              "Hello $name,\nWelcome to your dashboard",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 22,
@@ -420,17 +424,17 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                   return SingleChildScrollView(
-                      child: SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.6,
-                    child: CarouselSlider(
+                    child: SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.6,
+                      child: CarouselSlider(
                         items: snapshot.data?.data?.map((i) {
                           print("Name:${i.name}");
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
-                                height: MediaQuery.of(context).size.height * 0.6,
-                                width:
-                                    MediaQuery.of(context).size.width*0.7,
+                                height:
+                                    MediaQuery.of(context).size.height * 0.6,
+                                width: MediaQuery.of(context).size.width * 0.7,
                                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Image.network(
                                   'https://athome.rodlandfarms.com/uploads/${i.name}',
@@ -454,8 +458,10 @@ class _HomePageState extends State<HomePage> {
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enlargeCenterPage: true,
                           scrollDirection: Axis.horizontal,
-                        ),),
-                  ),);
+                        ),
+                      ),
+                    ),
+                  );
                 }),
           );
         });
