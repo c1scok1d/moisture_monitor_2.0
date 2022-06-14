@@ -24,11 +24,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   var _devices = NetworkRequests().getUserDevices();
   var name = "Rodland Farmers";
+  var _profileImage = "";
 
   @override
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser?.displayName?.isNotEmpty == true) {
       name = (FirebaseAuth.instance.currentUser?.displayName)!;
+    }
+    if(FirebaseAuth.instance.currentUser!=null&&FirebaseAuth.instance.currentUser?.photoURL?.isNotEmpty == true){
+      _profileImage = (FirebaseAuth.instance.currentUser?.photoURL)!;
     }
     print("HomePage: ${widget.id}");
     return Scaffold(
@@ -40,8 +44,9 @@ class _HomePageState extends State<HomePage> {
             Stack(
               children: [
                 Center(
-                  child: const CircleAvatar(
+                  child:  CircleAvatar(
                     radius: 50,
+                    backgroundImage: NetworkImage(_profileImage==""?"https://www.shareicon.net/download/128x128//2016/07/26/802016_man_512x512.png":_profileImage),
                   ),
                 ),
                 Align(
