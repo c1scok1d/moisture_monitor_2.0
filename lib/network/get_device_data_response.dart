@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GetDeviceDataResponse {
@@ -132,6 +134,20 @@ class ChartData {
     ];
   }
 
+  List<SplineSeries<Records, DateTime>>? getSpineMoistureData() {
+    return <SplineSeries<Records, DateTime>>[
+      SplineSeries<Records, DateTime>(
+        dataSource: deviceRecords!,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
+        yValueMapper: (Records d, _) => d.moisture ?? 0,
+        sortFieldValueMapper: (Records d, _) => d.createdAt,
+        sortingOrder: SortingOrder.ascending,
+        markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Moisture',
+      ),
+    ];
+  }
+
   List<SplineSeries<Records, DateTime>>? getSpineVpdData() {
     return <SplineSeries<Records, DateTime>>[
       SplineSeries<Records, DateTime>(
@@ -162,7 +178,7 @@ class ChartData {
         yValueMapper: (Records d, _) => d.humidity ?? 0,
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Humidity',
-        legendItemText: 'Humidit',
+        legendItemText: 'Humidity',
       ),
     ];
   }
