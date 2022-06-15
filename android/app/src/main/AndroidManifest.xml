@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.trichain.measurement.measurement_app">
+    package="com.rodlandfarms.athome">
 
     <queries>
         <provider android:authorities="com.facebook.katana.provider.PlatformProvider" />
@@ -8,7 +8,7 @@
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
    <application
-        android:label="measurement_app"
+        android:label="\@Home"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
