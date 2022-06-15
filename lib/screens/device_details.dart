@@ -68,17 +68,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
-                              maximum: (List.generate(
-                                  snapshot.data?.data?.length ?? 0,
-                                      (index) => snapshot.data?.data
-                                      ?.elementAt(index)
-                                      .moisture
-                                      ?.toDouble()
-                                      .round()).cast<num>().reduce(
-                                  max) ??
-                                  100)
-                                  .toDouble() *
-                                  1.4,
+                              maximum: 100,
                               axisLine: const AxisLine(width: 0),
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
                               labelFormat: '{value}%',
@@ -150,17 +140,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
-                              maximum: (List.generate(
-                                              snapshot.data?.data?.length ?? 0,
-                                              (index) => snapshot.data?.data
-                                                  ?.elementAt(index)
-                                                  .humidity
-                                                  ?.toDouble()
-                                                  .round()).cast<num>().reduce(
-                                              max) ??
-                                          100)
-                                      .toDouble() *
-                                  1.4,
+                              maximum: 100,
                               axisLine: const AxisLine(width: 0),
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
                               labelFormat: '{value}%',
@@ -201,15 +181,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
-                              maximum: (List.generate(
-                              snapshot.data?.data?.length ?? 0,
-              (index) => snapshot.data?.data?.elementAt(index).vpd
-                  ?.toDouble()
-                  .round()).cast<num>().reduce(
-              max) ??
-              100)
-                  .toDouble() *
-              1.4,
+                              maximum: 3,
                               axisLine: const AxisLine(width: 0),
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
                               // labelFormat: '{value}°F',
