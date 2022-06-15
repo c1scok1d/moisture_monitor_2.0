@@ -174,18 +174,18 @@ class _HomePageState extends State<HomePage> {
                                                             ranges: <GaugeRange>[GaugeRange(startValue: 0, endValue: 33,
                                                                 color: Color(0xFFFE2A25), label: 'Dry',
                                                                 sizeUnit: GaugeSizeUnit.factor,
-                                                                labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:  12),
-                                                                startWidth: 0.65, endWidth: 0.65
+                                                                labelStyle: GaugeTextStyle(fontSize:  9),
+                                                                startWidth: 0.25, endWidth: 0.25
                                                             ),GaugeRange(startValue: 33, endValue: 66,
-                                                              color:Color(0xFFFFBA00), label: 'Moderate',
-                                                              labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:   12),
-                                                              startWidth: 0.65, endWidth: 0.65, sizeUnit: GaugeSizeUnit.factor,
+                                                              color:const Color(0xFFFFBA00), label: 'Moderate',
+                                                              labelStyle: const GaugeTextStyle(fontSize:   9),
+                                                              startWidth: 0.25, endWidth: 0.25, sizeUnit: GaugeSizeUnit.factor,
                                                             ),
                                                               GaugeRange(startValue: 66, endValue: 99,
-                                                                color:Color(0xFF00AB47), label: 'Good',
-                                                                labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:   12),
+                                                                color:const Color(0xFF00AB47), label: 'Good',
+                                                                labelStyle: const GaugeTextStyle(fontSize:   9),
                                                                 sizeUnit: GaugeSizeUnit.factor,
-                                                                startWidth: 0.65, endWidth: 0.65,
+                                                                startWidth: 0.25, endWidth: 0.25,
                                                               ),
 
                                                             ],
@@ -283,9 +283,9 @@ class _HomePageState extends State<HomePage> {
                                                   ],
                                                 ),),
                                                 Align(
-                                                  alignment: Alignment.topRight,
+                                                  alignment: Alignment.topCenter,
                                                   child: Container(
-                                                    margin: const EdgeInsets.only(right: 20, top: 20),
+                                                    margin: const EdgeInsets.only(right: 10, top: 15),
                                                     child: GestureDetector(
                                                       onTap: () async {
                                                         //logout()
@@ -299,12 +299,12 @@ class _HomePageState extends State<HomePage> {
                                                       child: BatteryIndicator(
                                                         batteryFromPhone: false,
                                                         batteryLevel: 74,
-                                                        style: BatteryIndicatorStyle.values[0],
+                                                        style: BatteryIndicatorStyle.skeumorphism,
                                                         colorful: true,
                                                         showPercentNum: true,
-                                                        mainColor: Colors.green,
-                                                        size: 9.0,
-                                                        ratio: 3.0,
+                                                        mainColor: Colors.green/*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
+                                                        size: 8.0,
+                                                        ratio: 2.5,
                                                         showPercentSlide: true,
                                                       ),
                                                     ),
