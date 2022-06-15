@@ -316,8 +316,8 @@ class _HomePageState extends State<HomePage> {
                                                           },
                                                           child: SizedBox(
 
-                                                            //width: 75,
-                                                            //height: 75,
+                                                            width: 90,
+                                                            height: 90,
                                                             child:
                                                                 Image.network(
                                                               'https://athome.rodlandfarms.com/uploads/${record.image}',
