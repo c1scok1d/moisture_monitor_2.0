@@ -33,10 +33,10 @@ class Records {
   int? deviceId;
   String? sensor;
   String? location;
-  int? temperature;
-  int? humidity;
-  int? moisture;
-  int? vpd;
+  num? temperature;
+  num? humidity;
+  num? moisture;
+  num? vpd;
   String? readAt;
   String? createdAt;
   String? updatedAt;
