@@ -51,10 +51,12 @@ class _HomePageState extends State<HomePage> {
                       radius: 70,
                       backgroundColor: Colors.transparent,
                       child: Image.asset('assets/images/logo.png'),
+
                     /*backgroundImage: NetworkImage(_profileImage == ""
                         ? "https://www.shareicon.net/download/128x128//2016/07/26/802016_man_512x512.png"
                         : _profileImage),*/
                   ),
+
                 ),
                 Align(
                   alignment: Alignment.topRight,
@@ -291,14 +293,19 @@ class _HomePageState extends State<HomePage> {
                                                     : Card(
                                                         shape:
                                                             const RoundedRectangleBorder(
-                                                          borderRadius:
-                                                              BorderRadius.only(
+                                                          borderRadius: BorderRadius.only(
                                                                   topRight: Radius
                                                                       .circular(
                                                                           10),
                                                                   bottomRight:
                                                                       Radius.circular(
-                                                                          10)),
+                                                                          10),
+                                                              topLeft: Radius
+                                                              .circular(
+                                                              10),
+                                                                bottomLeft:
+                                                                Radius.circular(
+                                                                    10)),
                                                         ),
                                                         child: GestureDetector(
                                                           onTap: () {
@@ -308,13 +315,14 @@ class _HomePageState extends State<HomePage> {
                                                                 record.image);
                                                           },
                                                           child: SizedBox(
+
                                                             //width: 75,
                                                             //height: 75,
                                                             child:
                                                                 Image.network(
                                                               'https://athome.rodlandfarms.com/uploads/${record.image}',
                                                               fit: BoxFit
-                                                                  .fitHeight,
+                                                                  .fill,
                                                               alignment: Alignment
                                                                   .center,
                                                               colorBlendMode:
