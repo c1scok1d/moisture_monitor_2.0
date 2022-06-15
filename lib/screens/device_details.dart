@@ -101,7 +101,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                               maximum: 100,
                               axisLine: const AxisLine(width: 0),
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
-                              labelFormat: '{value}%',
+                              labelFormat: '{value}',
                               majorTickLines: const MajorTickLines(size: 0.9)),
                           series: ChartData(deviceRecords: snapshot.data?.data!)
                               .getAreaHumidAndTempData(),
