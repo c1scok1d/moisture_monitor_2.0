@@ -8,6 +8,7 @@ import 'package:rodland_farms/network/images_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
 import 'package:rodland_farms/screens/authentication/register.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:battery_indicator/battery_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../network/get_user_devices_response.dart';
@@ -281,6 +282,34 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                   ],
                                                 ),),
+                                                Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: Container(
+                                                    margin: const EdgeInsets.only(right: 20, top: 20),
+                                                    child: GestureDetector(
+                                                      onTap: () async {
+                                                        //logout()
+                                                        await FirebaseAuth.instance.signOut();
+                                                        Navigator.of(context).pushReplacement(
+                                                          MaterialPageRoute(
+                                                            builder: (context) => RegisterPage(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: BatteryIndicator(
+                                                        batteryFromPhone: false,
+                                                        batteryLevel: 74,
+                                                        style: BatteryIndicatorStyle.values[0],
+                                                        colorful: true,
+                                                        showPercentNum: true,
+                                                        mainColor: Colors.green,
+                                                        size: 9.0,
+                                                        ratio: 3.0,
+                                                        showPercentSlide: true,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                           Visibility(
                                               visible: snapshot.data?.data != null &&
                                                   snapshot.data?.data?.isNotEmpty == true &&
