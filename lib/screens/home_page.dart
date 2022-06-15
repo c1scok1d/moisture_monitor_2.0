@@ -493,15 +493,15 @@ class _HomePageState extends State<HomePage> {
                   if (!snapshot.hasData) {
                     return Center(
                       child: SizedBox(
-                        width: 100,
-                        height: 100,
+                        //width: 100,
+                        //height: 100,
                         child: CircularProgressIndicator(),
                       ),
                     );
                   }
                   return SingleChildScrollView(
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      //height: MediaQuery.of(context).size.height * 0.6,
                       child: CarouselSlider(
                         items: snapshot.data?.data?.map((i) {
                           print("Name:${i.name}");
@@ -514,7 +514,7 @@ class _HomePageState extends State<HomePage> {
                                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Image.network(
                                   'https://athome.rodlandfarms.com/uploads/${i.name}',
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.fill,
                                 ),
                               );
                             },
