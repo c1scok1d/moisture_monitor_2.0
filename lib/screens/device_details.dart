@@ -80,48 +80,6 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                       ),
                     ),
                     Visibility(
-                        visible: snapshot.data?.data != null &&
-                            snapshot.data?.data?.isNotEmpty == true &&
-                            snapshot.data?.data![0].temperature != 0,
-                        child: Card(
-                          margin: const EdgeInsets.all(8),
-                          child: SfCartesianChart(
-                            plotAreaBorderWidth: 0,
-                            title: ChartTitle(
-                                text:
-                                    'Temperature'),
-                            legend: Legend(
-                                isVisible: true,
-                                position: LegendPosition.bottom,
-                                overflowMode: LegendItemOverflowMode.scroll),
-                            primaryXAxis: DateTimeCategoryAxis(
-                              majorGridLines: const MajorGridLines(width: 0),
-                              dateFormat: DateFormat('h:mm a'),
-                              // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
-                              // labelRotation: 90,
-                            ),
-                            primaryYAxis: NumericAxis(
-                                minimum: 0,
-                                maximum: 100,
-                                axisLine: const AxisLine(width: 0),
-                                edgeLabelPlacement: EdgeLabelPlacement.shift,
-                                labelFormat: '{value}°F',
-                                majorTickLines: const MajorTickLines(size: 0)),
-                            series:
-                                ChartData(deviceRecords: snapshot.data?.data!)
-                                    .getSpineTempData(),
-                            tooltipBehavior: TooltipBehavior(enable: true),
-                          ),
-                        )),
-                    Visibility(
-                      visible: snapshot.data?.data != null &&
-                          snapshot.data?.data?.isNotEmpty == true &&
-                          snapshot.data?.data![0].temperature != 0,
-                      child: SizedBox(
-                        height: 20,
-                      ),
-                    ),
-                    Visibility(
                       visible: snapshot.data?.data != null &&
                           snapshot.data?.data?.isNotEmpty == true &&
                           snapshot.data?.data![0].humidity != 0,
@@ -131,11 +89,11 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           plotAreaBorderWidth: 0,
                           title: ChartTitle(
                               text:
-                                  'Humidity'),
+                                  'Humidity and Temperature'),
                           legend: Legend(
                               isVisible: true, position: LegendPosition.bottom),
                           primaryXAxis: DateTimeCategoryAxis(
-                            majorGridLines: const MajorGridLines(width: 0),
+                            majorGridLines: const MajorGridLines(width: 0.9),
                             dateFormat: DateFormat('h:mm a'),
                           ),
                           primaryYAxis: NumericAxis(
@@ -143,20 +101,12 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                               maximum: 100,
                               axisLine: const AxisLine(width: 0),
                               edgeLabelPlacement: EdgeLabelPlacement.shift,
-                              labelFormat: '{value}%',
-                              majorTickLines: const MajorTickLines(size: 0)),
+                              labelFormat: '{value}',
+                              majorTickLines: const MajorTickLines(size: 0.9)),
                           series: ChartData(deviceRecords: snapshot.data?.data!)
-                              .getAreaHumidData(),
+                              .getAreaHumidAndTempData(),
                           tooltipBehavior: TooltipBehavior(enable: true),
                         ),
-                      ),
-                    ),
-                    Visibility(
-                      visible: snapshot.data?.data != null &&
-                          snapshot.data?.data?.isNotEmpty == true &&
-                          snapshot.data?.data![0].humidity != 0,
-                      child: SizedBox(
-                        height: 20,
                       ),
                     ),
                     Visibility(

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GetDeviceDataResponse {
@@ -163,14 +164,6 @@ class ChartData {
   }
 
   List<AreaSeries<Records, DateTime>>? getAreaHumidData() {
-    // <ChartSeries<_ChartData, String>>[
-    //   AreaSeries<_ChartData, String>(
-    //       dataSource: data,
-    //       xValueMapper: (_ChartData data, _) => data.x,
-    //       yValueMapper: (_ChartData data, _) => data.y,
-    //       name: 'Gold',
-    //       color: Color.fromRGBO(8, 142, 255, 1))
-    // ];
     return <AreaSeries<Records, DateTime>>[
       AreaSeries<Records, DateTime>(
         dataSource: deviceRecords!,
@@ -179,6 +172,32 @@ class ChartData {
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Humidity',
         legendItemText: 'Humidity',
+      ),
+    ];
+  }
+
+  List<SplineAreaSeries<Records, DateTime>>? getAreaHumidAndTempData() {
+    return <SplineAreaSeries<Records, DateTime>>[
+      SplineAreaSeries<Records, DateTime>(
+        dataSource: deviceRecords!,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
+        yValueMapper: (Records d, _) => d.temperature ?? 0,
+        sortFieldValueMapper: (Records d, _) => d.createdAt,
+        sortingOrder: SortingOrder.ascending,
+        markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Temp (°F)',
+        color: Color.fromRGBO(53, 92, 125, 0.9),
+        splineType: SplineType.cardinal,
+      ),
+      SplineAreaSeries<Records, DateTime>(
+        dataSource: deviceRecords!,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
+        yValueMapper: (Records d, _) => d.humidity ?? 0,
+        markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Humidity',
+        legendItemText: 'Humidity (%)',
+        color: Color.fromRGBO(192, 108, 132, 0.9),
+        splineType: SplineType.cardinal,
       ),
     ];
   }
