@@ -145,6 +145,24 @@ class ChartData {
         sortingOrder: SortingOrder.ascending,
         markerSettings: const MarkerSettings(isVisible: true),
         name: 'Moisture',
+        color: Colors.lightBlue,
+      ),
+    ];
+  }
+
+  List<AreaSeries<Records, DateTime>>? getAreaMoistureData() {
+    return <AreaSeries<Records, DateTime>>[
+      AreaSeries<Records, DateTime>(
+    dataSource: deviceRecords!,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
+        yValueMapper: (Records d, _) => d.moisture ?? 0,
+        sortFieldValueMapper: (Records d, _) => d.createdAt,
+        sortingOrder: SortingOrder.ascending,
+        //markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Moisture (%)',
+        legendItemText: 'Moisture',
+        color: Colors.lightBlue,
+        //color: Color.fromRGBO(247, 147, 29, .8),
       ),
     ];
   }
@@ -158,7 +176,9 @@ class ChartData {
         sortFieldValueMapper: (Records d, _) => d.createdAt,
         sortingOrder: SortingOrder.ascending,
         markerSettings: const MarkerSettings(isVisible: true),
-        name: 'VPD',
+        name: 'VPD (kPa)',
+        legendItemText: 'VPD',
+        color: Colors.green,
       ),
     ];
   }
@@ -169,9 +189,10 @@ class ChartData {
         dataSource: deviceRecords!,
         xValueMapper: (Records d, _) => d.getGraphTime(),
         yValueMapper: (Records d, _) => d.humidity ?? 0,
-        markerSettings: const MarkerSettings(isVisible: true),
-        name: 'Humidity',
-        legendItemText: 'Humidity',
+        //markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Humidity (%)',
+        legendItemText: 'Humidity%',
+        color: Colors.green,
       ),
     ];
   }
@@ -184,19 +205,19 @@ class ChartData {
         yValueMapper: (Records d, _) => d.temperature ?? 0,
         sortFieldValueMapper: (Records d, _) => d.createdAt,
         sortingOrder: SortingOrder.ascending,
-        markerSettings: const MarkerSettings(isVisible: true),
+        //markerSettings: const MarkerSettings(isVisible: true),
         name: 'Temp (°F)',
-        color: Color.fromRGBO(53, 92, 125, 0.9),
+        color: Color.fromRGBO(255,140,0, 0.4), //orange
         splineType: SplineType.cardinal,
       ),
       SplineAreaSeries<Records, DateTime>(
         dataSource: deviceRecords!,
         xValueMapper: (Records d, _) => d.getGraphTime(),
         yValueMapper: (Records d, _) => d.humidity ?? 0,
-        markerSettings: const MarkerSettings(isVisible: true),
+        //markerSettings: const MarkerSettings(isVisible: true),
         name: 'Humidity',
         legendItemText: 'Humidity (%)',
-        color: Color.fromRGBO(192, 108, 132, 0.9),
+        color: Color.fromRGBO(127,255,0, 0.4), // chartreuse - cause why the fuck not
         splineType: SplineType.cardinal,
       ),
     ];
