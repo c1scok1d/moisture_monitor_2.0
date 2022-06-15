@@ -275,7 +275,7 @@ class _HomePageState extends State<HomePage> {
                                                           color: Colors.black,
                                                         ),
                                                         children: <TextSpan>[
-                                                          const TextSpan(text: 'Last seen: ',style: TextStyle(fontWeight: FontWeight.bold)),
+                                                          const TextSpan(text: 'Updated: ',style: TextStyle(fontWeight: FontWeight.bold)),
                                                           TextSpan(text: '${timeago.format(DateTime.parse(record.createdAt!))}')
                                                         ],
                                                       ),
@@ -469,7 +469,7 @@ class _HomePageState extends State<HomePage> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("${hostname} Images"),
+                Text("Images"),
                 SizedBox(
                   width: 10,
                 ),
