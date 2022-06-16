@@ -176,8 +176,8 @@ class ChartData {
         sortFieldValueMapper: (Records d, _) => d.createdAt,
         sortingOrder: SortingOrder.ascending,
         markerSettings: const MarkerSettings(isVisible: true),
-        name: 'VPD (kPa)',
-        legendItemText: 'VPD',
+        name: 'VPD: ${deviceRecords![0].vpd} kPa',
+        //legendItemText: 'VPD',
         color: Colors.green,
       ),
     ];
@@ -206,7 +206,7 @@ class ChartData {
         sortFieldValueMapper: (Records d, _) => d.createdAt,
         sortingOrder: SortingOrder.ascending,
         //markerSettings: const MarkerSettings(isVisible: true),
-        name: 'Temp (°F)',
+        name: 'Temp: ${deviceRecords![0].temperature}°F',
         color: Color.fromRGBO(255,140,0, 0.4), //orange
         splineType: SplineType.cardinal,
       ),
@@ -215,8 +215,8 @@ class ChartData {
         xValueMapper: (Records d, _) => d.getGraphTime(),
         yValueMapper: (Records d, _) => d.humidity ?? 0,
         //markerSettings: const MarkerSettings(isVisible: true),
-        name: 'Humidity',
-        legendItemText: 'Humidity (%)',
+        name: 'Humidity: ${deviceRecords![0].humidity}%',
+        //legendItemText: 'Humidity (%)',
         color: Color.fromRGBO(127,255,0, 0.4), // chartreuse - cause why the fuck not
         splineType: SplineType.cardinal,
       ),
