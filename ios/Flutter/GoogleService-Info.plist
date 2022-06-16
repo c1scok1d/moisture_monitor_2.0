@@ -3,11 +3,11 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>546027512896-r6jvc12f7k2fq74h5vjo1ffqntk6h8en.apps.googleusercontent.com</string>
+	<string>546027512896-lr0q74q8frr0uvb8f6geub2rhi2n0dl4.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.546027512896-r6jvc12f7k2fq74h5vjo1ffqntk6h8en</string>
+	<string>com.googleusercontent.apps.546027512896-lr0q74q8frr0uvb8f6geub2rhi2n0dl4</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>546027512896-dvt4fc226man5d78vtiql7lidt0nvtjd.apps.googleusercontent.com</string>
+	<string>546027512896-5to3tjrl9hm46g7jikogf502ee1unf5j.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
 	<string>AIzaSyA_mrGhOAVK9c994g7ziZ9GioExfSzAWBM</string>
 	<key>GCM_SENDER_ID</key>
@@ -15,7 +15,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.trichain.measurement.measurementApp</string>
+	<string>com.rodlandfarms.athome</string>
 	<key>PROJECT_ID</key>
 	<string>rodland-farms</string>
 	<key>STORAGE_BUCKET</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:546027512896:ios:57b0c1e97c6301a63c6ba5</string>
+	<string>1:546027512896:ios:d040dcc36e45e9b63c6ba5</string>
 </dict>
 </plist>
