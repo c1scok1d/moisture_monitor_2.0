@@ -1,4 +1,4 @@
-package com.trichain.measurement.rodland_farms
+package com.rodlandfarms.athome
 
 import io.flutter.embedding.android.FlutterActivity
 
