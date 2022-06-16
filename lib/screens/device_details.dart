@@ -99,8 +99,8 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                             majorGridLines: const MajorGridLines(width: 0.9),
                             dateFormat: DateFormat('h:mm a'),
                               // Interval type will be days
-                              intervalType: DateTimeIntervalType.days,
-                              interval: 7
+                              //intervalType: DateTimeIntervalType.days,
+                              //interval: 7
                           ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
