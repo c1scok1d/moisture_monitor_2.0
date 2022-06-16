@@ -1,4 +1,4 @@
-package com.trichain.measurement.measurement_app
+package com.rodlandfarms.athome
 
 import io.flutter.embedding.android.FlutterActivity
 
