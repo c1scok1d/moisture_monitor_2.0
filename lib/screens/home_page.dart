@@ -8,6 +8,7 @@ import 'package:rodland_farms/network/images_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
 import 'package:rodland_farms/screens/authentication/register.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import 'package:battery_indicator/battery_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import '../network/get_user_devices_response.dart';
@@ -173,18 +174,18 @@ class _HomePageState extends State<HomePage> {
                                                             ranges: <GaugeRange>[GaugeRange(startValue: 0, endValue: 33,
                                                                 color: Color(0xFFFE2A25), label: 'Dry',
                                                                 sizeUnit: GaugeSizeUnit.factor,
-                                                                labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:  12),
-                                                                startWidth: 0.65, endWidth: 0.65
+                                                                labelStyle: GaugeTextStyle(fontSize:  9),
+                                                                startWidth: 0.33, endWidth: 0.33,
                                                             ),GaugeRange(startValue: 33, endValue: 66,
-                                                              color:Color(0xFFFFBA00), label: 'Moderate',
-                                                              labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:   12),
-                                                              startWidth: 0.65, endWidth: 0.65, sizeUnit: GaugeSizeUnit.factor,
+                                                              color:const Color(0xFFFFBA00), label: 'OK',
+                                                              labelStyle: const GaugeTextStyle(fontSize:   9),
+                                                              startWidth: 0.33, endWidth: 0.33, sizeUnit: GaugeSizeUnit.factor,
                                                             ),
                                                               GaugeRange(startValue: 66, endValue: 99,
-                                                                color:Color(0xFF00AB47), label: 'Good',
-                                                                labelStyle: GaugeTextStyle(fontFamily: 'Times', fontSize:   12),
+                                                                color:const Color(0xFF00AB47), label: 'Good',
+                                                                labelStyle: const GaugeTextStyle(fontSize:   9),
                                                                 sizeUnit: GaugeSizeUnit.factor,
-                                                                startWidth: 0.65, endWidth: 0.65,
+                                                                startWidth: 0.33, endWidth: 0.33,
                                                               ),
 
                                                             ],
@@ -274,13 +275,41 @@ class _HomePageState extends State<HomePage> {
                                                           color: Colors.black,
                                                         ),
                                                         children: <TextSpan>[
-                                                          const TextSpan(text: 'Last seen: ',style: TextStyle(fontWeight: FontWeight.bold)),
+                                                          const TextSpan(text: 'Updated: ',style: TextStyle(fontWeight: FontWeight.bold)),
                                                           TextSpan(text: '${timeago.format(DateTime.parse(record.createdAt!))}')
                                                         ],
                                                       ),
                                                     ),
                                                   ],
                                                 ),),
+                                                Align(
+                                                  alignment: Alignment.topCenter,
+                                                  child: Container(
+                                                    margin: const EdgeInsets.only(right: 10, top: 15),
+                                                    child: GestureDetector(
+                                                      onTap: () async {
+                                                        //logout()
+                                                        await FirebaseAuth.instance.signOut();
+                                                        Navigator.of(context).pushReplacement(
+                                                          MaterialPageRoute(
+                                                            builder: (context) => RegisterPage(),
+                                                          ),
+                                                        );
+                                                      },
+                                                      child: BatteryIndicator(
+                                                        batteryFromPhone: false,
+                                                        batteryLevel: 74,
+                                                        style: BatteryIndicatorStyle.skeumorphism,
+                                                        colorful: true,
+                                                        showPercentNum: true,
+                                                        mainColor: Colors.green/*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
+                                                        size: 8.0,
+                                                        ratio: 2.5,
+                                                        showPercentSlide: true,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
                                           Visibility(
                                               visible: snapshot.data?.data != null &&
                                                   snapshot.data?.data?.isNotEmpty == true &&
@@ -316,8 +345,8 @@ class _HomePageState extends State<HomePage> {
                                                           },
                                                           child: SizedBox(
 
-                                                            //width: 75,
-                                                            //height: 75,
+                                                            width: 90,
+                                                            height: 90,
                                                             child:
                                                                 Image.network(
                                                               'https://athome.rodlandfarms.com/uploads/${record.image}',
@@ -440,7 +469,7 @@ class _HomePageState extends State<HomePage> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("${hostname} Images"),
+                Text("Images"),
                 SizedBox(
                   width: 10,
                 ),
@@ -464,15 +493,15 @@ class _HomePageState extends State<HomePage> {
                   if (!snapshot.hasData) {
                     return Center(
                       child: SizedBox(
-                        width: 100,
-                        height: 100,
+                        //width: 100,
+                        //height: 100,
                         child: CircularProgressIndicator(),
                       ),
                     );
                   }
                   return SingleChildScrollView(
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.6,
+                      //height: MediaQuery.of(context).size.height * 0.6,
                       child: CarouselSlider(
                         items: snapshot.data?.data?.map((i) {
                           print("Name:${i.name}");
@@ -485,7 +514,7 @@ class _HomePageState extends State<HomePage> {
                                 margin: EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Image.network(
                                   'https://athome.rodlandfarms.com/uploads/${i.name}',
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.fill,
                                 ),
                               );
                             },
