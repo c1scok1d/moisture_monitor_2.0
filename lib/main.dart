@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -13,6 +14,8 @@ import 'package:rodland_farms/notifications/firebase_msg_handler.dart';
 import 'package:rodland_farms/screens/authentication/register.dart';
 import 'package:rodland_farms/screens/home_page.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'data/received_notifications.dart';
 
 
@@ -140,20 +143,47 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: FutureBuilder<User?>(
-        future: getCurrentUser(),
-        builder: (context, snapshot) {
-          print("MaterialApp:" + snapshot.connectionState.name);
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasData) {
-              return HomePage();
-            } else {
-              return RegisterPage();
-            }
-          } else {
-            return const Center(child: CircularProgressIndicator());
+      home: ShowCaseWidget(
+        onStart: (index, key) {
+          print('onStart: $index, $key');
+          SharedPreferences.getInstance().then((prefs) {
+            print('INIT:isFirstTime: ${prefs.getBool('isFirstTime')}');
+            // prefs.remove('isFirstTime');
+          });
+        },
+        onComplete: (index, key) {
+          print('onComplete: $index, $key');
+          SharedPreferences.getInstance().then((prefs) {
+            prefs.setBool('isFirstTime', false);
+          });
+          if (index == 4) {
+            SystemChrome.setSystemUIOverlayStyle(
+              SystemUiOverlayStyle.light.copyWith(
+                statusBarIconBrightness: Brightness.dark,
+                statusBarColor: Colors.white,
+              ),
+            );
           }
         },
+        blurValue: 1,
+        builder: Builder(builder: (context) {
+          return FutureBuilder<User?>(
+            future: getCurrentUser(),
+            builder: (context, snapshot) {
+              print("MaterialApp:" + snapshot.connectionState.name);
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return HomePage();
+                } else {
+                  return RegisterPage();
+                }
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          );
+        }),
+        autoPlayDelay: const Duration(seconds: 3),
       ),
       builder: EasyLoading.init(),
     );

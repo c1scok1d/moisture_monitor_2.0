@@ -53,6 +53,26 @@ class NetworkRequests {
     }
   }
 
+  Future<SaveDeviceResponse> deleteDevice(String hostname) async {
+    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
+    final response = await http
+        .get(Uri.parse(baseUrl + "/user/delete/"+hostname+"?api_token=" + apiToken!));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return SaveDeviceResponse.fromJson(jsonDecode(response.body));
+    } else {
+      print(response.body);
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      return SaveDeviceResponse(
+        success: false,
+        message: 'Something went wrong',
+      );
+    }
+  }
+
   Future<GetDeviceDataResponse> getLatestDeviceData(String hostname) async {
     String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
     final response = await http.get(Uri.parse(

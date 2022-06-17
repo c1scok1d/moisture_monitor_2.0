@@ -58,6 +58,7 @@ dependencies:
   rxdart: ^0.27.4
   carousel_slider: ^4.1.1
   battery_indicator: ^0.1.1
+  showcaseview: ^1.1.5
 
 dev_dependencies:
   flutter_test:
