@@ -63,7 +63,7 @@ class AuthClass {
           });
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text("Google Registration success"),
+              content: Text("Google Sign-In Successful"),
             ),
           );
         } catch (e) {

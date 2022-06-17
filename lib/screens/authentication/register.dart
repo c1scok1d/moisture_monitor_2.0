@@ -45,27 +45,23 @@ class _RegisterPageState extends State<RegisterPage> {
           color: Colors.white,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                "Sign Up",
+            children: [Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/logo.png", height: 150, width: 150,),
+                ],
+              ),
+          /*    const Text(
+                "Sign In",
                 style: TextStyle(
-                  fontSize: 35,
+                  fontSize: 18,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               const SizedBox(
                 height: 10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/images/logo.png", height: 150, width: 150,),
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
+              ), */
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -85,17 +81,40 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
               const SizedBox(
-                height: 15,
+                height: 10,
               ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text("Sign-in using your Google or Facebook accout.  \nYou can also sign in using your mobile number.",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ]),
               const SizedBox(
                 height: 10,
               ),
               const Text(
                 "Or",
-                style: TextStyle(color: Colors.white, fontSize: 18),
+                style: TextStyle(color: Colors.black, fontSize: 18),
               ),
               const SizedBox(
                 height: 10,
+              ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text("Login with your email and password.",
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ]),
+              const SizedBox(
+                height: 15,
               ),
               textItem("Email", _emailController, false),
               const SizedBox(
@@ -105,7 +124,7 @@ class _RegisterPageState extends State<RegisterPage> {
               const SizedBox(
                 height: 15,
               ),
-              colorButton("Sign Up"),
+              colorButton("Sign In"),
               const SizedBox(
                 height: 15,
               ),

@@ -76,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 15,
               ),
-              colorButton("Sign Up"),
+              colorButton("Sign In"),
               const SizedBox(
                 height: 15,
               ),
@@ -99,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                               (route) => false);
                     },
                     child: const Text(
-                      " Sign Up",
+                      " Sign In",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
