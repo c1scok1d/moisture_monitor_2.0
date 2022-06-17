@@ -106,7 +106,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Text("Login with your email and password.",
+                    Text("Login with an active email and password.",
                       style: TextStyle(
                         fontSize: 10,
                         color: Colors.black,
