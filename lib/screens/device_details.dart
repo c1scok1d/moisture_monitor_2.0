@@ -54,21 +54,20 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                         margin: const EdgeInsets.all(8),
                         child: SfCartesianChart(
                           plotAreaBorderWidth: 0,
-                          title: ChartTitle(
-                              text: 'Moisture'),
+                          title: ChartTitle(text: 'Moisture'),
                           legend: Legend(
                               isVisible: true,
                               position: LegendPosition.bottom,
                               overflowMode: LegendItemOverflowMode.scroll),
                           primaryXAxis: DateTimeCategoryAxis(
-                            majorGridLines: const MajorGridLines(width: 0),
-                            dateFormat: DateFormat('h:mm a'),
+                              majorGridLines: const MajorGridLines(width: 0),
+                              dateFormat: DateFormat('h:mm a'),
                               // Interval type will be days
                               intervalType: DateTimeIntervalType.days,
                               interval: 7
-                            // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
-                            // labelRotation: 90,
-                          ),
+                              // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
+                              // labelRotation: 90,
+                              ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
                               maximum: 100,
@@ -90,17 +89,15 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                         margin: const EdgeInsets.all(8),
                         child: SfCartesianChart(
                           plotAreaBorderWidth: 0,
-                          title: ChartTitle(
-                              text:
-                                  'Humidity and Temperature'),
+                          title: ChartTitle(text: 'Humidity and Temperature'),
                           legend: Legend(
                               isVisible: true, position: LegendPosition.bottom),
                           primaryXAxis: DateTimeCategoryAxis(
                             majorGridLines: const MajorGridLines(width: 0.9),
                             dateFormat: DateFormat('h:mm a'),
-                              // Interval type will be days
-                              //intervalType: DateTimeIntervalType.days,
-                              //interval: 7
+                            // Interval type will be days
+                            //intervalType: DateTimeIntervalType.days,
+                            //interval: 7
                           ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
@@ -123,8 +120,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                         margin: const EdgeInsets.all(8),
                         child: SfCartesianChart(
                           plotAreaBorderWidth: 0,
-                          title: ChartTitle(
-                              text: 'VPD'),
+                          title: ChartTitle(text: 'VPD'),
                           legend: Legend(
                               isVisible: true,
                               position: LegendPosition.bottom,
