@@ -238,7 +238,7 @@ Future.delayed(Duration(seconds: 7), () {
                                                               MaterialPageRoute(
                                                                   builder: (context) =>
                                                                       DeviceDetailsScreen(
-                                                                          device)));
+                                                                          device,record.sensor??device.hostname!)));
                                                         },
                                                         child: Row(
                                                           /*mainAxisAlignment:
@@ -545,7 +545,7 @@ Future.delayed(Duration(seconds: 7), () {
                                                       MaterialPageRoute(
                                                           builder: (context) =>
                                                               DeviceDetailsScreen(
-                                                                  device)));
+                                                                  device,record.sensor??device.hostname!)));
                                                 },
                                                 child: Row(
                                                   /*mainAxisAlignment:

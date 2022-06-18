@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 class GetDeviceDataResponse {
@@ -68,6 +69,7 @@ class Records {
     vpd = json['vpd'];
     readAt = json['read_at'];
     createdAt = json['created_at'];
+    // createdAt =  DateFormat("yyyy-MM-dd HH:mm:ss").parse(json['created_at'], true).toLocal().toString();
     updatedAt = json['updated_at'];
     image = json['image'];
   }
@@ -106,7 +108,7 @@ class Records {
 
     // toxValueMapper
 
-    DateTime correctTime = DateTime.parse(convertedString);
+    DateTime correctTime = DateFormat("yyyy-MM-dd HH:mm:ss").parse(convertedString, true).toLocal();
 
     return correctTime; //returned the CorrectTimestamp
     return DateTime.parse(createdAt!);

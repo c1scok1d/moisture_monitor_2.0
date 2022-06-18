@@ -12,8 +12,9 @@ import '../network/get_user_devices_response.dart';
 
 class DeviceDetailsScreen extends StatefulWidget {
   late Devices deviceRecord;
+  String sensorName;
 
-  DeviceDetailsScreen(this.deviceRecord);
+  DeviceDetailsScreen(this.deviceRecord,this.sensorName);
 
   @override
   _DeviceDetailsScreenState createState() => _DeviceDetailsScreenState();
@@ -28,7 +29,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.deviceRecord.hostname!),
+        title: Text(widget.sensorName),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.pop(context),
