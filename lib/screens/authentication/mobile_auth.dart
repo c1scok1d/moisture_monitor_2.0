@@ -44,7 +44,16 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
           child: Column(
             children: [
               const SizedBox(
-                height: 150,
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/logo.png", height: 150, width: 150,),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
               ),
               phoneField(),
               const SizedBox(
@@ -52,7 +61,8 @@ class _MobileAuthPageState extends State<MobileAuthPage> {
               ),
               Container(
                 width: MediaQuery.of(context).size.width - 30,
-                child: Row(
+                child:
+                Row(
                   children: [
                     Expanded(
                       child: Container(

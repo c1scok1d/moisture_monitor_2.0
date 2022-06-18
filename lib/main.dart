@@ -142,6 +142,7 @@ class MyApp extends StatelessWidget {
       title: 'Rodland Farms @Home',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: 'Montserrat',
       ),
       home: ShowCaseWidget(
         onStart: (index, key) {

@@ -39,13 +39,21 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  buttonItem(
-                      "assets/images/google.svg", "Continue with Google", 25, () {}),
+                  Image.asset("assets/images/logo.png", height: 150, width: 150,),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  buttonItem("assets/images/google.svg", "Continue with Google", 25, () {}),
                   buttonItem("assets/images/phone.svg", "Continue with Phone", 30, () {}),
                   buttonItem("assets/images/facebook.svg", "Continue with Phone", 30, () {}),
                 ],
@@ -68,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 15,
               ),
-              colorButton("Sign Up"),
+              colorButton("Sign In"),
               const SizedBox(
                 height: 15,
               ),
@@ -91,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                               (route) => false);
                     },
                     child: const Text(
-                      " Sign Up",
+                      " Sign In",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.blue,
