@@ -93,7 +93,7 @@ class Records {
 
   DateTime getGraphTime() {
     // print(createdAt!);
-    print(DateTime.parse(createdAt!).toIso8601String());
+    // print(DateTime.parse(createdAt!).toIso8601String());
 
     String isoString = DateTime.parse(createdAt!)
         .toIso8601String(); // say "2020-08-20 01:30:00.000Z" in ISO8601 format.
@@ -103,7 +103,7 @@ class Records {
     String convertedString = isoString.replaceAll(RegExp(r'Z'), '');
     convertedString = convertedString.replaceAll('T', ' ');
     convertedString = convertedString.replaceAll('.000', '');
-    print(convertedString);
+    // print(convertedString);
     // The converted timestamp string is then parsed to DateTime type and returned
 
     // toxValueMapper

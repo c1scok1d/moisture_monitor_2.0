@@ -21,7 +21,25 @@ class DeviceDetailsScreen extends StatefulWidget {
 }
 
 class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
+  late ZoomPanBehavior _zoom1Behavior;
+  late ZoomPanBehavior _zoom2Behavior;
+  late ZoomPanBehavior _zoom3Behavior;
   initState() {
+    _zoom1Behavior=ZoomPanBehavior(
+        enablePinching: true,
+      enablePanning: true,
+      zoomMode: ZoomMode.x,
+    );
+    _zoom2Behavior=ZoomPanBehavior(
+        enablePinching: true,
+      enablePanning: true,
+      zoomMode: ZoomMode.x,
+    );
+    _zoom3Behavior=ZoomPanBehavior(
+        enablePinching: true,
+      enablePanning: true,
+      zoomMode: ZoomMode.x,
+    );
     super.initState();
   }
 
@@ -54,6 +72,8 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                       child: Card(
                         margin: const EdgeInsets.all(8),
                         child: SfCartesianChart(
+                          zoomPanBehavior: _zoom1Behavior,
+
                           plotAreaBorderWidth: 0,
                           title: ChartTitle(text: 'Moisture'),
                           legend: Legend(
@@ -81,7 +101,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           tooltipBehavior: TooltipBehavior(enable: true),
                         ),
                       ),
-                    ),
+                    ),//Moisture Chart
                     Visibility(
                       visible: snapshot.data?.data != null &&
                           snapshot.data?.data?.isNotEmpty == true &&
@@ -89,6 +109,10 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                       child: Card(
                         margin: const EdgeInsets.all(8),
                         child: SfCartesianChart(
+                          zoomPanBehavior: _zoom2Behavior,
+                          onZoomEnd: (ZoomPanArgs args) {
+                            print("currentZoomFactor"+args.currentZoomFactor.toString());
+                          },
                           plotAreaBorderWidth: 0,
                           title: ChartTitle(text: 'Humidity and Temperature'),
                           legend: Legend(
@@ -112,7 +136,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           tooltipBehavior: TooltipBehavior(enable: true),
                         ),
                       ),
-                    ),
+                    ),//Temp and humidity chart
                     Visibility(
                       visible: snapshot.data?.data != null &&
                           snapshot.data?.data?.isNotEmpty == true &&
@@ -120,6 +144,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                       child: Card(
                         margin: const EdgeInsets.all(8),
                         child: SfCartesianChart(
+                          zoomPanBehavior: _zoom3Behavior,
                           plotAreaBorderWidth: 0,
                           title: ChartTitle(text: 'VPD'),
                           legend: Legend(
@@ -144,7 +169,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           tooltipBehavior: TooltipBehavior(enable: true),
                         ),
                       ),
-                    ),
+                    ),//vpd chart
                   ],
                 );
               } else {
