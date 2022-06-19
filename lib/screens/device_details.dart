@@ -1,9 +1,6 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:rodland_farms/data/device_record.dart';
-import 'package:rodland_farms/data/dummy.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
