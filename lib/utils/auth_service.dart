@@ -9,12 +9,6 @@ import 'package:rodland_farms/network/network_requests.dart';
 import 'package:rodland_farms/screens/home_page.dart';
 
 class AuthClass {
-  // final GoogleSignIn _googleSignIn = GoogleSignIn(
-  //   scopes: [
-  //     'email',
-  //     'https://www.googleapis.com/auth/contacts.readonly',
-  //   ],
-  // );
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   FirebaseAuth auth = FirebaseAuth.instance;
   final storage = const FlutterSecureStorage();
