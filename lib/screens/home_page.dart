@@ -1,12 +1,10 @@
-import 'dart:developer';
+
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/images_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
