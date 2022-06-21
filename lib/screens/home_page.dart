@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-Future.delayed(Duration(seconds: 7), () {
+Future.delayed(const Duration(seconds: 7), () {
   // WidgetsBinding.instance.addPostFrameCallback(
   //         (_) => ShowCaseWidget.of(context)
   //         ?.startShowCase([_one]));
@@ -109,7 +109,7 @@ Future.delayed(Duration(seconds: 7), () {
             Text(
               "Hello $name,\nWelcome to your dashboard",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.normal,
               ),
@@ -125,8 +125,8 @@ Future.delayed(Duration(seconds: 7), () {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data?.devices?.isEmpty == true) {
-                      return Center(
-                        child: const Text(
+                      return const Center(
+                        child: Text(
                           "You have no devices",
                           style: TextStyle(fontSize: 20),
                         ),
@@ -803,18 +803,18 @@ Future.delayed(Duration(seconds: 7), () {
                       },
                     ),
                     FlatButton(
-                      child: Text("Add"),
+                      child: const Text("Add"),
                       onPressed: () {
                         if (_controller.text.isEmpty) {
                           showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text("Error"),
-                                  content: Text("Hostname cannot be empty"),
+                                  title: const Text("Error"),
+                                  content: const Text("Hostname cannot be empty"),
                                   actions: <Widget>[
                                     FlatButton(
-                                      child: Text("Ok"),
+                                      child: const Text("Ok"),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
