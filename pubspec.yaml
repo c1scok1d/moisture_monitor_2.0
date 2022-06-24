@@ -59,13 +59,8 @@ dependencies:
   carousel_slider: ^4.1.1
   battery_indicator: ^0.1.1
   showcaseview: ^1.1.5
-  esp_provisioning: ^1.0.0+6
-  flutter_bloc: ^7.0.0
-  logger: ^1.0.0
-  permission_handler: ^7.0.0
-  equatable: ^2.0.0
-  flutter_spinkit: ^5.0.0
-  location: ^4.1.1
+  flutter_bluetooth_basic:
+    path: ./packages/flutter_bluetooth_basic-master
 
 dev_dependencies:
   flutter_test:
