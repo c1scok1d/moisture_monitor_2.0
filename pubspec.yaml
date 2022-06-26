@@ -59,8 +59,8 @@ dependencies:
   carousel_slider: ^4.1.1
   battery_indicator: ^0.1.1
   showcaseview: ^1.1.5
-  flutter_bluetooth_basic:
-    path: ./packages/flutter_bluetooth_basic-master
+  flutter_blue:
+    path: ./packages/flutter_blue-master
 
 dev_dependencies:
   flutter_test:

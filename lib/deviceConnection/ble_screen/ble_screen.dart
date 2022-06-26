@@ -1,12 +1,14 @@
 // import 'package:esp_provisioning_example/wifi_screen/wifi.dart';
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-
+import 'package:flutter_blue/flutter_blue.dart';
+import 'package:rodland_farms/deviceConnection/BluetoothDeviceListEntry.dart';
 
 class BleScreen extends StatefulWidget {
+  bool start = true;
+
   BleScreen();
 
   @override
@@ -14,201 +16,201 @@ class BleScreen extends StatefulWidget {
 }
 
 class _BleScreenState extends State<BleScreen> {
-
-  BluetoothManager bluetoothManager = BluetoothManager.instance;
-
-  bool _connected = false;
-  BluetoothDevice? _device;
-  String tips = 'no device connect';
-
+  BluetoothState? _bluetoothState;
+  bool _isScanning = false;
+  List<ScanResult> results = [];
 
   @override
   void initState() {
+    super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => initBluetooth());
+    _startDiscovery();
+    // Get current state
+    //   FlutterBluetoothSerial.instance.state.then((state) {
+    //     setState(() {
+    //       _bluetoothState = state;
+    //       if (_bluetoothState == BluetoothState.STATE_OFF) {
+    //          FlutterBluetoothSerial.instance.requestEnable();
+    //       }
+    //     });
+    //   });
+    //   isDiscovering = widget.start;
+    //   Future.doWhile(() async {
+    //     // Wait if adapter not enabled
+    //     if ((await FlutterBluetoothSerial.instance.isEnabled) ?? false) {
+    //       return false;
+    //     }
+    //     await Future.delayed(Duration(milliseconds: 0xDD));
+    //     return true;
+    //   }).then((_) {
+    //     print('BT enabled');
+    //     if (isDiscovering) {
+    //       _startDiscovery();
+    //     }
+    //     // Update the address field
+    //     FlutterBluetoothSerial.instance.address.then((address) {
+    //
+    //     });
+    //   });
+    //
+    //
+    //   // Listen for futher state changes
+    //   FlutterBluetoothSerial.instance
+    //       .onStateChanged()
+    //       .listen((BluetoothState state) {
+    //         print('State change: $state');
+    //   });
+    // }
+    //
+    //
+    // @TODO . One day there should be `_pairDevice` on long tap on something... ;)
+
   }
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initBluetooth() async {
-    bluetoothManager.startScan(timeout: Duration(seconds: 4));
+  @override
+  void dispose() {
+    // Avoid memory leak (`setState` after dispose) and cancel discovery
+    // _streamSubscription?.cancel();
+    print('Scan stopping');
+    FlutterBlue.instance.stopScan();
+    super.dispose();
+  }
 
-    bool isConnected = await bluetoothManager.isConnected;
+  void _startDiscovery() {
+    print('_startDiscovery');
+    FlutterBlue.instance.scan().listen((scanResult) {
+      print('Discovered ${scanResult.toString()}');
 
-    bluetoothManager.state.listen((state) {
-      print('cur device status: $state');
-
-      switch (state) {
-        case BluetoothManager.CONNECTED:
-          setState(() {
-            _connected = true;
-            tips = 'connect success';
-          });
-          break;
-        case BluetoothManager.DISCONNECTED:
-          setState(() {
-            _connected = false;
-            tips = 'disconnect success';
-          });
-          break;
-        default:
-          break;
+      final existingIndex = results.indexWhere(
+          (element) => element.device.id.id == scanResult.device.id.id);
+      if (existingIndex >= 0) {
+        results[existingIndex] = scanResult;
+      } else {
+        results.add(scanResult);
       }
+      setState(() {
+        results.sort((a, b) => a.rssi.compareTo(b.rssi));
+      });
+    }, onDone: () {
+      print('Scan completed');
+      setState(() {
+        _isScanning = false;
+      });
+    });
+  }
+
+  void _restartDiscovery() {
+    FlutterBlue.instance.stopScan();
+    setState(() {
+      results.clear();
+      _isScanning = true;
     });
 
-    if (!mounted) return;
-
-    if (isConnected) {
-      setState(() {
-        _connected = true;
-      });
-    }
-  }
-  void _onConnect() async {
-    if (_device != null && _device?.address != null) {
-      await bluetoothManager.connect(_device!);
-    } else {
-      setState(() {
-        tips = 'please select device';
-      });
-      print('please select device');
-    }
-  }
-
-  void _onDisconnect() async {
-    await bluetoothManager.disconnect();
-  }
-
-  void _sendData() async {
-    List<int> bytes = latin1.encode('Hello world!\n\n\n').toList();
-
-    // Set codetable west. Add import 'dart:typed_data';
-    // List<int> bytes = Uint8List.fromList(List.from('\x1Bt'.codeUnits)..add(6));
-    // Text with special characters
-    // bytes += latin1.encode('blåbærgrød\n\n\n');
-
-    await bluetoothManager.writeData(bytes);
-  }
-  void _showBottomSheet(Map<String, dynamic> item, BuildContext _context) {
-    // BlocProvider.of<BleBloc>(_context).add(BleEventStopScan());
-    // BlocProvider.of<BleBloc>(_context).add(BleEventSelect(item));
-    //
-    // var bottomSheetController = showModalBottomSheet(
-    //     context: context,
-    //     backgroundColor: Colors.white,
-    //     isScrollControlled: true,
-    //     elevation: 0,
-    //     shape: RoundedRectangleBorder(
-    //       borderRadius: BorderRadius.only(
-    //         topLeft: const Radius.circular(20.0),
-    //         topRight: const Radius.circular(20.0),
-    //       ),
-    //     ),
-    //     builder: (BuildContext context) {
-    //       return Container(
-    //         padding: EdgeInsets.only(top: 5.0),
-    //         height: MediaQuery.of(context).size.height - 50,
-    //         child: WiFiScreen(),
-    //       );
-    //     });
-    // bottomSheetController.whenComplete(() {
-    //   BlocProvider.of<BleBloc>(_context).add(BleEventStart());
-    // });
+    Future.delayed(Duration(milliseconds: 500)).then((_) {
+      _startDiscovery();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-    appBar: AppBar(
-      title: Text('Scanning BT devices'),
-    ),
-    body: RefreshIndicator(
-      onRefresh: () =>
-          bluetoothManager.startScan(timeout: Duration(seconds: 4)),
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-                  child: Text(tips),
-                ),
+    return StreamBuilder<BluetoothState>(
+        stream: FlutterBlue.instance.state,
+        initialData: BluetoothState.unknown,
+        builder: (c, snapshot) {
+          _bluetoothState = snapshot.data;
+          return Scaffold(
+            appBar: AppBar(
+              title: _isScanning
+                  ? Text('Discovering devices')
+                  : Text('Discovered devices'),
+              actions: <Widget>[
+                _bluetoothState == BluetoothState.on
+                    ? FittedBox(
+                        child: GestureDetector(
+                          onTap: (){
+                            FlutterBlue.instance.stopScan();
+                          },
+                          child: Container(
+                          margin: new EdgeInsets.all(16.0),
+                          child: CircularProgressIndicator(
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(Colors.white),
+                          ),
+                        ),
+                      ))
+                    : IconButton(
+                        icon: Icon(Icons.replay),
+                        onPressed: () {
+                          _restartDiscovery();
+                        },
+                      )
               ],
             ),
-            Divider(),
-            StreamBuilder<List<BluetoothDevice>>(
-              stream: bluetoothManager.scanResults,
-              initialData: [],
-              builder: (c, snapshot) => Column(
-                children: snapshot.data!
-                    .map((d) => ListTile(
-                  title: Text(d.name ?? ''),
-                  subtitle: Text(d.address??''),
-                  onTap: () async {
-                    setState(() {
-                      _device = d;
-                    });
-                  },
-                  trailing:
-                  _device != null && _device?.address == d.address
-                      ? Icon(
-                    Icons.check,
-                    color: Colors.green,
-                  )
-                      : null,
-                ))
-                    .toList(),
-              ),
-            ),
-            Divider(),
-            Container(
-              padding: EdgeInsets.fromLTRB(20, 5, 20, 10),
-              child: Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      ElevatedButton(
-                        child: Text('connect'),
-                        onPressed: _connected ? null : _onConnect,
-                      ),
-                      SizedBox(width: 10.0),
-                      ElevatedButton(
-                        child: Text('disconnect'),
-                        onPressed: _connected ? _onDisconnect : null,
-                      ),
-                    ],
-                  ),
-                  ElevatedButton(
-                    child: Text('Send test data'),
-                    onPressed: _connected ? _sendData : null,
-                  ),
-                ],
-              ),
-            )
-          ],
-        ),
-      ),
-    ),
-    floatingActionButton: StreamBuilder<bool>(
-      stream: bluetoothManager.isScanning,
-      initialData: false,
-      builder: (c, snapshot) {
-        if (snapshot.hasData) {
-          return FloatingActionButton(
-            child: Icon(Icons.stop),
-            onPressed: () => bluetoothManager.stopScan(),
-            backgroundColor: Colors.red,
-          );
-        } else {
-          return FloatingActionButton(
-              child: Icon(Icons.search),
-              onPressed: () =>
-                  bluetoothManager.startScan(timeout: Duration(seconds: 4)));
-        }
-      },
-    ),
-  );
-  }
+            body: ListView.builder(
+              itemCount: results.length,
+              itemBuilder: (BuildContext context, index) {
+                ScanResult result = results[index];
+                final device = result;
+                final address = device.device.id.id.toString();
+                bool bonded = false;
 
+                device.device.state.listen((event) {
+                  print('Device ${device.device.id.id}...${event.toString()}');
+                  setState(() {
+                    bonded = event == BluetoothDeviceState.connected;
+                  });
+                });
+                // print('Name:${result.device.toString()}-${result.advertisementData.toString()}');
+                return BluetoothDeviceListEntry(
+                  device: device,
+                  rssi: result.rssi,
+                  onTap: () {
+                    // Navigator.of(context).pop(result.device);
+                  },
+                  onLongPress: () async {
+                    try {
+                      bool bonded = false;
+                      FlutterBlue.instance.connectedDevices.then((value) async {
+                        print('Connected devices: ${value.toString()}');
+                        if (value.indexWhere((element) =>
+                                element.id.id == device.device.id.id) >=
+                            0) {
+                          bonded = true;
+                        }
+                        if (bonded) {
+                          print('Unbonding from ${device.device.id.id}...');
+                          await device.device.disconnect();
+                          print(
+                              'Unbonding from ${device.device.name} has succed');
+                        } else {
+                          print('Bonding with ${device.device.name}...');
+                          device.device.connect();
+
+                        }
+                      });
+                    } catch (ex) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Error occured while bonding'),
+                            content: Text("${ex.toString()}"),
+                            actions: <Widget>[
+                              new TextButton(
+                                child: new Text("Close"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  },
+                );
+              },
+            ),
+          );
+        });
+  }
 }

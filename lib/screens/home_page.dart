@@ -142,10 +142,10 @@ Future.delayed(Duration(seconds: 7), () {
                           return FutureBuilder<SharedPreferences>(
                             future: (SharedPreferences.getInstance()),
                             builder: (context, mData) {
-                              print('hasdata: ${mData.hasData},$index');
-                              print('IsFirstTime:${mData.data?.getBool('isFirstTime') != false}');
+                              // print('hasdata: ${mData.hasData},$index');
+                              // print('IsFirstTime:${mData.data?.getBool('isFirstTime') != false}');
                               if(mData.hasData && (mData.data?.getBool('isFirstTime') != false)&&index==0) {
-                                print('Should show here');
+                                // print('Should show here');
                                   return  Showcase(
                                       key: _one,
                                       title: 'Controls',
@@ -178,8 +178,8 @@ Future.delayed(Duration(seconds: 7), () {
                                                       Records record =
                                                       snapshot.data!.data![0];
 
-                                                      print("ID${record.id}");
-                                                      print("Location${record.image}");
+                                                      // print("ID${record.id}");
+                                                      // print("Location${record.image}");
                                                       return InkWell(
                                                         onLongPress: () {
                                                           //Delete dialog
@@ -458,7 +458,7 @@ Future.delayed(Duration(seconds: 7), () {
 
 
                               }else{
-                                print('Should not show here $index');
+                                // print('Should not show here $index');
                                 return  Container(
                                     height: 100,
                                     child: Card(
@@ -485,8 +485,8 @@ Future.delayed(Duration(seconds: 7), () {
                                               Records record =
                                               snapshot.data!.data![0];
 
-                                              print("ID${record.id}");
-                                              print("Location${record.image}");
+                                              // print("ID${record.id}");
+                                              // print("Location${record.image}");
                                               return InkWell(
                                                 onLongPress: () {
                                                   //Delete dialog
