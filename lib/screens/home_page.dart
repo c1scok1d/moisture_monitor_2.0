@@ -1,10 +1,12 @@
 
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:esp_provisioning/esp_provisioning.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rodland_farms/deviceConnection/ble_screen/ble_screen.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/images_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
@@ -37,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-Future.delayed(const Duration(seconds: 7), () {
+Future.delayed(Duration(seconds: 7), () {
   // WidgetsBinding.instance.addPostFrameCallback(
   //         (_) => ShowCaseWidget.of(context)
   //         ?.startShowCase([_one]));
@@ -109,7 +111,7 @@ Future.delayed(const Duration(seconds: 7), () {
             Text(
               "Hello $name,\nWelcome to your dashboard",
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.normal,
               ),
@@ -125,8 +127,8 @@ Future.delayed(const Duration(seconds: 7), () {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data?.devices?.isEmpty == true) {
-                      return const Center(
-                        child: Text(
+                      return Center(
+                        child: const Text(
                           "You have no devices",
                           style: TextStyle(fontSize: 20),
                         ),
@@ -688,14 +690,11 @@ Future.delayed(const Duration(seconds: 7), () {
                                                             },
                                                             child: BatteryIndicator(
                                                               batteryFromPhone: false,
-                                                              batteryLevel: record
-                                                                .batt
-                                                                ?.toInt() ??
-                                                                0,
+                                                              batteryLevel: 74,
                                                               style: BatteryIndicatorStyle.skeumorphism,
                                                               colorful: true,
                                                               showPercentNum: true,
-                                                              mainColor: ( record.batt! < 15 ? Colors.red : record.batt! < 30 ? Colors.orange : Colors.green),
+                                                              mainColor: Colors.green/*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
                                                               size: 8.0,
                                                               ratio: 2.5,
                                                               showPercentSlide: true,
@@ -784,75 +783,80 @@ Future.delayed(const Duration(seconds: 7), () {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          var _controller = TextEditingController();
+
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => BleScreen()));
+          // var _controller = TextEditingController();
           //create dialog
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text("Add Device"),
-                  content: TextField(
-                    controller: _controller,
-                    decoration: InputDecoration(
-                        labelText: "Hostname",
-                        hintText: "Enter device name",
-                        border: OutlineInputBorder()),
-                  ),
-                  actions: <Widget>[
-                    FlatButton(
-                      child: Text("Cancel"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    FlatButton(
-                      child: const Text("Add"),
-                      onPressed: () {
-                        if (_controller.text.isEmpty) {
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Error"),
-                                  content: const Text("Hostname cannot be empty"),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: const Text("Ok"),
-                                      onPressed: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    )
-                                  ],
-                                );
-                              });
-                        } else {
-                          Navigator.of(context).pop();
-                          EasyLoading.show(status: 'Adding device...');
-                          NetworkRequests()
-                              .saveDevice(_controller.text)
-                              .then((value) async {
-                            EasyLoading.dismiss();
-                            if (value.success == true) {
-                              print("Adding to firebase:");
-                              await FirebaseMessaging.instance
-                                  .subscribeToTopic("host_" + _controller.text);
-                              EasyLoading.showSuccess('Device added');
-                              setState(() {
-                                _devices = NetworkRequests().getUserDevices();
-                              });
-                            } else {
-                              EasyLoading.showError(value.message??'Error adding device');
-                            }
-                          }).catchError((error) {
-                            EasyLoading.dismiss();
-                            EasyLoading.showError('Error adding device');
-                          });
-                        }
-                      },
-                    )
-                  ],
-                );
-              });
+          // showDialog(
+          //     context: context,
+          //     builder: (BuildContext context) {
+          //       return AlertDialog(
+          //         title: Text("Add Device"),
+          //         content: TextField(
+          //           controller: _controller,
+          //           decoration: InputDecoration(
+          //               labelText: "Hostname",
+          //               hintText: "Enter device name",
+          //               border: OutlineInputBorder()),
+          //         ),
+          //         actions: <Widget>[
+          //           FlatButton(
+          //             child: Text("Cancel"),
+          //             onPressed: () {
+          //               Navigator.of(context).pop();
+          //             },
+          //           ),
+          //           FlatButton(
+          //             child: Text("Add"),
+          //             onPressed: () {
+          //               if (_controller.text.isEmpty) {
+          //                 showDialog(
+          //                     context: context,
+          //                     builder: (BuildContext context) {
+          //                       return AlertDialog(
+          //                         title: Text("Error"),
+          //                         content: Text("Hostname cannot be empty"),
+          //                         actions: <Widget>[
+          //                           FlatButton(
+          //                             child: Text("Ok"),
+          //                             onPressed: () {
+          //                               Navigator.of(context).pop();
+          //                             },
+          //                           )
+          //                         ],
+          //                       );
+          //                     });
+          //               } else {
+          //                 Navigator.of(context).pop();
+          //                 EasyLoading.show(status: 'Adding device...');
+          //                 NetworkRequests()
+          //                     .saveDevice(_controller.text)
+          //                     .then((value) async {
+          //                   EasyLoading.dismiss();
+          //                   if (value.success == true) {
+          //                     print("Adding to firebase:");
+          //                     await FirebaseMessaging.instance
+          //                         .subscribeToTopic("host_" + _controller.text);
+          //                     EasyLoading.showSuccess('Device added');
+          //                     setState(() {
+          //                       _devices = NetworkRequests().getUserDevices();
+          //                     });
+          //                   } else {
+          //                     EasyLoading.showError(value.message??'Error adding device');
+          //                   }
+          //                 }).catchError((error) {
+          //                   EasyLoading.dismiss();
+          //                   EasyLoading.showError('Error adding device');
+          //                 });
+          //               }
+          //             },
+          //           )
+          //         ],
+          //       );
+          //     });
         },
         child: const Icon(Icons.add),
       ),
