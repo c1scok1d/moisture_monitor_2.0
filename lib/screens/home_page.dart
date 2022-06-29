@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-Future.delayed(Duration(seconds: 7), () {
+Future.delayed(const Duration(seconds: 7), () {
   // WidgetsBinding.instance.addPostFrameCallback(
   //         (_) => ShowCaseWidget.of(context)
   //         ?.startShowCase([_one]));
@@ -111,7 +111,7 @@ Future.delayed(Duration(seconds: 7), () {
             Text(
               "Hello $name,\nWelcome to your dashboard",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.normal,
               ),
@@ -127,8 +127,8 @@ Future.delayed(Duration(seconds: 7), () {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data?.devices?.isEmpty == true) {
-                      return Center(
-                        child: const Text(
+                      return const Center(
+                        child: Text(
                           "You have no devices",
                           style: TextStyle(fontSize: 20),
                         ),
@@ -690,11 +690,14 @@ Future.delayed(Duration(seconds: 7), () {
                                                             },
                                                             child: BatteryIndicator(
                                                               batteryFromPhone: false,
-                                                              batteryLevel: 74,
+                                                              batteryLevel: record
+                                                                .batt
+                                                                ?.toInt() ??
+                                                                0,
                                                               style: BatteryIndicatorStyle.skeumorphism,
                                                               colorful: true,
                                                               showPercentNum: true,
-                                                              mainColor: Colors.green/*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
+                                                              mainColor: ( record.batt! < 15 ? Colors.red : record.batt! < 30 ? Colors.orange : Colors.green),
                                                               size: 8.0,
                                                               ratio: 2.5,
                                                               showPercentSlide: true,
