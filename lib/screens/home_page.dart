@@ -1,5 +1,3 @@
-
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,18 +31,16 @@ class _HomePageState extends State<HomePage> {
   GlobalKey _one = GlobalKey();
   late BuildContext _context;
 
-
   @override
   void initState() {
     super.initState();
-Future.delayed(Duration(seconds: 7), () {
-  // WidgetsBinding.instance.addPostFrameCallback(
-  //         (_) => ShowCaseWidget.of(context)
-  //         ?.startShowCase([_one]));
-});
+    Future.delayed(Duration(seconds: 7), () {
+      // WidgetsBinding.instance.addPostFrameCallback(
+      //         (_) => ShowCaseWidget.of(context)
+      //         ?.startShowCase([_one]));
+    });
     WidgetsBinding.instance.addPostFrameCallback(
-            (_) => ShowCaseWidget.of(context)
-            ?.startShowCase([_one]));
+        (_) => ShowCaseWidget.of(context)?.startShowCase([_one]));
   }
 
   @override
@@ -60,8 +56,7 @@ Future.delayed(Duration(seconds: 7), () {
     }
     print("HomePage: ${widget.id}");
     return Scaffold(
-      body:
-      Container(
+      body: Container(
         color: Colors.white,
         child: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -70,15 +65,14 @@ Future.delayed(Duration(seconds: 7), () {
               children: [
                 Center(
                   child: CircleAvatar(
-                      radius: 70,
-                      backgroundColor: Colors.transparent,
-                      child: Image.asset('assets/images/logo.png'),
+                    radius: 70,
+                    backgroundColor: Colors.transparent,
+                    child: Image.asset('assets/images/logo.png'),
 
                     /*backgroundImage: NetworkImage(_profileImage == ""
                         ? "https://www.shareicon.net/download/128x128//2016/07/26/802016_man_512x512.png"
                         : _profileImage),*/
                   ),
-
                 ),
                 Align(
                   alignment: Alignment.topRight,
@@ -140,43 +134,53 @@ Future.delayed(Duration(seconds: 7), () {
                         if (snapshot.hasData) {
                           Devices device = snapshot.data!.devices![index];
                           return FutureBuilder<SharedPreferences>(
-                            future: (SharedPreferences.getInstance()),
-                            builder: (context, mData) {
-                              // print('hasdata: ${mData.hasData},$index');
-                              // print('IsFirstTime:${mData.data?.getBool('isFirstTime') != false}');
-                              if(mData.hasData && (mData.data?.getBool('isFirstTime') != false)&&index==0) {
-                                // print('Should show here');
-                                  return  Showcase(
-                                      key: _one,
-                                      title: 'Controls',
-                                      description: 'Long press to delete, press once to view details',
-
-                                      blurValue: 1,
-                                      child: Container(
-                                            height: 100,
-                                            child: Card(
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius: BorderRadius.circular(10),
-                                              ),
-                                              child: FutureBuilder<GetDeviceDataResponse>(
+                              future: (SharedPreferences.getInstance()),
+                              builder: (context, mData) {
+                                // print('hasdata: ${mData.hasData},$index');
+                                // print('IsFirstTime:${mData.data?.getBool('isFirstTime') != false}');
+                                if (mData.hasData &&
+                                    (mData.data?.getBool('isFirstTime') !=
+                                        false) &&
+                                    index == 0) {
+                                  // print('Should show here');
+                                  return Showcase(
+                                    key: _one,
+                                    title: 'Controls',
+                                    description:
+                                        'Long press to delete, press once to view details',
+                                    blurValue: 1,
+                                    child: Container(
+                                        height: 100,
+                                        child: Card(
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child:
+                                              FutureBuilder<
+                                                      GetDeviceDataResponse>(
                                                   future: NetworkRequests()
-                                                      .getLatestDeviceData(device.hostname!),
+                                                      .getLatestDeviceData(
+                                                          device.hostname!),
                                                   builder: (context, snapshot) {
                                                     print("DeviceRecord:" +
-                                                        snapshot.connectionState.name);
+                                                        snapshot.connectionState
+                                                            .name);
                                                     if (snapshot.hasData) {
-                                                      if (snapshot.data?.data?.isEmpty ==
+                                                      if (snapshot.data?.data
+                                                              ?.isEmpty ==
                                                           true) {
                                                         return Center(
                                                           child: const Text(
                                                             "No data available",
-                                                            style: TextStyle(fontSize: 20),
+                                                            style: TextStyle(
+                                                                fontSize: 20),
                                                           ),
                                                         );
                                                       }
 
-                                                      Records record =
-                                                      snapshot.data!.data![0];
+                                                      Records record = snapshot
+                                                          .data!.data![0];
 
                                                       // print("ID${record.id}");
                                                       // print("Location${record.image}");
@@ -185,41 +189,58 @@ Future.delayed(Duration(seconds: 7), () {
                                                           //Delete dialog
                                                           showDialog(
                                                             context: context,
-                                                            builder: (context) => AlertDialog(
-                                                              title: const Text("Delete"),
-                                                              content:  Text(
-                                                                  "Are you sure you want to delete ${device.hostname??'this'} device?"),
+                                                            builder:
+                                                                (context) =>
+                                                                    AlertDialog(
+                                                              title: const Text(
+                                                                  "Delete"),
+                                                              content: Text(
+                                                                  "Are you sure you want to delete ${device.hostname ?? 'this'} device?"),
                                                               actions: [
                                                                 FlatButton(
-                                                                  child: const Text("Cancel"),
-                                                                  onPressed: () {
-                                                                    Navigator.of(context)
+                                                                  child: const Text(
+                                                                      "Cancel"),
+                                                                  onPressed:
+                                                                      () {
+                                                                    Navigator.of(
+                                                                            context)
                                                                         .pop();
                                                                   },
                                                                 ),
                                                                 FlatButton(
-                                                                  child: const Text("Delete"),
-                                                                  onPressed: () async {
+                                                                  child: const Text(
+                                                                      "Delete"),
+                                                                  onPressed:
+                                                                      () async {
                                                                     EasyLoading.show(
-                                                                        status: "Deleting...");
-                                                                    var res=await NetworkRequests()
+                                                                        status:
+                                                                            "Deleting...");
+                                                                    var res = await NetworkRequests()
                                                                         .deleteDevice(
-                                                                        device.hostname!);
-                                                                    if(res.success==true){
-                                                                      EasyLoading.showSuccess(res.message??"Success");
-                                                                      Navigator.of(context).pop();
-                                                                      setState(() {
+                                                                            device.hostname!);
+                                                                    if (res.success ==
+                                                                        true) {
+                                                                      EasyLoading.showSuccess(
+                                                                          res.message ??
+                                                                              "Success");
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                      setState(
+                                                                          () {
                                                                         _devices =
-                                                                            NetworkRequests()
-                                                                                .getUserDevices();
+                                                                            NetworkRequests().getUserDevices();
                                                                       });
-                                                                    }
-                                                                    else{
-                                                                      EasyLoading.showError(res.message??"Error deleting device");
-                                                                      Navigator.of(context)
+                                                                    } else {
+                                                                      EasyLoading.showError(
+                                                                          res.message ??
+                                                                              "Error deleting device");
+                                                                      Navigator.of(
+                                                                              context)
                                                                           .pop();
                                                                     }
-                                                                    setState(() {
+                                                                    setState(
+                                                                        () {
                                                                       _devices =
                                                                           NetworkRequests()
                                                                               .getUserDevices();
@@ -236,10 +257,12 @@ Future.delayed(Duration(seconds: 7), () {
                                                               MaterialPageRoute(
                                                                   builder: (context) =>
                                                                       DeviceDetailsScreen(
-                                                                          device,record.sensor??device.hostname!)));
+                                                                          device,
+                                                                          record.sensor ??
+                                                                              device.hostname!)));
                                                         },
                                                         child: Row(
-                                                          /*mainAxisAlignment:
+                                                            /*mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,*/
 
@@ -249,74 +272,95 @@ Future.delayed(Duration(seconds: 7), () {
                                                                 child: SizedBox(
                                                                   width: 100,
                                                                   child: SfRadialGauge(
-                                                                    //title: const GaugeTitle(text: 'Moisture', borderWidth: 10),
-                                                                      enableLoadingAnimation: true, animationDuration: 4500,
+                                                                      //title: const GaugeTitle(text: 'Moisture', borderWidth: 10),
+                                                                      enableLoadingAnimation: true,
+                                                                      animationDuration: 4500,
                                                                       axes: <RadialAxis>[
-                                                                        RadialAxis(showLabels: false, showAxisLine: false, showTicks: false,
-                                                                            minimum: 0, maximum: 99,
-                                                                            ranges: <GaugeRange>[GaugeRange(startValue: 0, endValue: 33,
-                                                                              color: Color(0xFFFE2A25), label: 'Dry',
-                                                                              sizeUnit: GaugeSizeUnit.factor,
-                                                                              labelStyle: GaugeTextStyle(fontSize:  9),
-                                                                              startWidth: 0.33, endWidth: 0.33,
-                                                                            ),GaugeRange(startValue: 33, endValue: 66,
-                                                                              color:const Color(0xFFFFBA00), label: 'OK',
-                                                                              labelStyle: const GaugeTextStyle(fontSize:   9),
-                                                                              startWidth: 0.33, endWidth: 0.33, sizeUnit: GaugeSizeUnit.factor,
-                                                                            ),
-                                                                              GaugeRange(startValue: 66, endValue: 99,
-                                                                                color:const Color(0xFF00AB47), label: 'Good',
-                                                                                labelStyle: const GaugeTextStyle(fontSize:   9),
+                                                                        RadialAxis(
+                                                                            showLabels:
+                                                                                false,
+                                                                            showAxisLine:
+                                                                                false,
+                                                                            showTicks:
+                                                                                false,
+                                                                            minimum:
+                                                                                0,
+                                                                            maximum:
+                                                                                99,
+                                                                            ranges: <GaugeRange>[
+                                                                              GaugeRange(
+                                                                                startValue: 0,
+                                                                                endValue: 33,
+                                                                                color: Color(0xFFFE2A25),
+                                                                                label: 'Dry',
                                                                                 sizeUnit: GaugeSizeUnit.factor,
-                                                                                startWidth: 0.33, endWidth: 0.33,
+                                                                                labelStyle: GaugeTextStyle(fontSize: 9),
+                                                                                startWidth: 0.33,
+                                                                                endWidth: 0.33,
                                                                               ),
-
+                                                                              GaugeRange(
+                                                                                startValue: 33,
+                                                                                endValue: 66,
+                                                                                color: const Color(0xFFFFBA00),
+                                                                                label: 'OK',
+                                                                                labelStyle: const GaugeTextStyle(fontSize: 9),
+                                                                                startWidth: 0.33,
+                                                                                endWidth: 0.33,
+                                                                                sizeUnit: GaugeSizeUnit.factor,
+                                                                              ),
+                                                                              GaugeRange(
+                                                                                startValue: 66,
+                                                                                endValue: 99,
+                                                                                color: const Color(0xFF00AB47),
+                                                                                label: 'Good',
+                                                                                labelStyle: const GaugeTextStyle(fontSize: 9),
+                                                                                sizeUnit: GaugeSizeUnit.factor,
+                                                                                startWidth: 0.33,
+                                                                                endWidth: 0.33,
+                                                                              ),
                                                                             ],
-                                                                            pointers: <
-                                                                                GaugePointer>[
+                                                                            pointers: <GaugePointer>[
                                                                               NeedlePointer(
-                                                                                value: record
-                                                                                    .moisture
-                                                                                    ?.toDouble() ??
-                                                                                    0,
+                                                                                value: record.moisture?.toDouble() ?? 0,
                                                                                 needleEndWidth: 1,
                                                                               )
                                                                             ],
-                                                                            annotations: <
-                                                                                GaugeAnnotation>[
-                                                                              GaugeAnnotation(
-                                                                                  widget: Container(
-                                                                                      child: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
-                                                                                  angle: 90,
-                                                                                  positionFactor:
-                                                                                  .8)
+                                                                            annotations: <GaugeAnnotation>[
+                                                                              GaugeAnnotation(widget: Container(child: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))), angle: 90, positionFactor: .8)
                                                                             ]),
                                                                       ]),
                                                                 ),
                                                               ),
-                                                              const SizedBox(width: 10),
-
+                                                              const SizedBox(
+                                                                  width: 10),
                                                               Expanded(
                                                                 flex: 4,
-                                                                child:
-                                                                Column(
+                                                                child: Column(
                                                                   crossAxisAlignment:
-                                                                  CrossAxisAlignment.start,
+                                                                      CrossAxisAlignment
+                                                                          .start,
                                                                   mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
+                                                                      MainAxisAlignment
+                                                                          .center,
                                                                   children: [
                                                                     Text.rich(
                                                                       TextSpan(
                                                                         // Note: Styles for TextSpans must be explicitly defined.
                                                                         // Child text spans will inherit styles from parent
-                                                                        style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: Colors.black,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.black,
                                                                         ),
-                                                                        children: <TextSpan>[
-                                                                          const TextSpan(text: 'Sensor: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                          TextSpan(text: '${record.sensor}'),
+                                                                        children: <
+                                                                            TextSpan>[
+                                                                          const TextSpan(
+                                                                              text: 'Sensor: ',
+                                                                              style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                          TextSpan(
+                                                                              text: '${record.sensor}'),
                                                                         ],
                                                                       ),
                                                                     ),
@@ -324,446 +368,607 @@ Future.delayed(Duration(seconds: 7), () {
                                                                       TextSpan(
                                                                         // Note: Styles for TextSpans must be explicitly defined.
                                                                         // Child text spans will inherit styles from parent
-                                                                        style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: Colors.black,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.black,
                                                                         ),
-                                                                        children: <TextSpan>[
-                                                                          const TextSpan(text: 'Moisture: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                          TextSpan(text: '${record.moisture}%', style: TextStyle(
-                                                                            color: ( record.moisture! < 20 ? Colors.red : Colors.green),)),
+                                                                        children: <
+                                                                            TextSpan>[
+                                                                          const TextSpan(
+                                                                              text: 'Moisture: ',
+                                                                              style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                          TextSpan(
+                                                                              text: '${record.moisture}%',
+                                                                              style: TextStyle(
+                                                                                color: (record.moisture! < 20 ? Colors.red : Colors.green),
+                                                                              )),
                                                                         ],
                                                                       ),
                                                                     ),
                                                                     Text.rich(
                                                                       TextSpan(
-                                                                        style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: Colors.black,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.black,
                                                                         ),
-                                                                        children: <TextSpan>[
+                                                                        children: <
+                                                                            TextSpan>[
                                                                           /*  const WidgetSpan(
                                                             child: Icon(Icons
                                                                 .location_on_outlined),
                                                           ),*/
-                                                                          const TextSpan(text: 'Location: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                          TextSpan(text: '${record.location}')
+                                                                          const TextSpan(
+                                                                              text: 'Location: ',
+                                                                              style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                          TextSpan(
+                                                                              text: '${record.location}')
                                                                         ],
                                                                       ),
                                                                     ),
                                                                     Text.rich(
                                                                       TextSpan(
-                                                                        style: const TextStyle(
-                                                                          fontSize: 14,
-                                                                          color: Colors.black,
+                                                                        style:
+                                                                            const TextStyle(
+                                                                          fontSize:
+                                                                              14,
+                                                                          color:
+                                                                              Colors.black,
                                                                         ),
-                                                                        children: <TextSpan>[
-                                                                          const TextSpan(text: 'Updated: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                          TextSpan(text: '${timeago.format(DateTime.parse(record.createdAt!))}')
+                                                                        children: <
+                                                                            TextSpan>[
+                                                                          const TextSpan(
+                                                                              text: 'Updated: ',
+                                                                              style: TextStyle(fontWeight: FontWeight.bold)),
+                                                                          TextSpan(
+                                                                              text: '${timeago.format(DateTime.parse(record.createdAt!))}')
                                                                         ],
                                                                       ),
                                                                     ),
                                                                   ],
-                                                                ),),
+                                                                ),
+                                                              ),
                                                               Align(
-                                                                alignment: Alignment.topCenter,
-                                                                child: Container(
-                                                                  margin: const EdgeInsets.only(right: 10, top: 15),
-                                                                  child: GestureDetector(
-                                                                    onTap: () async {
+                                                                alignment:
+                                                                    Alignment
+                                                                        .topCenter,
+                                                                child:
+                                                                    Container(
+                                                                  margin: const EdgeInsets
+                                                                          .only(
+                                                                      right: 10,
+                                                                      top: 15),
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap:
+                                                                        () async {
                                                                       //logout()
-                                                                      await FirebaseAuth.instance.signOut();
-                                                                      Navigator.of(context).pushReplacement(
+                                                                      await FirebaseAuth
+                                                                          .instance
+                                                                          .signOut();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pushReplacement(
                                                                         MaterialPageRoute(
-                                                                          builder: (context) => RegisterPage(),
+                                                                          builder: (context) =>
+                                                                              RegisterPage(),
                                                                         ),
                                                                       );
                                                                     },
-                                                                    child: BatteryIndicator(
-                                                                      batteryFromPhone: false,
-                                                                      batteryLevel: 74,
-                                                                      style: BatteryIndicatorStyle.skeumorphism,
-                                                                      colorful: true,
-                                                                      showPercentNum: true,
-                                                                      mainColor: Colors.green/*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
+                                                                    child:
+                                                                        BatteryIndicator(
+                                                                      batteryFromPhone:
+                                                                          false,
+                                                                      batteryLevel:
+                                                                          74,
+                                                                      style: BatteryIndicatorStyle
+                                                                          .skeumorphism,
+                                                                      colorful:
+                                                                          true,
+                                                                      showPercentNum:
+                                                                          true,
+                                                                      mainColor:
+                                                                          Colors
+                                                                              .green /*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
                                                                       size: 8.0,
-                                                                      ratio: 2.5,
-                                                                      showPercentSlide: true,
+                                                                      ratio:
+                                                                          2.5,
+                                                                      showPercentSlide:
+                                                                          true,
                                                                     ),
                                                                   ),
                                                                 ),
                                                               ),
                                                               Visibility(
                                                                 visible: snapshot.data?.data != null &&
-                                                                    snapshot.data?.data?.isNotEmpty == true &&
-                                                                    snapshot.data?.data![0].image?.isNotEmpty == true,
-                                                                child:
-                                                                Expanded(
-                                                                  flex:2,
-                                                                  child: record.image == null
+                                                                    snapshot
+                                                                            .data
+                                                                            ?.data
+                                                                            ?.isNotEmpty ==
+                                                                        true &&
+                                                                    snapshot
+                                                                            .data
+                                                                            ?.data![0]
+                                                                            .image
+                                                                            ?.isNotEmpty ==
+                                                                        true,
+                                                                child: Expanded(
+                                                                  flex: 2,
+                                                                  child: record
+                                                                              .image ==
+                                                                          null
                                                                       ? Container()
                                                                       : Card(
-                                                                    shape:
-                                                                    const RoundedRectangleBorder(
-                                                                      borderRadius: BorderRadius.only(
-                                                                          topRight: Radius
-                                                                              .circular(
-                                                                              10),
-                                                                          bottomRight:
-                                                                          Radius.circular(
-                                                                              10),
-                                                                          topLeft: Radius
-                                                                              .circular(
-                                                                              10),
-                                                                          bottomLeft:
-                                                                          Radius.circular(
-                                                                              10)),
-                                                                    ),
-                                                                    child: GestureDetector(
-                                                                      onTap: () {
-                                                                        showImageDialog(
-                                                                            context,
-                                                                            device.hostname,
-                                                                            record.image);
-                                                                      },
-                                                                      child: SizedBox(
-
-                                                                        width: 90,
-                                                                        height: 90,
-                                                                        child:
-                                                                        Image.network(
-                                                                          'https://athome.rodlandfarms.com/uploads/${record.image}',
-                                                                          fit: BoxFit
-                                                                              .fill,
-                                                                          alignment: Alignment
-                                                                              .center,
-                                                                          colorBlendMode:
-                                                                          BlendMode
-                                                                              .darken,
+                                                                          shape:
+                                                                              const RoundedRectangleBorder(
+                                                                            borderRadius: BorderRadius.only(
+                                                                                topRight: Radius.circular(10),
+                                                                                bottomRight: Radius.circular(10),
+                                                                                topLeft: Radius.circular(10),
+                                                                                bottomLeft: Radius.circular(10)),
+                                                                          ),
+                                                                          child:
+                                                                              GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              showImageDialog(context, device.hostname, record.image);
+                                                                            },
+                                                                            child:
+                                                                                SizedBox(
+                                                                              width: 90,
+                                                                              height: 90,
+                                                                              child: Image.network(
+                                                                                'https://athome.rodlandfarms.com/uploads/${record.image}',
+                                                                                fit: BoxFit.fill,
+                                                                                alignment: Alignment.center,
+                                                                                colorBlendMode: BlendMode.darken,
+                                                                              ),
+                                                                            ),
+                                                                          ),
                                                                         ),
-                                                                      ),
-                                                                    ),
-                                                                  ),),
-                                                              )]),
+                                                                ),
+                                                              )
+                                                            ]),
                                                       );
                                                     } else {
                                                       return const Center(
-                                                          child: CircularProgressIndicator());
+                                                          child:
+                                                              CircularProgressIndicator());
                                                     }
                                                   }),
-                                            ))
-                                      ,);
-
-
-
-
-                              }else{
-                                // print('Should not show here $index');
-                                return  Container(
-                                    height: 100,
-                                    child: Card(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: FutureBuilder<GetDeviceDataResponse>(
-                                          future: NetworkRequests()
-                                              .getLatestDeviceData(device.hostname!),
-                                          builder: (context, snapshot) {
-                                            // print("DeviceRecord:" +
-                                            //     snapshot.connectionState.name);
-                                            if (snapshot.hasData) {
-                                              if (snapshot.data?.data?.isEmpty ==
-                                                  true) {
-                                                return Center(
-                                                  child: const Text(
-                                                    "No data available",
-                                                    style: TextStyle(fontSize: 20),
-                                                  ),
-                                                );
-                                              }
-
-                                              Records record =
-                                              snapshot.data!.data![0];
-
-                                              // print("ID${record.id}");
-                                              // print("Location${record.image}");
-                                              return InkWell(
-                                                onLongPress: () {
-                                                  //Delete dialog
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) => AlertDialog(
-                                                      title: const Text("Delete"),
-                                                      content:  Text(
-                                                          "Are you sure you want to delete ${device.hostname??'this'} device?"),
-                                                      actions: [
-                                                        FlatButton(
-                                                          child: const Text("Cancel"),
-                                                          onPressed: () {
-                                                            Navigator.of(context)
-                                                                .pop();
-                                                          },
+                                        )),
+                                  );
+                                } else {
+                                  // print('Should not show here $index');
+                                  return Container(
+                                      height: 100,
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                        ),
+                                        child:
+                                            FutureBuilder<
+                                                    GetDeviceDataResponse>(
+                                                future: NetworkRequests()
+                                                    .getLatestDeviceData(
+                                                        device.hostname!),
+                                                builder: (context, snapshot) {
+                                                  // print("DeviceRecord:" +
+                                                  //     snapshot.connectionState.name);
+                                                  if (snapshot.hasData) {
+                                                    if (snapshot.data?.data
+                                                            ?.isEmpty ==
+                                                        true) {
+                                                      return Center(
+                                                        child: const Text(
+                                                          "No data available",
+                                                          style: TextStyle(
+                                                              fontSize: 20),
                                                         ),
-                                                        FlatButton(
-                                                          child: const Text("Delete"),
-                                                          onPressed: () async {
-                                                            EasyLoading.show(
-                                                                status: "Deleting...");
-                                                            var res=await NetworkRequests()
-                                                                .deleteDevice(
-                                                                device.hostname!);
-                                                            if(res.success==true){
-                                                              EasyLoading.showSuccess(res.message??"Success");
-                                                              Navigator.of(context).pop();
-                                                              setState(() {
-                                                                _devices =
-                                                                    NetworkRequests()
-                                                                        .getUserDevices();
-                                                              });
-                                                            }
-                                                            else{
-                                                              EasyLoading.showError(res.message??"Error deleting device");
-                                                              Navigator.of(context)
-                                                                  .pop();
-                                                            }
-                                                            setState(() {
-                                                              _devices =
-                                                                  NetworkRequests()
-                                                                      .getUserDevices();
-                                                            });
-                                                          },
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  );
-                                                },
-                                                onTap: () {
-                                                  Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
+                                                      );
+                                                    }
+
+                                                    Records record =
+                                                        snapshot.data!.data![0];
+
+                                                    // print("ID${record.id}");
+                                                    // print("Location${record.image}");
+                                                    return InkWell(
+                                                      onLongPress: () {
+                                                        //Delete dialog
+                                                        showDialog(
+                                                          context: context,
                                                           builder: (context) =>
-                                                              DeviceDetailsScreen(
-                                                                  device,record.sensor??device.hostname!)));
-                                                },
-                                                child: Row(
-                                                  /*mainAxisAlignment:
+                                                              AlertDialog(
+                                                            title: const Text(
+                                                                "Delete"),
+                                                            content: Text(
+                                                                "Are you sure you want to delete ${device.hostname ?? 'this'} device?"),
+                                                            actions: [
+                                                              FlatButton(
+                                                                child: const Text(
+                                                                    "Cancel"),
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                              ),
+                                                              FlatButton(
+                                                                child: const Text(
+                                                                    "Delete"),
+                                                                onPressed:
+                                                                    () async {
+                                                                  EasyLoading.show(
+                                                                      status:
+                                                                          "Deleting...");
+                                                                  var res = await NetworkRequests()
+                                                                      .deleteDevice(
+                                                                          device
+                                                                              .hostname!);
+                                                                  if (res.success ==
+                                                                      true) {
+                                                                    EasyLoading.showSuccess(
+                                                                        res.message ??
+                                                                            "Success");
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                    setState(
+                                                                        () {
+                                                                      _devices =
+                                                                          NetworkRequests()
+                                                                              .getUserDevices();
+                                                                    });
+                                                                  } else {
+                                                                    EasyLoading.showError(
+                                                                        res.message ??
+                                                                            "Error deleting device");
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pop();
+                                                                  }
+                                                                  setState(() {
+                                                                    _devices =
+                                                                        NetworkRequests()
+                                                                            .getUserDevices();
+                                                                  });
+                                                                },
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                      onTap: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    DeviceDetailsScreen(
+                                                                        device,
+                                                                        record.sensor ??
+                                                                            device.hostname!)));
+                                                      },
+                                                      child: Row(
+                                                          /*mainAxisAlignment:
                                                   MainAxisAlignment
                                                       .spaceBetween,*/
 
-                                                    children: [
-                                                      Expanded(
-                                                        flex: 2,
-                                                        child: SizedBox(
-                                                          width: 100,
-                                                          child: SfRadialGauge(
-                                                            //title: const GaugeTitle(text: 'Moisture', borderWidth: 10),
-                                                              enableLoadingAnimation: true, animationDuration: 4500,
-                                                              axes: <RadialAxis>[
-                                                                RadialAxis(showLabels: false, showAxisLine: false, showTicks: false,
-                                                                    minimum: 0, maximum: 99,
-                                                                    ranges: <GaugeRange>[GaugeRange(startValue: 0, endValue: 33,
-                                                                      color: Color(0xFFFE2A25), label: 'Dry',
-                                                                      sizeUnit: GaugeSizeUnit.factor,
-                                                                      labelStyle: GaugeTextStyle(fontSize:  9),
-                                                                      startWidth: 0.33, endWidth: 0.33,
-                                                                    ),GaugeRange(startValue: 33, endValue: 66,
-                                                                      color:const Color(0xFFFFBA00), label: 'OK',
-                                                                      labelStyle: const GaugeTextStyle(fontSize:   9),
-                                                                      startWidth: 0.33, endWidth: 0.33, sizeUnit: GaugeSizeUnit.factor,
-                                                                    ),
-                                                                      GaugeRange(startValue: 66, endValue: 99,
-                                                                        color:const Color(0xFF00AB47), label: 'Good',
-                                                                        labelStyle: const GaugeTextStyle(fontSize:   9),
-                                                                        sizeUnit: GaugeSizeUnit.factor,
-                                                                        startWidth: 0.33, endWidth: 0.33,
-                                                                      ),
-
-                                                                    ],
-                                                                    pointers: <
-                                                                        GaugePointer>[
-                                                                      NeedlePointer(
-                                                                        value: record
-                                                                            .moisture
-                                                                            ?.toDouble() ??
-                                                                            0,
-                                                                        needleEndWidth: 1,
-                                                                      )
-                                                                    ],
-                                                                    annotations: <
-                                                                        GaugeAnnotation>[
-                                                                      GaugeAnnotation(
-                                                                          widget: Container(
-                                                                              child: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
-                                                                          angle: 90,
-                                                                          positionFactor:
-                                                                          .8)
-                                                                    ]),
-                                                              ]),
-                                                        ),
-                                                      ),
-                                                      const SizedBox(width: 10),
-
-                                                      Expanded(
-                                                        flex: 4,
-                                                        child:
-                                                        Column(
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.start,
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
                                                           children: [
-                                                            Text.rich(
-                                                              TextSpan(
-                                                                // Note: Styles for TextSpans must be explicitly defined.
-                                                                // Child text spans will inherit styles from parent
-                                                                style: const TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors.black,
-                                                                ),
-                                                                children: <TextSpan>[
-                                                                  const TextSpan(text: 'Sensor: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: '${record.sensor}'),
-                                                                ],
+                                                            Expanded(
+                                                              flex: 2,
+                                                              child: SizedBox(
+                                                                width: 100,
+                                                                child: SfRadialGauge(
+                                                                    //title: const GaugeTitle(text: 'Moisture', borderWidth: 10),
+                                                                    enableLoadingAnimation: true,
+                                                                    animationDuration: 4500,
+                                                                    axes: <RadialAxis>[
+                                                                      RadialAxis(
+                                                                          showLabels:
+                                                                              false,
+                                                                          showAxisLine:
+                                                                              false,
+                                                                          showTicks:
+                                                                              false,
+                                                                          minimum:
+                                                                              0,
+                                                                          maximum:
+                                                                              99,
+                                                                          ranges: <
+                                                                              GaugeRange>[
+                                                                            GaugeRange(
+                                                                              startValue: 0,
+                                                                              endValue: 33,
+                                                                              color: Color(0xFFFE2A25),
+                                                                              label: 'Dry',
+                                                                              sizeUnit: GaugeSizeUnit.factor,
+                                                                              labelStyle: GaugeTextStyle(fontSize: 9),
+                                                                              startWidth: 0.33,
+                                                                              endWidth: 0.33,
+                                                                            ),
+                                                                            GaugeRange(
+                                                                              startValue: 33,
+                                                                              endValue: 66,
+                                                                              color: const Color(0xFFFFBA00),
+                                                                              label: 'OK',
+                                                                              labelStyle: const GaugeTextStyle(fontSize: 9),
+                                                                              startWidth: 0.33,
+                                                                              endWidth: 0.33,
+                                                                              sizeUnit: GaugeSizeUnit.factor,
+                                                                            ),
+                                                                            GaugeRange(
+                                                                              startValue: 66,
+                                                                              endValue: 99,
+                                                                              color: const Color(0xFF00AB47),
+                                                                              label: 'Good',
+                                                                              labelStyle: const GaugeTextStyle(fontSize: 9),
+                                                                              sizeUnit: GaugeSizeUnit.factor,
+                                                                              startWidth: 0.33,
+                                                                              endWidth: 0.33,
+                                                                            ),
+                                                                          ],
+                                                                          pointers: <
+                                                                              GaugePointer>[
+                                                                            NeedlePointer(
+                                                                              value: record.moisture?.toDouble() ?? 0,
+                                                                              needleEndWidth: 1,
+                                                                            )
+                                                                          ],
+                                                                          annotations: <
+                                                                              GaugeAnnotation>[
+                                                                            GaugeAnnotation(
+                                                                                widget: Container(child: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
+                                                                                angle: 90,
+                                                                                positionFactor: .8)
+                                                                          ]),
+                                                                    ]),
                                                               ),
                                                             ),
-                                                            Text.rich(
-                                                              TextSpan(
-                                                                // Note: Styles for TextSpans must be explicitly defined.
-                                                                // Child text spans will inherit styles from parent
-                                                                style: const TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors.black,
-                                                                ),
-                                                                children: <TextSpan>[
-                                                                  const TextSpan(text: 'Moisture: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: '${record.moisture}%', style: TextStyle(
-                                                                    color: ( record.moisture! < 20 ? Colors.red : Colors.green),)),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                            Text.rich(
-                                                              TextSpan(
-                                                                style: const TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors.black,
-                                                                ),
-                                                                children: <TextSpan>[
-                                                                  /*  const WidgetSpan(
+                                                            const SizedBox(
+                                                                width: 10),
+                                                            Expanded(
+                                                              flex: 4,
+                                                              child: Column(
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .start,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text.rich(
+                                                                    TextSpan(
+                                                                      // Note: Styles for TextSpans must be explicitly defined.
+                                                                      // Child text spans will inherit styles from parent
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                        const TextSpan(
+                                                                            text:
+                                                                                'Sensor: ',
+                                                                            style:
+                                                                                TextStyle(fontWeight: FontWeight.bold)),
+                                                                        TextSpan(
+                                                                            text:
+                                                                                '${record.sensor}'),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Text.rich(
+                                                                    TextSpan(
+                                                                      // Note: Styles for TextSpans must be explicitly defined.
+                                                                      // Child text spans will inherit styles from parent
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                        const TextSpan(
+                                                                            text:
+                                                                                'Moisture: ',
+                                                                            style:
+                                                                                TextStyle(fontWeight: FontWeight.bold)),
+                                                                        TextSpan(
+                                                                            text:
+                                                                                '${record.moisture}%',
+                                                                            style:
+                                                                                TextStyle(
+                                                                              color: (record.moisture! < 20 ? Colors.red : Colors.green),
+                                                                            )),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Text.rich(
+                                                                    TextSpan(
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                        /*  const WidgetSpan(
                                                             child: Icon(Icons
                                                                 .location_on_outlined),
                                                           ),*/
-                                                                  const TextSpan(text: 'Location: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: '${record.location}')
+                                                                        const TextSpan(
+                                                                            text:
+                                                                                'Location: ',
+                                                                            style:
+                                                                                TextStyle(fontWeight: FontWeight.bold)),
+                                                                        TextSpan(
+                                                                            text:
+                                                                                '${record.location}')
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                  Text.rich(
+                                                                    TextSpan(
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            14,
+                                                                        color: Colors
+                                                                            .black,
+                                                                      ),
+                                                                      children: <
+                                                                          TextSpan>[
+                                                                        const TextSpan(
+                                                                            text:
+                                                                                'Updated: ',
+                                                                            style:
+                                                                                TextStyle(fontWeight: FontWeight.bold)),
+                                                                        TextSpan(
+                                                                            text:
+                                                                                '${timeago.format(DateTime.parse(record.createdAt!))}')
+                                                                      ],
+                                                                    ),
+                                                                  ),
                                                                 ],
                                                               ),
                                                             ),
-                                                            Text.rich(
-                                                              TextSpan(
-                                                                style: const TextStyle(
-                                                                  fontSize: 14,
-                                                                  color: Colors.black,
-                                                                ),
-                                                                children: <TextSpan>[
-                                                                  const TextSpan(text: 'Updated: ',style: TextStyle(fontWeight: FontWeight.bold)),
-                                                                  TextSpan(text: '${timeago.format(DateTime.parse(record.createdAt!))}')
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),),
-                                                      Align(
-                                                        alignment: Alignment.topCenter,
-                                                        child: Container(
-                                                          margin: const EdgeInsets.only(right: 10, top: 15),
-                                                          child: GestureDetector(
-                                                            onTap: () async {
-                                                              //logout()
-                                                              await FirebaseAuth.instance.signOut();
-                                                              Navigator.of(context).pushReplacement(
-                                                                MaterialPageRoute(
-                                                                  builder: (context) => RegisterPage(),
-                                                                ),
-                                                              );
-                                                            },
-                                                            child: BatteryIndicator(
-                                                              batteryFromPhone: false,
-                                                              batteryLevel: 74,
-                                                              style: BatteryIndicatorStyle.skeumorphism,
-                                                              colorful: true,
-                                                              showPercentNum: true,
-                                                              mainColor: Colors.green/*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
-                                                              size: 8.0,
-                                                              ratio: 2.5,
-                                                              showPercentSlide: true,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Visibility(
-                                                        visible: snapshot.data?.data != null &&
-                                                            snapshot.data?.data?.isNotEmpty == true &&
-                                                            snapshot.data?.data![0].image?.isNotEmpty == true,
-                                                        child:
-                                                        Expanded(
-                                                          flex:2,
-                                                          child: record.image == null
-                                                              ? Container()
-                                                              : Card(
-                                                            shape:
-                                                            const RoundedRectangleBorder(
-                                                              borderRadius: BorderRadius.only(
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                      10),
-                                                                  bottomRight:
-                                                                  Radius.circular(
-                                                                      10),
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                      10),
-                                                                  bottomLeft:
-                                                                  Radius.circular(
-                                                                      10)),
-                                                            ),
-                                                            child: GestureDetector(
-                                                              onTap: () {
-                                                                showImageDialog(
-                                                                    context,
-                                                                    device.hostname,
-                                                                    record.image);
-                                                              },
-                                                              child: SizedBox(
-
-                                                                width: 90,
-                                                                height: 90,
+                                                            Align(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .topCenter,
+                                                              child: Container(
+                                                                margin:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        right:
+                                                                            10,
+                                                                        top:
+                                                                            15),
                                                                 child:
-                                                                Image.network(
-                                                                  'https://athome.rodlandfarms.com/uploads/${record.image}',
-                                                                  fit: BoxFit
-                                                                      .fill,
-                                                                  alignment: Alignment
-                                                                      .center,
-                                                                  colorBlendMode:
-                                                                  BlendMode
-                                                                      .darken,
+                                                                    GestureDetector(
+                                                                  onTap:
+                                                                      () async {
+                                                                    //logout()
+                                                                    await FirebaseAuth
+                                                                        .instance
+                                                                        .signOut();
+                                                                    Navigator.of(
+                                                                            context)
+                                                                        .pushReplacement(
+                                                                      MaterialPageRoute(
+                                                                        builder:
+                                                                            (context) =>
+                                                                                RegisterPage(),
+                                                                      ),
+                                                                    );
+                                                                  },
+                                                                  child:
+                                                                      BatteryIndicator(
+                                                                    batteryFromPhone:
+                                                                        false,
+                                                                    batteryLevel:
+                                                                        74,
+                                                                    style: BatteryIndicatorStyle
+                                                                        .skeumorphism,
+                                                                    colorful:
+                                                                        true,
+                                                                    showPercentNum:
+                                                                        true,
+                                                                    mainColor:
+                                                                        Colors
+                                                                            .green /*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
+                                                                    size: 8.0,
+                                                                    ratio: 2.5,
+                                                                    showPercentSlide:
+                                                                        true,
+                                                                  ),
                                                                 ),
                                                               ),
                                                             ),
-                                                          ),),
-                                                      )]),
-                                              );
-                                            } else {
-                                              return const Center(
-                                                  child: CircularProgressIndicator());
-                                            }
-                                          }),
-                                    ));
-                              }
-
-                            }
-                          );
-
+                                                            Visibility(
+                                                              visible: snapshot
+                                                                          .data
+                                                                          ?.data !=
+                                                                      null &&
+                                                                  snapshot
+                                                                          .data
+                                                                          ?.data
+                                                                          ?.isNotEmpty ==
+                                                                      true &&
+                                                                  snapshot
+                                                                          .data
+                                                                          ?.data![
+                                                                              0]
+                                                                          .image
+                                                                          ?.isNotEmpty ==
+                                                                      true,
+                                                              child: Expanded(
+                                                                flex: 2,
+                                                                child: record
+                                                                            .image ==
+                                                                        null
+                                                                    ? Container()
+                                                                    : Card(
+                                                                        shape:
+                                                                            const RoundedRectangleBorder(
+                                                                          borderRadius: BorderRadius.only(
+                                                                              topRight: Radius.circular(10),
+                                                                              bottomRight: Radius.circular(10),
+                                                                              topLeft: Radius.circular(10),
+                                                                              bottomLeft: Radius.circular(10)),
+                                                                        ),
+                                                                        child:
+                                                                            GestureDetector(
+                                                                          onTap:
+                                                                              () {
+                                                                            showImageDialog(
+                                                                                context,
+                                                                                device.hostname,
+                                                                                record.image);
+                                                                          },
+                                                                          child:
+                                                                              SizedBox(
+                                                                            width:
+                                                                                90,
+                                                                            height:
+                                                                                90,
+                                                                            child:
+                                                                                Image.network(
+                                                                              'https://athome.rodlandfarms.com/uploads/${record.image}',
+                                                                              fit: BoxFit.fill,
+                                                                              alignment: Alignment.center,
+                                                                              colorBlendMode: BlendMode.darken,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                              ),
+                                                            )
+                                                          ]),
+                                                    );
+                                                  } else {
+                                                    return const Center(
+                                                        child:
+                                                            CircularProgressIndicator());
+                                                  }
+                                                }),
+                                      ));
+                                }
+                              });
                         } else {
                           print("No data");
                           return Container();
@@ -780,12 +985,19 @@ Future.delayed(Duration(seconds: 7), () {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => BleScreen()));
+        onPressed: () async {
+          final bool args = await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => BleScreen(),
+            ),
+          );
+          print("args $args");
+          if (args != null && args == true) {
+            setState(() {
+              _devices = NetworkRequests().getUserDevices();
+            });
+          }
           // var _controller = TextEditingController();
           //create dialog
           // showDialog(

@@ -3,10 +3,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rodland_farms/deviceConnection/BluetoothDeviceListEntry.dart';
+import 'package:rodland_farms/network/network_requests.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
 class BleScreen extends StatefulWidget {
@@ -217,7 +219,12 @@ class _BleScreenState extends State<BleScreen> {
       _connection = connection;
       print('Connected to the device ${result.device.bondState}');
       connection.input?.listen((Uint8List data) {
-        print('Data incoming: ${ascii.decode(data)}');
+        String received = ascii.decode(data);
+        print('Data incoming: $received');
+        if(received.contains("Hostname")){
+          EasyLoading.show(status: "Hostname received. Adding device to dashboard...");
+          addDeviceToDashboard(received);
+        }
         // connection.output.add(data); // Sending data
 
         if (ascii.decode(data).contains('!')) {
@@ -412,4 +419,26 @@ String sensorName = "";
         );
       },
     );}
+
+  void addDeviceToDashboard(String received) {
+    String hostname = received.trim().split(' ')[1];
+    NetworkRequests().saveDevice(hostname)
+                        .then((value) async {
+                      EasyLoading.dismiss();
+                      if (value.success == true) {
+                        print("Adding to firebase:");
+                        await FirebaseMessaging.instance
+                            .subscribeToTopic("host_" + hostname);
+                        EasyLoading.showSuccess('Device added');
+                        Future.delayed(Duration(seconds: 1), () {
+                          Navigator.pop(context, true);
+                        });
+                      } else {
+                        EasyLoading.showError(value.message??'Error adding device');
+                      }
+                    }).catchError((error) {
+                      EasyLoading.dismiss();
+                      EasyLoading.showError('Error adding device');
+                    });
+  }
 }
