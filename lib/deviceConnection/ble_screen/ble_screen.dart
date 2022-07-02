@@ -218,7 +218,7 @@ class _BleScreenState extends State<BleScreen> {
       print('Connected to the device ${result.device.bondState}');
       connection.input?.listen((Uint8List data) {
         print('Data incoming: ${ascii.decode(data)}');
-        connection.output.add(data); // Sending data
+        // connection.output.add(data); // Sending data
 
         if (ascii.decode(data).contains('!')) {
           connection.finish(); // Closing connection
@@ -282,7 +282,7 @@ class _BleScreenState extends State<BleScreen> {
                           onTap: () {
                             Navigator.of(context).pop();
                             _selectedWifiNetwork = accessPoint;
-                            connectToWifi(accessPoint);
+                            getWifiPassword(accessPoint);
                           },
                         );
                       },
@@ -305,7 +305,7 @@ class _BleScreenState extends State<BleScreen> {
     }
   }
 
-  void connectToWifi(WiFiAccessPoint accessPoint) {
+  void getWifiPassword(WiFiAccessPoint accessPoint) {
     //show password dialog
     showDialog(
       context: context,
@@ -328,8 +328,9 @@ class _BleScreenState extends State<BleScreen> {
                   String message =
                       'ssid "${_selectedWifiNetwork?.ssid}" password "$_password"';
                   _connection?.output.add(ascii.encode(message));
+                  EasyLoading.showSuccess("Password sent");
                   Future.delayed(Duration(seconds: 1), () {
-                    EasyLoading.showSuccess("Password sent");
+                    setUpSensorName();
                   });
                 }
               },
@@ -339,4 +340,76 @@ class _BleScreenState extends State<BleScreen> {
       },
     );
   }
+
+  void setUpSensorName() {
+    //show sensor name dialog
+String sensorName = "";
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Enter Sensor name'),
+          content: TextField(
+            obscureText: true,
+            onChanged: (String value) {
+              sensorName = value;
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Send to device"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                EasyLoading.show(status: 'Sending Sensor name...');
+                if (_connection != null) {
+                  String message =
+                      'sensorname "$sensorName"';
+                  _connection?.output.add(ascii.encode(message));
+                  EasyLoading.showSuccess("Sensor name sent");
+                  Future.delayed(Duration(seconds: 1), () {
+                    setUpSensorLocation();
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void setUpSensorLocation() {
+    String sensorLocation = "";
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Enter Sensor location'),
+          content: TextField(
+            obscureText: true,
+            onChanged: (String value) {
+              sensorLocation = value;
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text("Send to device"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                EasyLoading.show(status: 'Sending Sensor location...');
+                if (_connection != null) {
+                  String message =
+                      'sensorlocation "$sensorLocation"';
+                  _connection?.output.add(ascii.encode(message));
+                  EasyLoading.showSuccess("Sensor location sent");
+                  Future.delayed(Duration(seconds: 1), () {
+                    // setUpSensorLocation();
+                  });
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );}
 }
