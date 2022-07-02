@@ -995,6 +995,7 @@ class _HomePageState extends State<HomePage> {
           print("args $args");
           if (args != null && args == true) {
             setState(() {
+
               _devices = NetworkRequests().getUserDevices();
             });
           }
@@ -1072,6 +1073,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
 
   void showImageDialog(BuildContext context, String? hostname, String? image) {
     showDialog(
