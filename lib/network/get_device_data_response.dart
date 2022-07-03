@@ -43,6 +43,7 @@ class Records {
   String? createdAt;
   String? updatedAt;
   String? image;
+  num? batt;
 
   Records(
       {this.id,
@@ -56,7 +57,8 @@ class Records {
       this.readAt,
       this.createdAt,
       this.updatedAt,
-      this.image});
+      this.image,
+      this.batt});
 
   Records.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -72,6 +74,7 @@ class Records {
     // createdAt =  DateFormat("yyyy-MM-dd HH:mm:ss").parse(json['created_at'], true).toLocal().toString();
     updatedAt = json['updated_at'];
     image = json['image'];
+    batt = json['batt'];
   }
 
   Map<String, dynamic> toJson() {
@@ -88,6 +91,7 @@ class Records {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['image'] = this.image;
+    data['batt'] = this.batt;
     return data;
   }
 
@@ -194,6 +198,20 @@ class ChartData {
         //markerSettings: const MarkerSettings(isVisible: true),
         name: 'Humidity (%)',
         legendItemText: 'Humidity%',
+        color: Colors.green,
+      ),
+    ];
+  }
+
+  List<AreaSeries<Records, DateTime>>? getAreaBattData() {
+    return <AreaSeries<Records, DateTime>>[
+      AreaSeries<Records, DateTime>(
+        dataSource: deviceRecords!,
+        xValueMapper: (Records d, _) => d.getGraphTime(),
+        yValueMapper: (Records d, _) => d.batt ?? 0,
+        //markerSettings: const MarkerSettings(isVisible: true),
+        name: 'Battery (%)',
+        legendItemText: 'Battery%',
         color: Colors.green,
       ),
     ];

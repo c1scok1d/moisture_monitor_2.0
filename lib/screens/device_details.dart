@@ -80,11 +80,6 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           primaryXAxis: DateTimeCategoryAxis(
                               majorGridLines: const MajorGridLines(width: 0),
                               dateFormat: DateFormat('h:mm a'),
-                              // Interval type will be days
-                              intervalType: DateTimeIntervalType.hours,
-                              interval: 8
-                              // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
-                              // labelRotation: 90,
                               ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
@@ -117,9 +112,6 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           primaryXAxis: DateTimeCategoryAxis(
                             majorGridLines: const MajorGridLines(width: 0.9),
                             dateFormat: DateFormat('h:mm a'),
-                            // Interval type will be days
-                            intervalType: DateTimeIntervalType.hours,
-                            interval: 8
                           ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,
@@ -151,8 +143,6 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           primaryXAxis: DateTimeCategoryAxis(
                             majorGridLines: const MajorGridLines(width: 0),
                             dateFormat: DateFormat('h:mm a'),
-                            // dateFormat: DateFormat('MM/dd/yyyy-H:mm:s'),
-                            // labelRotation: 90,
                           ),
                           primaryYAxis: NumericAxis(
                               minimum: 0,

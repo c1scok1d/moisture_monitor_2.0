@@ -8,6 +8,7 @@ class DeviceRecord{
   String? moisture;
   String? readingTime;
   String? name;
+  String? batt;
 
 
 
@@ -18,7 +19,8 @@ class DeviceRecord{
         this.temp,
         this.humid,
         this.moisture,
-        this.readingTime});
+        this.readingTime,
+        this.batt});
 
   DeviceRecord.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -28,6 +30,7 @@ class DeviceRecord{
     humid = json['humid'];
     moisture = json['moisture'];
     readingTime = json['reading_time'];
+    batt = json['batt'];
   }
 
   String getGraphTime(){
@@ -43,6 +46,7 @@ class DeviceRecord{
     data['humid'] = humid;
     data['moisture'] = moisture;
     data['reading_time'] = readingTime;
+    data['batt'] = batt;
     return data;
   }
 }
