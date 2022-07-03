@@ -984,8 +984,6 @@ class _HomePageState extends State<HomePage> {
           if (await Permission.bluetoothScan
               .request()
               .isGranted && await Permission.bluetoothConnect.request().isGranted) {
-            // Either the permission was already granted before or the user just granted it.
-            // if it has already been granted before, nothing happens.
             final bool args = await Navigator.push(
               context,
               MaterialPageRoute(
