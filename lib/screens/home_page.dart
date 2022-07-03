@@ -877,26 +877,20 @@ class _HomePageState extends State<HomePage> {
                                                                       ),
                                                                     );
                                                                   },
-                                                                  child:
-                                                                      BatteryIndicator(
-                                                                    batteryFromPhone:
-                                                                        false,
-                                                                    batteryLevel:
-                                                                        74,
-                                                                    style: BatteryIndicatorStyle
-                                                                        .skeumorphism,
-                                                                    colorful:
-                                                                        true,
-                                                                    showPercentNum:
-                                                                        true,
-                                                                    mainColor:
-                                                                        Colors
-                                                                            .green /*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
-                                                                    size: 8.0,
-                                                                    ratio: 2.5,
-                                                                    showPercentSlide:
-                                                                        true,
-                                                                  ),
+                                                                      child: BatteryIndicator(
+                                                                        batteryFromPhone: false,
+                                                                        batteryLevel: record
+                                                                            .batt
+                                                                            ?.toInt() ??
+                                                                            0,
+                                                                        style: BatteryIndicatorStyle.skeumorphism,
+                                                                        colorful: true,
+                                                                        showPercentNum: true,
+                                                                        mainColor: ( record.batt! < 15 ? Colors.red : record.batt! < 30 ? Colors.orange : Colors.green),
+                                                                        size: 8.0,
+                                                                        ratio: 2.5,
+                                                                        showPercentSlide: true,
+                                                                      ),
                                                                 ),
                                                               ),
                                                             ),
