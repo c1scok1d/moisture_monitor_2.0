@@ -62,6 +62,7 @@ dependencies:
   flutter_bluetooth_serial:
     path: ./packages/flutter_bluetooth_serial-master
   wifi_scan: ^0.3.0
+  permission_handler: ^10.0.0
 
 dev_dependencies:
   flutter_test:

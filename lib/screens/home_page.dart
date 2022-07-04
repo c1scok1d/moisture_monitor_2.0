@@ -15,6 +15,7 @@ import 'package:timeago/timeago.dart' as timeago;
 
 import '../network/get_user_devices_response.dart';
 import 'device_details.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key, this.id}) : super(key: key);
@@ -876,26 +877,20 @@ class _HomePageState extends State<HomePage> {
                                                                       ),
                                                                     );
                                                                   },
-                                                                  child:
-                                                                      BatteryIndicator(
-                                                                    batteryFromPhone:
-                                                                        false,
-                                                                    batteryLevel:
-                                                                        74,
-                                                                    style: BatteryIndicatorStyle
-                                                                        .skeumorphism,
-                                                                    colorful:
-                                                                        true,
-                                                                    showPercentNum:
-                                                                        true,
-                                                                    mainColor:
-                                                                        Colors
-                                                                            .green /*( batteryLv < 15 ? Colors.red : batteryLv < 30 ? Colors.orange : Colors.green)*/,
-                                                                    size: 8.0,
-                                                                    ratio: 2.5,
-                                                                    showPercentSlide:
-                                                                        true,
-                                                                  ),
+                                                                      child: BatteryIndicator(
+                                                                        batteryFromPhone: false,
+                                                                        batteryLevel: record
+                                                                            .batt
+                                                                            ?.toInt() ??
+                                                                            0,
+                                                                        style: BatteryIndicatorStyle.skeumorphism,
+                                                                        colorful: true,
+                                                                        showPercentNum: true,
+                                                                        mainColor: ( record.batt! < 15 ? Colors.red : record.batt! < 30 ? Colors.orange : Colors.green),
+                                                                        size: 8.0,
+                                                                        ratio: 2.5,
+                                                                        showPercentSlide: true,
+                                                                      ),
                                                                 ),
                                                               ),
                                                             ),
@@ -986,88 +981,91 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final bool args = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => BleScreen(),
-            ),
-          );
-          print("args $args");
-          if (args != null && args == true) {
-            setState(() {
-
-              _devices = NetworkRequests().getUserDevices();
-            });
+          if (await Permission.bluetoothScan
+              .request()
+              .isGranted && await Permission.bluetoothConnect.request().isGranted) {
+            final bool args = await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => BleScreen(),
+              ),
+            );
+            print("args $args");
+            if (args != null && args == true) {
+              setState(() {
+                _devices = NetworkRequests().getUserDevices();
+              });
+            }
+            // var _controller = TextEditingController();
+            //create dialog
+            // showDialog(
+            //     context: context,
+            //     builder: (BuildContext context) {
+            //       return AlertDialog(
+            //         title: Text("Add Device"),
+            //         content: TextField(
+            //           controller: _controller,
+            //           decoration: InputDecoration(
+            //               labelText: "Hostname",
+            //               hintText: "Enter device name",
+            //               border: OutlineInputBorder()),
+            //         ),
+            //         actions: <Widget>[
+            //           FlatButton(
+            //             child: Text("Cancel"),
+            //             onPressed: () {
+            //               Navigator.of(context).pop();
+            //             },
+            //           ),
+            //           FlatButton(
+            //             child: Text("Add"),
+            //             onPressed: () {
+            //               if (_controller.text.isEmpty) {
+            //                 showDialog(
+            //                     context: context,
+            //                     builder: (BuildContext context) {
+            //                       return AlertDialog(
+            //                         title: Text("Error"),
+            //                         content: Text("Hostname cannot be empty"),
+            //                         actions: <Widget>[
+            //                           FlatButton(
+            //                             child: Text("Ok"),
+            //                             onPressed: () {
+            //                               Navigator.of(context).pop();
+            //                             },
+            //                           )
+            //                         ],
+            //                       );
+            //                     });
+            //               } else {
+            //                 Navigator.of(context).pop();
+            //                 EasyLoading.show(status: 'Adding device...');
+            //                 NetworkRequests()
+            //                     .saveDevice(_controller.text)
+            //                     .then((value) async {
+            //                   EasyLoading.dismiss();
+            //                   if (value.success == true) {
+            //                     print("Adding to firebase:");
+            //                     await FirebaseMessaging.instance
+            //                         .subscribeToTopic("host_" + _controller.text);
+            //                     EasyLoading.showSuccess('Device added');
+            //                     setState(() {
+            //                       _devices = NetworkRequests().getUserDevices();
+            //                     });
+            //                   } else {
+            //                     EasyLoading.showError(value.message??'Error adding device');
+            //                   }
+            //                 }).catchError((error) {
+            //                   EasyLoading.dismiss();
+            //                   EasyLoading.showError('Error adding device');
+            //                 });
+            //               }
+            //             },
+            //           )
+            //         ],
+            //       );
+            //     });
           }
-          // var _controller = TextEditingController();
-          //create dialog
-          // showDialog(
-          //     context: context,
-          //     builder: (BuildContext context) {
-          //       return AlertDialog(
-          //         title: Text("Add Device"),
-          //         content: TextField(
-          //           controller: _controller,
-          //           decoration: InputDecoration(
-          //               labelText: "Hostname",
-          //               hintText: "Enter device name",
-          //               border: OutlineInputBorder()),
-          //         ),
-          //         actions: <Widget>[
-          //           FlatButton(
-          //             child: Text("Cancel"),
-          //             onPressed: () {
-          //               Navigator.of(context).pop();
-          //             },
-          //           ),
-          //           FlatButton(
-          //             child: Text("Add"),
-          //             onPressed: () {
-          //               if (_controller.text.isEmpty) {
-          //                 showDialog(
-          //                     context: context,
-          //                     builder: (BuildContext context) {
-          //                       return AlertDialog(
-          //                         title: Text("Error"),
-          //                         content: Text("Hostname cannot be empty"),
-          //                         actions: <Widget>[
-          //                           FlatButton(
-          //                             child: Text("Ok"),
-          //                             onPressed: () {
-          //                               Navigator.of(context).pop();
-          //                             },
-          //                           )
-          //                         ],
-          //                       );
-          //                     });
-          //               } else {
-          //                 Navigator.of(context).pop();
-          //                 EasyLoading.show(status: 'Adding device...');
-          //                 NetworkRequests()
-          //                     .saveDevice(_controller.text)
-          //                     .then((value) async {
-          //                   EasyLoading.dismiss();
-          //                   if (value.success == true) {
-          //                     print("Adding to firebase:");
-          //                     await FirebaseMessaging.instance
-          //                         .subscribeToTopic("host_" + _controller.text);
-          //                     EasyLoading.showSuccess('Device added');
-          //                     setState(() {
-          //                       _devices = NetworkRequests().getUserDevices();
-          //                     });
-          //                   } else {
-          //                     EasyLoading.showError(value.message??'Error adding device');
-          //                   }
-          //                 }).catchError((error) {
-          //                   EasyLoading.dismiss();
-          //                   EasyLoading.showError('Error adding device');
-          //                 });
-          //               }
-          //             },
-          //           )
-          //         ],
-          //       );
-          //     });
         },
         child: const Icon(Icons.add),
       ),
