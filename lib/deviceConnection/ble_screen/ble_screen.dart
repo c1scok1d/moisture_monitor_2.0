@@ -329,7 +329,7 @@ class _BleScreenState extends State<BleScreen> {
         return AlertDialog(
           title: const Text('Enter password'),
           content: TextField(
-            obscureText: true,
+            //obscureText: false,
             onChanged: (String value) {
               _password = value;
             },
@@ -365,7 +365,7 @@ String sensorName = "";
         return AlertDialog(
           title: const Text('Enter Sensor name'),
           content: TextField(
-            obscureText: true,
+            //obscureText: false,
             onChanged: (String value) {
               sensorName = value;
             },
@@ -401,7 +401,7 @@ String sensorName = "";
         return AlertDialog(
           title: const Text('Enter Sensor location'),
           content: TextField(
-            obscureText: true,
+            //obscureText: true,
             onChanged: (String value) {
               sensorLocation = value;
             },
