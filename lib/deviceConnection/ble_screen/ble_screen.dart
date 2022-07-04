@@ -217,7 +217,6 @@ class _BleScreenState extends State<BleScreen> {
     }
     BluetoothConnection.toAddress(result.device.address).then((connection) {
       _connection = connection;
-
       print('Connected to the device ${result.device.bondState}');
       connection.input?.listen((Uint8List data) {
         String received = ascii.decode(data);
