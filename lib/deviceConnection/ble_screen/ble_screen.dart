@@ -291,7 +291,15 @@ class _BleScreenState extends State<BleScreen> {
                           onTap: () {
                             Navigator.of(context).pop();
                             _selectedWifiNetwork = accessPoint;
-                            getWifiPassword(accessPoint);
+                            EasyLoading.show(status: 'Saving WiFi network name...');
+                            if (_connection != null) {
+                              String message = accessPoint.ssid;
+                              _connection?.output.add(ascii.encode(message));
+                              EasyLoading.showSuccess("Network name set");
+                              Future.delayed(const Duration(seconds: 1), () {
+                                getWifiPassword(accessPoint);
+                              });
+                            }
                           },
                         );
                       },
@@ -334,9 +342,8 @@ class _BleScreenState extends State<BleScreen> {
                 Navigator.of(context).pop();
                 EasyLoading.show(status: 'Sending password...');
                 if (_connection != null) {
-                  String message =
-                      'ssid "${_selectedWifiNetwork?.ssid}" password "$_password"';
-                  _connection?.output.add(ascii.encode(message));
+                  String? message = _password;
+                  _connection?.output.add(ascii.encode(message!));
                   EasyLoading.showSuccess("Password sent");
                   Future.delayed(const Duration(seconds: 1), () {
                     setUpSensorName();
