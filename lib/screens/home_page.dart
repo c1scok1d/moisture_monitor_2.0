@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
       //         ?.startShowCase([_one]));
     });
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ShowCaseWidget.of(context)?.startShowCase([_one]));
+        (_) => ShowCaseWidget.of(context).startShowCase([_one]));
   }
 
   @override
@@ -171,8 +171,8 @@ class _HomePageState extends State<HomePage> {
                                                       if (snapshot.data?.data
                                                               ?.isEmpty ==
                                                           true) {
-                                                        return Center(
-                                                          child: const Text(
+                                                        return const Center(
+                                                          child: Text(
                                                             "No data available",
                                                             style: TextStyle(
                                                                 fontSize: 20),
@@ -996,75 +996,6 @@ class _HomePageState extends State<HomePage> {
                 _devices = NetworkRequests().getUserDevices();
               });
             }
-            // var _controller = TextEditingController();
-            //create dialog
-            // showDialog(
-            //     context: context,
-            //     builder: (BuildContext context) {
-            //       return AlertDialog(
-            //         title: Text("Add Device"),
-            //         content: TextField(
-            //           controller: _controller,
-            //           decoration: InputDecoration(
-            //               labelText: "Hostname",
-            //               hintText: "Enter device name",
-            //               border: OutlineInputBorder()),
-            //         ),
-            //         actions: <Widget>[
-            //           FlatButton(
-            //             child: Text("Cancel"),
-            //             onPressed: () {
-            //               Navigator.of(context).pop();
-            //             },
-            //           ),
-            //           FlatButton(
-            //             child: Text("Add"),
-            //             onPressed: () {
-            //               if (_controller.text.isEmpty) {
-            //                 showDialog(
-            //                     context: context,
-            //                     builder: (BuildContext context) {
-            //                       return AlertDialog(
-            //                         title: Text("Error"),
-            //                         content: Text("Hostname cannot be empty"),
-            //                         actions: <Widget>[
-            //                           FlatButton(
-            //                             child: Text("Ok"),
-            //                             onPressed: () {
-            //                               Navigator.of(context).pop();
-            //                             },
-            //                           )
-            //                         ],
-            //                       );
-            //                     });
-            //               } else {
-            //                 Navigator.of(context).pop();
-            //                 EasyLoading.show(status: 'Adding device...');
-            //                 NetworkRequests()
-            //                     .saveDevice(_controller.text)
-            //                     .then((value) async {
-            //                   EasyLoading.dismiss();
-            //                   if (value.success == true) {
-            //                     print("Adding to firebase:");
-            //                     await FirebaseMessaging.instance
-            //                         .subscribeToTopic("host_" + _controller.text);
-            //                     EasyLoading.showSuccess('Device added');
-            //                     setState(() {
-            //                       _devices = NetworkRequests().getUserDevices();
-            //                     });
-            //                   } else {
-            //                     EasyLoading.showError(value.message??'Error adding device');
-            //                   }
-            //                 }).catchError((error) {
-            //                   EasyLoading.dismiss();
-            //                   EasyLoading.showError('Error adding device');
-            //                 });
-            //               }
-            //             },
-            //           )
-            //         ],
-            //       );
-            //     });
           }
         },
         child: const Icon(Icons.add),
