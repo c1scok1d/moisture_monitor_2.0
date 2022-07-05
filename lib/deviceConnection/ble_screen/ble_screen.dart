@@ -29,13 +29,13 @@ class _BleScreenState extends State<BleScreen> {
   BluetoothState _bluetoothState = BluetoothState.UNKNOWN;
 
   Timer? _discoverableTimeoutTimer;
-  int _discoverableTimeoutSecondsLeft = 0;
-
-  bool _autoAcceptPairingRequests = false;
-  BluetoothConnection? _connection = null;
+  //int _discoverableTimeoutSecondsLeft = 0;
+  //bool _autoAcceptPairingRequests = false;
+  BluetoothConnection? _connection;
 
   WiFiAccessPoint? _selectedWifiNetwork;
   String? _password;
+  String? hostname;
 
   @override
   void initState() {
@@ -222,12 +222,10 @@ class _BleScreenState extends State<BleScreen> {
       connection.input?.listen((Uint8List data) {
         String received = ascii.decode(data);
         print('Data incoming: $received');
-        if(received.contains("Hostname")){
+        if(received.isNotEmpty){
           EasyLoading.show(status: "Hostname received. Adding device to dashboard...");
           addDeviceToDashboard(received);
         }
-        // connection.output.add(data); // Sending data
-
         if (ascii.decode(data).contains('!')) {
           connection.finish(); // Closing connection
           print('Disconnecting by local host');
@@ -252,7 +250,6 @@ class _BleScreenState extends State<BleScreen> {
 
   Future<void> scanForWifiNetworks() async {
     // EasyLoading.show(status: 'Scanning for wifi networks...');
-
     if (await WiFiScan.instance.hasCapability()) {
       // can safely call scan related functionalities
       final error = await WiFiScan.instance.startScan(askPermissions: true);
@@ -292,8 +289,7 @@ class _BleScreenState extends State<BleScreen> {
                             _selectedWifiNetwork = accessPoint;
                             EasyLoading.show(status: 'Saving WiFi network name...');
                             if (_connection != null) {
-                              String message = accessPoint.ssid;
-                              _connection?.output.add(ascii.encode(message));
+                              _connection?.output.add(ascii.encode(accessPoint.ssid));
                               EasyLoading.showSuccess("Network name set");
                               Future.delayed(const Duration(seconds: 1), () {
                                 getWifiPassword(accessPoint);
@@ -341,11 +337,12 @@ class _BleScreenState extends State<BleScreen> {
                 Navigator.of(context).pop();
                 EasyLoading.show(status: 'Sending password...');
                 if (_connection != null) {
-                  String? message = _password;
-                  _connection?.output.add(ascii.encode(message!));
+                  //String? message = _password;
+                  _connection?.output.add(ascii.encode(_password!));
                   EasyLoading.showSuccess("Password sent");
                   Future.delayed(const Duration(seconds: 1), () {
                     setUpSensorName();
+                    addDeviceToDashboard(hostname!);
                   });
                 }
               },
@@ -377,9 +374,8 @@ String sensorName = "";
                 Navigator.of(context).pop();
                 EasyLoading.show(status: 'Sending Sensor name...');
                 if (_connection != null) {
-                  String message =
-                      'sensorname "$sensorName"';
-                  _connection?.output.add(ascii.encode(message));
+                  //String message = sensorName;
+                  _connection?.output.add(ascii.encode(sensorName));
                   EasyLoading.showSuccess("Sensor name sent");
                   Future.delayed(const Duration(seconds: 1), () {
                     setUpSensorLocation();
@@ -413,12 +409,11 @@ String sensorName = "";
                 Navigator.of(context).pop();
                 EasyLoading.show(status: 'Sending Sensor location...');
                 if (_connection != null) {
-                  String message =
-                      'sensorlocation "$sensorLocation"';
-                  _connection?.output.add(ascii.encode(message));
+                  //String message = sensorLocation;
+                  _connection?.output.add(ascii.encode(sensorLocation));
                   EasyLoading.showSuccess("Sensor location sent");
                   Future.delayed(const Duration(seconds: 1), () {
-                    // setUpSensorLocation();
+                    addDeviceToDashboard(hostname!);
                   });
                 }
               },
