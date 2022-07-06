@@ -17,9 +17,9 @@ class FirebaseMsgHandler {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
-      'Gage Readings', // title
+      'Gauge Readings', // title
       description:
-          'This channel is used for showing when gage readings go below certain level.',
+          'This channel is used for showing when gauge reading alerts.',
       // description
       importance: Importance.high,
     );
@@ -54,9 +54,9 @@ class FirebaseMsgHandler {
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
     channel = const AndroidNotificationChannel(
       'high_importance_channel', // id
-      'Gage Readings', // title
+      'Gauge Readings', // title
       description:
-          'This channel is used for showing when gage readings go below certain level.',
+          'This channel is used for showing alerts when gauge readings go below a specified level.',
       // description
       importance: Importance.high,
     );
