@@ -971,7 +971,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     );
                   } else {
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   }
                 },
               ),
@@ -991,7 +991,7 @@ class _HomePageState extends State<HomePage> {
               ),
             );
             print("args $args");
-            if (args != null && args == true) {
+            if (args == true) {
               setState(() {
                 _devices = NetworkRequests().getUserDevices();
               });
@@ -1012,15 +1012,15 @@ class _HomePageState extends State<HomePage> {
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Images"),
-                SizedBox(
+                const Text("Images"),
+                const SizedBox(
                   width: 10,
                 ),
                 GestureDetector(
                   onTap: () {
                     Navigator.of(context).pop();
                   },
-                  child: Icon(Icons.close),
+                  child: const Icon(Icons.close),
                 ),
               ],
             ),
@@ -1029,12 +1029,12 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData &&
                       (snapshot.data?.data!.length ?? 0 == 0) == true) {
-                    return Center(
+                    return const Center(
                       child: Text("No images"),
                     );
                   }
                   if (!snapshot.hasData) {
-                    return Center(
+                    return const Center(
                       child: SizedBox(
                         //width: 100,
                         //height: 100,
@@ -1054,7 +1054,7 @@ class _HomePageState extends State<HomePage> {
                                 height:
                                     MediaQuery.of(context).size.height * 0.6,
                                 width: MediaQuery.of(context).size.width * 0.7,
-                                margin: EdgeInsets.symmetric(horizontal: 5.0),
+                                margin: const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Image.network(
                                   'https://athome.rodlandfarms.com/uploads/${i.name}',
                                   fit: BoxFit.fill,
@@ -1071,9 +1071,9 @@ class _HomePageState extends State<HomePage> {
                           enableInfiniteScroll: false,
                           reverse: false,
                           autoPlay: true,
-                          autoPlayInterval: Duration(seconds: 3),
+                          autoPlayInterval: const Duration(seconds: 3),
                           autoPlayAnimationDuration:
-                              Duration(milliseconds: 800),
+                              const Duration(milliseconds: 800),
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enlargeCenterPage: true,
                           scrollDirection: Axis.horizontal,
