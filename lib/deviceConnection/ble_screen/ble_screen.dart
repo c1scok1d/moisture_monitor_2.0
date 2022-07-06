@@ -213,39 +213,42 @@ class _BleScreenState extends State<BleScreen> {
     if (_connection != null && _connection?.isConnected == true) {
       print("Connection still active");
       EasyLoading.dismiss();
+      hostname = result.device.name?.trim().split('-')[1];
+      //addDeviceToDashboard(hostname!);
       scanForWifiNetworks();
       return;
-    }
-    BluetoothConnection.toAddress(result.device.address).then((connection) {
-      _connection = connection;
-      print('Connected to the device ${result.device.bondState}');
-      connection.input?.listen((Uint8List data) {
-        String received = ascii.decode(data);
-        print('Data incoming: $received');
-        if(received.isNotEmpty){
-          EasyLoading.show(status: "Hostname received. Adding device to dashboard...");
-          addDeviceToDashboard(received);
-        }
+    } else {
+      BluetoothConnection.toAddress(result.device.address).then((connection) {
+        _connection = connection;
+        print('Connected to the device ${result.device.name}');
+        hostname = result.device.name?.trim().split('-')[1];
+        //addDeviceToDashboard(hostname!);
+        //connection.input?.listen((Uint8List data) {
+        //String received = ascii.decode(data);
+        //print('Data incoming: $received');
+        //if(received.isNotEmpty){
+        /*}
         if (ascii.decode(data).contains('!')) {
           connection.finish(); // Closing connection
           print('Disconnecting by local host');
         }
       }).onDone(() {
         print('Disconnected by remote request');
-      });
-      Future.delayed(const Duration(seconds: 1), () {
+      }); */
+        //Future.delayed(const Duration(seconds: 1), () {
         if (connection.isConnected) {
           EasyLoading.showSuccess("Link established");
           scanForWifiNetworks();
         } else {
           EasyLoading.showError("Could not establish link. Please try again.");
         }
-      });
-    }).catchError((error) {
+        //});
+        /*}).catchError((error) {
       EasyLoading.showError("Could not establish link. Please try again.");
       print('Cannot connect, exception occured');
-      print(error);
-    });
+      print(error); */
+      });
+    }
   }
 
   Future<void> scanForWifiNetworks() async {
@@ -342,7 +345,7 @@ class _BleScreenState extends State<BleScreen> {
                   EasyLoading.showSuccess("Password sent");
                   Future.delayed(const Duration(seconds: 1), () {
                     setUpSensorName();
-                    addDeviceToDashboard(hostname!);
+                    //addDeviceToDashboard(hostname!);
                   });
                 }
               },
@@ -414,6 +417,7 @@ String sensorName = "";
                   EasyLoading.showSuccess("Sensor location sent");
                   Future.delayed(const Duration(seconds: 1), () {
                     addDeviceToDashboard(hostname!);
+                    Navigator.pop(context, true);
                   });
                 }
               },
@@ -424,15 +428,14 @@ String sensorName = "";
     );}
 
   void addDeviceToDashboard(String received) {
-    String hostname = received.trim().split(' ')[1];
-    NetworkRequests().saveDevice(hostname)
+    NetworkRequests().saveDevice(received)
                         .then((value) async {
                       EasyLoading.dismiss();
                       if (value.success == true) {
                         print("Adding to firebase:");
                         await FirebaseMessaging.instance
-                            .subscribeToTopic("host_" + hostname);
-                        EasyLoading.showSuccess('Device added');
+                            .subscribeToTopic("host_" + received);
+                        EasyLoading.showSuccess("Adding device to dashboard...");
                         Future.delayed(const Duration(seconds: 1), () {
                           Navigator.pop(context, true);
                         });
