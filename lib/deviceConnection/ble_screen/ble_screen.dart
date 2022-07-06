@@ -275,8 +275,11 @@ class _BleScreenState extends State<BleScreen> {
             context: context,
             builder: (BuildContext context) {
               return AlertDialog(
-                  title: const Text('Wifi networks'),
-                  content: Container(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                    BorderRadius.circular(20.0)),
+                  title: const Text('Select Your Wifi Network'),
+                  content: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: ListView.builder(
@@ -286,7 +289,7 @@ class _BleScreenState extends State<BleScreen> {
                         final accessPoint = accessPoints![index];
                         return ListTile(
                           title: Text(accessPoint.ssid),
-                          subtitle: Text(accessPoint.bssid),
+                          //subtitle: Text(accessPoint.bssid),
                           onTap: () {
                             Navigator.of(context).pop();
                             _selectedWifiNetwork = accessPoint;
@@ -326,106 +329,176 @@ class _BleScreenState extends State<BleScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Enter password'),
-          content: TextField(
-            //obscureText: false,
-            onChanged: (String value) {
-              _password = value;
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Send to device"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                EasyLoading.show(status: 'Sending password...');
-                if (_connection != null) {
-                  //String? message = _password;
-                  _connection?.output.add(ascii.encode(_password!));
-                  EasyLoading.showSuccess("Password sent");
-                  Future.delayed(const Duration(seconds: 1), () {
-                    setUpSensorName();
-                    //addDeviceToDashboard(hostname!);
-                  });
-                }
-              },
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(20.0)),
+          title: const Text('WiFi Password'),
+          content: SizedBox(
+            height: 125,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextField(
+                    decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Tap to Enter WiFi Password',
+                    ),
+                    onChanged: (String value){
+                      _password = value;
+                    },
+                  ),
+                  SizedBox(
+                    width: 320.0,
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        EasyLoading.show(status: 'Sending password...');
+                          if (_connection != null) {
+                            //String? message = _password;
+                            _connection?.output.add(ascii.encode(_password!));
+                            EasyLoading.showSuccess("Password sent");
+                            Future.delayed(const Duration(seconds: 1), () {
+                              setUpSensorName();
+                          });
+                        }
+        },
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: const Color(0xFF1BC0C5),
+                    ),
+                  )
+                ],
+              ),
             ),
-          ],
+          ),
         );
       },
     );
   }
-
   void setUpSensorName() {
     //show sensor name dialog
-String sensorName = "";
+    String sensorName = "";
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Enter Sensor name'),
-          content: TextField(
-            //obscureText: false,
-            onChanged: (String value) {
-              sensorName = value;
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Send to device"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                EasyLoading.show(status: 'Sending Sensor name...');
-                if (_connection != null) {
-                  //String message = sensorName;
-                  _connection?.output.add(ascii.encode(sensorName));
-                  EasyLoading.showSuccess("Sensor name sent");
-                  Future.delayed(const Duration(seconds: 1), () {
-                    setUpSensorLocation();
-                  });
-                }
-              },
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(20.0)),
+          title: const Text('Plant Name'),
+          content: SizedBox(
+            height: 125,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //const Text('Tap to enter plant name'),
+                  TextField(
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Tap to enter plant name',
+                    ),
+                    onChanged: (String value) {
+                      sensorName = value;
+                    },
+                  ),
+                  SizedBox(
+                    width: 320.0,
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        EasyLoading.show(status: 'Sending Sensor name...');
+                        if (_connection != null) {
+                          //String message = sensorName;
+                          _connection?.output.add(ascii.encode(sensorName));
+                          EasyLoading.showSuccess("Sensor name sent");
+                          Future.delayed(const Duration(seconds: 1), () {
+                            setUpSensorLocation();
+                          });
+                        }
+                      },
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: const Color(0xFF1BC0C5),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ],
+          ),
         );
       },
     );
   }
 
   void setUpSensorLocation() {
-    String sensorLocation = "";
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Enter Sensor location'),
-          content: TextField(
-            //obscureText: true,
-            onChanged: (String value) {
-              sensorLocation = value;
-            },
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text("Send to device"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                EasyLoading.show(status: 'Sending Sensor location...');
-                if (_connection != null) {
-                  //String message = sensorLocation;
-                  _connection?.output.add(ascii.encode(sensorLocation));
-                  EasyLoading.showSuccess("Sensor location sent");
-                  Future.delayed(const Duration(seconds: 1), () {
-                    addDeviceToDashboard(hostname!);
-                    Navigator.pop(context, true);
-                  });
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );}
+   String sensorLocation = "";
+   showDialog(
+     context: context,
+     builder: (BuildContext context) {
+       return AlertDialog(
+         shape: RoundedRectangleBorder(
+             borderRadius:
+             BorderRadius.circular(20.0)),
+         title: const Text('Plant Location'),
+         content: SizedBox(
+           height: 125,
+           child: Padding(
+             padding: const EdgeInsets.all(12.0),
+             child: Column(
+               mainAxisAlignment: MainAxisAlignment.center,
+               crossAxisAlignment: CrossAxisAlignment.start,
+               children: [
+                 //const Text('Tap to enter plant name'),
+                 TextField(
+                   decoration: const InputDecoration(
+                     border: InputBorder.none,
+                     hintText: 'Tap to enter plant location',
+                   ),
+                   onChanged: (String value) {
+                     sensorLocation = value;
+                   },
+                 ),
+                 SizedBox(
+                   width: 320.0,
+                   child: RaisedButton(
+                     onPressed: () {
+                       Navigator.of(context).pop();
+                       EasyLoading.show(status: 'Sending Sensor location...');
+                       if (_connection != null) {
+                         //String message = sensorName;
+                         _connection?.output.add(ascii.encode(sensorLocation));
+                         EasyLoading.showSuccess("Sensor location sent");
+                         Future.delayed(const Duration(seconds: 3), () {
+                         });
+                       }
+                       addDeviceToDashboard(hostname!);
+                       Navigator.of(context).popUntil((route) => route.isFirst);
+                     },
+                     child: const Text(
+                       "Save",
+                       style: TextStyle(color: Colors.white),
+                     ),
+                     color: const Color(0xFF1BC0C5),
+                   ),
+                 ),
+               ],
+             ),
+           ),
+         ),
+       );
+     },
+   );
+  }
 
   void addDeviceToDashboard(String received) {
     NetworkRequests().saveDevice(received)
