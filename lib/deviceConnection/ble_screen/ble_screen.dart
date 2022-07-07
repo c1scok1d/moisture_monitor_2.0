@@ -441,6 +441,7 @@ class _BleScreenState extends State<BleScreen> {
   }
 
   void setUpSensorLocation() {
+
    String sensorLocation = "";
    showDialog(
      context: context,
@@ -474,6 +475,7 @@ class _BleScreenState extends State<BleScreen> {
                      onPressed: () {
                        Navigator.of(context).pop();
                        EasyLoading.show(status: 'Sending Sensor location...');
+                       print("sensor location: " + sensorLocation);
                        if (_connection != null) {
                          //String message = sensorName;
                          _connection?.output.add(ascii.encode(sensorLocation));
@@ -501,6 +503,7 @@ class _BleScreenState extends State<BleScreen> {
   }
 
   void addDeviceToDashboard(String received) {
+    print("Adding device to dashboard");
     NetworkRequests().saveDevice(received)
                         .then((value) async {
                       EasyLoading.dismiss();
