@@ -28,7 +28,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   var _devices = NetworkRequests().getUserDevices();
-  var name = "Rodland Farmers";
+  var name = "Rodland Farms";
   var _profileImage = "";
   GlobalKey _one = GlobalKey();
   late BuildContext _context;
