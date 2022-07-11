@@ -59,10 +59,11 @@ dependencies:
   carousel_slider: ^4.1.1
   battery_indicator: ^0.1.1
   showcaseview: ^1.1.5
-  flutter_bluetooth_serial:
-    path: ./packages/flutter_bluetooth_serial-master
+  flutter_blue:
+    path: ./packages/flutter_blue-master
   wifi_scan: ^0.3.0
   permission_handler: ^10.0.0
+  bluetooth_enable: ^0.1.1
 
 dev_dependencies:
   flutter_test:

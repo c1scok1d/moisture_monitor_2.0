@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:rodland_farms/deviceConnection/ble_screen/ble_classic_screen.dart';
 import 'package:rodland_farms/deviceConnection/ble_screen/ble_screen.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/images_response.dart';
@@ -41,7 +42,7 @@ class _HomePageState extends State<HomePage> {
       //         ?.startShowCase([_one]));
     });
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ShowCaseWidget.of(context).startShowCase([_one]));
+        (_) => ShowCaseWidget.of(context)?.startShowCase([_one]));
   }
 
   @override
@@ -987,7 +988,7 @@ class _HomePageState extends State<HomePage> {
             final bool args = await Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => BleScreen(),
+                builder: (context) => BlEScreen(),
               ),
             );
             print("args $args");
