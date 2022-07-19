@@ -36,7 +36,7 @@ class AuthClass {
           NetworkRequests().saveUser(userCredential.credential!.token.toString()).then((response) async {
             if (response.success==true) {
 
-              EasyLoading.showSuccess('Loggined in');
+              EasyLoading.showSuccess('Login Successful');
               //save token to shared pref
               await storage.write(key: 'api_token', value: response.apiToken);
               Navigator.pushReplacement(
@@ -94,9 +94,7 @@ class AuthClass {
     final OAuthCredential facebookAuthCredential = FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
     // Once signed in, return the UserCredential
-
-    UserCredential userCredential =
-    await auth.signInWithCredential(facebookAuthCredential);
+    UserCredential userCredential = await auth.signInWithCredential(facebookAuthCredential);
 
     storeTokenAndData(userCredential);
 
@@ -106,7 +104,7 @@ class AuthClass {
     NetworkRequests().saveUser(userCredential.credential!.token.toString()).then((response) async {
       if (response.success==true) {
 
-        EasyLoading.showSuccess('Loggined in');
+        EasyLoading.showSuccess('Login Successful');
         //save token to shared pref
         await storage.write(key: 'api_token', value: response.apiToken);
         Navigator.pushReplacement(
@@ -144,7 +142,7 @@ class AuthClass {
       NetworkRequests().saveUser(phoneAuthCredential.verificationId.toString()).then((response) async {
         if (response.success==true) {
 
-          EasyLoading.showSuccess('Loggined in');
+          EasyLoading.showSuccess('Login Successful');
           //save token to shared pref
           await storage.write(key: 'api_token', value: response.apiToken);
           Navigator.pushReplacement(

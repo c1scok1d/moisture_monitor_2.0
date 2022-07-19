@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 children: [
                   buttonItem("assets/images/google.svg", "Continue with Google", 25, () {}),
                   buttonItem("assets/images/phone.svg", "Continue with Phone", 30, () {}),
-                  buttonItem("assets/images/facebook.svg", "Continue with Phone", 30, () {}),
+                  buttonItem("assets/images/facebook.svg", "Continue with Facebook", 30, () {}),
                 ],
               ),
               const SizedBox(
