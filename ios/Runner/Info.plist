@@ -60,8 +60,13 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+
+	<!-- Permission options for the `bluetooth` -->
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Our app uses bluetooth to find, connect and configure wifi settings for our monitoring devices</string>
+	<string>This app requires bluetooth permission to configure wifi settings for your monitoring devices</string>
+    <key>NSBluetoothPeripheralUsageDescription</key>
+    <string>This app requires bluetooth permission to configure wifi settings for your monitoring devices</string>
+
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
