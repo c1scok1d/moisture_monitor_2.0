@@ -982,9 +982,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (await Permission.bluetoothScan
-              .request()
-              .isGranted && await Permission.bluetoothConnect.request().isGranted) {
+          if (await Permission.bluetooth.request().isGranted) {
             final bool args = await Navigator.push(
               context,
               MaterialPageRoute(
