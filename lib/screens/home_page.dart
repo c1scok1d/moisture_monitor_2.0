@@ -982,7 +982,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          if (await Permission.bluetooth.request().isGranted) {
+          if (await Permission.bluetooth.request().isGranted==true) {
             final bool args = await Navigator.push(
               context,
               MaterialPageRoute(
@@ -995,6 +995,9 @@ class _HomePageState extends State<HomePage> {
                 _devices = NetworkRequests().getUserDevices();
               });
             }
+          }else{
+            print("No permission");
+            Permission.bluetooth.request();
           }
         },
         child: const Icon(Icons.add),
