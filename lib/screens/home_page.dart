@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:rodland_farms/deviceConnection/ble_screen/ble_classic_screen.dart';
@@ -429,7 +430,7 @@ class _HomePageState extends State<HomePage> {
                                                                               text: 'Updated: ',
                                                                               style: TextStyle(fontWeight: FontWeight.bold)),
                                                                           TextSpan(
-                                                                              text: '${timeago.format(DateTime.parse(record.createdAt!))}')
+                                                                              text: timeago.format(DateTime.parse(record.createdAt!)))
                                                                         ],
                                                                       ),
                                                                     ),
@@ -459,7 +460,7 @@ class _HomePageState extends State<HomePage> {
                                                                           .pushReplacement(
                                                                         MaterialPageRoute(
                                                                           builder: (context) =>
-                                                                              RegisterPage(),
+                                                                              const RegisterPage(),
                                                                         ),
                                                                       );
                                                                     },
@@ -548,7 +549,7 @@ class _HomePageState extends State<HomePage> {
                                   );
                                 } else {
                                   // print('Should not show here $index');
-                                  return Container(
+                                  return SizedBox(
                                       height: 100,
                                       child: Card(
                                         shape: RoundedRectangleBorder(
@@ -689,10 +690,10 @@ class _HomePageState extends State<HomePage> {
                                                                             GaugeRange(
                                                                               startValue: 0,
                                                                               endValue: 33,
-                                                                              color: Color(0xFFFE2A25),
+                                                                              color: const Color(0xFFFE2A25),
                                                                               label: 'Dry',
                                                                               sizeUnit: GaugeSizeUnit.factor,
-                                                                              labelStyle: GaugeTextStyle(fontSize: 9),
+                                                                              labelStyle: const GaugeTextStyle(fontSize: 9),
                                                                               startWidth: 0.33,
                                                                               endWidth: 0.33,
                                                                             ),
@@ -727,7 +728,7 @@ class _HomePageState extends State<HomePage> {
                                                                           annotations: <
                                                                               GaugeAnnotation>[
                                                                             GaugeAnnotation(
-                                                                                widget: Container(child: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))),
+                                                                                widget: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                                                                                 angle: 90,
                                                                                 positionFactor: .8)
                                                                           ]),
@@ -841,8 +842,7 @@ class _HomePageState extends State<HomePage> {
                                                                             style:
                                                                                 TextStyle(fontWeight: FontWeight.bold)),
                                                                         TextSpan(
-                                                                            text:
-                                                                                '${timeago.format(DateTime.parse(record.createdAt!))}')
+                                                                            text: timeago.format(DateTime.parse(record.createdAt!)))
                                                                       ],
                                                                     ),
                                                                   ),
@@ -875,7 +875,7 @@ class _HomePageState extends State<HomePage> {
                                                                       MaterialPageRoute(
                                                                         builder:
                                                                             (context) =>
-                                                                                RegisterPage(),
+                                                                                const RegisterPage(),
                                                                       ),
                                                                     );
                                                                   },
@@ -988,11 +988,6 @@ class _HomePageState extends State<HomePage> {
     blurValue: 1,
     height: 50,
     width: 50,
-    //container: Icon(
-    //Icons.local_drink,
-    //size: 50,
-    //color: Colors.blue[200],
-    //),
     shapeBorder: const CircleBorder(),
     overlayPadding: const EdgeInsets.all(8),
     container: null,
@@ -1005,14 +1000,18 @@ class _HomePageState extends State<HomePage> {
                 builder: (context) => BlEScreen(),
               ),
             );
-            print("args $args");
+            if (kDebugMode) {
+              print("args $args");
+            }
             if (args == true) {
               setState(() {
                 _devices = NetworkRequests().getUserDevices();
               });
             }
           }else{
-            print("No permission");
+            if (kDebugMode) {
+              print("No permission");
+            }
             Permission.bluetooth.request();
           }
         },
@@ -1027,6 +1026,7 @@ class _HomePageState extends State<HomePage> {
     showDialog(
         context: context,
         builder: (BuildContext context) {
+          //final double height = MediaQuery.of(context).size.height;
           return AlertDialog(
             title: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1067,17 +1067,19 @@ class _HomePageState extends State<HomePage> {
                       //height: MediaQuery.of(context).size.height * 0.6,
                       child: CarouselSlider(
                         items: snapshot.data?.data?.map((i) {
-                          print("Name:${i.name}");
+                          if (kDebugMode) {
+                            print("Name:${i.name}");
+                          }
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
                                 height:
-                                    MediaQuery.of(context).size.height * 0.6,
-                                width: MediaQuery.of(context).size.width * 0.7,
+                                    MediaQuery.of(context).size.height,
+                                width: MediaQuery.of(context).size.width,
                                 margin: const EdgeInsets.symmetric(horizontal: 5.0),
                                 child: Image.network(
                                   'https://athome.rodlandfarms.com/uploads/${i.name}',
-                                  fit: BoxFit.fill,
+                                  fit: BoxFit.cover,
                                 ),
                               );
                             },
