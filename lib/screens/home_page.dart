@@ -31,6 +31,7 @@ class _HomePageState extends State<HomePage> {
   var name = "Rodland Farms";
   var _profileImage = "";
   GlobalKey _one = GlobalKey();
+  GlobalKey _two = GlobalKey();
   late BuildContext _context;
 
   @override
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
       //         ?.startShowCase([_one]));
     });
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ShowCaseWidget.of(context)?.startShowCase([_one]));
+        (_) => ShowCaseWidget.of(context)?.startShowCase([_one, _two]));
   }
 
   @override
@@ -567,8 +568,8 @@ class _HomePageState extends State<HomePage> {
                                                     if (snapshot.data?.data
                                                             ?.isEmpty ==
                                                         true) {
-                                                      return Center(
-                                                        child: const Text(
+                                                      return const Center(
+                                                        child: Text(
                                                           "No data available",
                                                           style: TextStyle(
                                                               fontSize: 20),
@@ -980,7 +981,22 @@ class _HomePageState extends State<HomePage> {
           ]),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: Showcase.withWidget(
+      key: _two,
+        title: 'Add Devices',
+    description: 'Tap to find and configure your devices to connect to your wifi',
+    blurValue: 1,
+    height: 50,
+    width: 50,
+    //container: Icon(
+    //Icons.local_drink,
+    //size: 50,
+    //color: Colors.blue[200],
+    //),
+    shapeBorder: const CircleBorder(),
+    overlayPadding: const EdgeInsets.all(8),
+    container: null,
+    child: FloatingActionButton(
         onPressed: () async {
           if (await Permission.bluetooth.request().isGranted==true) {
             final bool args = await Navigator.push(
@@ -1002,6 +1018,7 @@ class _HomePageState extends State<HomePage> {
         },
         child: const Icon(Icons.add),
       ),
+      )
     );
   }
 
@@ -1016,7 +1033,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 const Text("Images"),
                 const SizedBox(
-                  width: 10,
+                  width: 100,
+                  height: 100,
                 ),
                 GestureDetector(
                   onTap: () {
