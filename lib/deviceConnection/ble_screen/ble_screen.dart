@@ -194,7 +194,7 @@ class _BlEScreenState extends State<BlEScreen> {
                 },
               ),
             );
-          ;
+            ;
           }
           return Container(
             child: Center(
@@ -208,22 +208,22 @@ class _BlEScreenState extends State<BlEScreen> {
                     child: Text('Enable'),
                     onPressed: () {
                       String dialogTitle = "Bluetooth permission";
-                    bool displayDialogContent = true;
-                    String dialogContent = "This app requires Bluetooth to connect to device.";
-                    //or
-                    // bool displayDialogContent = false;
-                    // String dialogContent = "";
-                    String cancelBtnText = "Nope";
-                    String acceptBtnText = "Sure";
-                    double dialogRadius = 10.0;
-                    bool barrierDismissible = true; //
+                      bool displayDialogContent = true;
+                      String dialogContent = "This app requires Bluetooth to connect to device.";
+                      //or
+                      // bool displayDialogContent = false;
+                      // String dialogContent = "";
+                      String cancelBtnText = "Nope";
+                      String acceptBtnText = "Sure";
+                      double dialogRadius = 10.0;
+                      bool barrierDismissible = true; //
 
-                    BluetoothEnable.customBluetoothRequest(context, dialogTitle, displayDialogContent, dialogContent, cancelBtnText, acceptBtnText, dialogRadius, barrierDismissible).then((result) {
-                      if (result == "true"){
-                        //Bluetooth has been enabled
-                        print("Bluetooth has been enabled");
-                      }
-                    });
+                      BluetoothEnable.customBluetoothRequest(context, dialogTitle, displayDialogContent, dialogContent, cancelBtnText, acceptBtnText, dialogRadius, barrierDismissible).then((result) {
+                        if (result == "true"){
+                          //Bluetooth has been enabled
+                          print("Bluetooth has been enabled");
+                        }
+                      });
                     },
                   ),
                 ],
@@ -393,10 +393,10 @@ class _BlEScreenState extends State<BlEScreen> {
       } else {
         print('Scan started');
         final result =
-            await WiFiScan.instance.getScannedResults(askPermissions: true);
+        await WiFiScan.instance.getScannedResults(askPermissions: true);
         if (result.hasError) {
           switch (error) {
-            // handle error for values of GetScannedResultErrors
+          // handle error for values of GetScannedResultErrors
           }
         } else {
           EasyLoading.dismiss();
@@ -410,8 +410,8 @@ class _BlEScreenState extends State<BlEScreen> {
                 shape: RoundedRectangleBorder(
                     borderRadius:
                     BorderRadius.circular(20.0)),
-                  title: const Text('Select Your Wifi Network'),
-                  content: SizedBox(
+                title: const Text('Select Your Wifi Network'),
+                content: SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
                     width: MediaQuery.of(context).size.width * 0.9,
                     child: ListView.builder(
@@ -437,15 +437,15 @@ class _BlEScreenState extends State<BlEScreen> {
                         );
                       },
                     )),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text("Close"),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ],
-                  );
+                actions: <Widget>[
+                  TextButton(
+                    child: const Text("Close"),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              );
             },
           );
         }
@@ -475,8 +475,8 @@ class _BlEScreenState extends State<BlEScreen> {
                 children: [
                   TextField(
                     decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Tap to Enter WiFi Password',
+                      border: InputBorder.none,
+                      hintText: 'Tap to Enter WiFi Password',
                     ),
                     onChanged: (String value){
                       _password = value;
@@ -496,7 +496,7 @@ class _BlEScreenState extends State<BlEScreen> {
                         //       setUpSensorName();
                         //     });
                         // }
-        },
+                      },
                       child: const Text(
                         "Save",
                         style: TextStyle(color: Colors.white),
@@ -574,85 +574,85 @@ class _BlEScreenState extends State<BlEScreen> {
 
   void setUpSensorLocation() {
 
-   String sensorLocation = "";
-   showDialog(
-     context: context,
-     builder: (BuildContext context) {
-       return AlertDialog(
-         shape: RoundedRectangleBorder(
-             borderRadius:
-             BorderRadius.circular(20.0)),
-         title: const Text('Plant Location'),
-         content: SizedBox(
-           height: 125,
-           child: Padding(
-             padding: const EdgeInsets.all(12.0),
-             child: Column(
-               mainAxisAlignment: MainAxisAlignment.center,
-               crossAxisAlignment: CrossAxisAlignment.start,
-               children: [
-                 //const Text('Tap to enter plant name'),
-                 TextField(
-                   decoration: const InputDecoration(
-                     border: InputBorder.none,
-                     hintText: 'Tap to enter plant location',
-                   ),
-                   onChanged: (String value) {
-                     sensorLocation = value;
-                   },
-                 ),
-                 SizedBox(
-                   width: 320.0,
-                   child: RaisedButton(
-                     onPressed: () {
-                       Navigator.of(context).pop();
-                       EasyLoading.show(status: 'Sending Sensor location...');
-                       print("sensor location: " + sensorLocation);
-                       // if (_connection != null) {
-                       //   //String message = sensorName;
-                       //   _connection?.output.add(ascii.encode(sensorLocation));
-                       //   EasyLoading.showSuccess("Sensor location sent");
-                       //   Future.delayed(const Duration(seconds: 3), () {
-                       //   });
-                       // }
-                       addDeviceToDashboard(hostname!);
-                       Navigator.of(context).popUntil((route) => route.isFirst);
-                     },
-                     child: const Text(
-                       "Save",
-                       style: TextStyle(color: Colors.white),
-                     ),
-                     color: const Color(0xFF1BC0C5),
-                   ),
-                 ),
-               ],
-             ),
-           ),
-         ),
-       );
-     },
-   );
+    String sensorLocation = "";
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+              borderRadius:
+              BorderRadius.circular(20.0)),
+          title: const Text('Plant Location'),
+          content: SizedBox(
+            height: 125,
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  //const Text('Tap to enter plant name'),
+                  TextField(
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Tap to enter plant location',
+                    ),
+                    onChanged: (String value) {
+                      sensorLocation = value;
+                    },
+                  ),
+                  SizedBox(
+                    width: 320.0,
+                    child: RaisedButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        EasyLoading.show(status: 'Sending Sensor location...');
+                        print("sensor location: " + sensorLocation);
+                        // if (_connection != null) {
+                        //   //String message = sensorName;
+                        //   _connection?.output.add(ascii.encode(sensorLocation));
+                        //   EasyLoading.showSuccess("Sensor location sent");
+                        //   Future.delayed(const Duration(seconds: 3), () {
+                        //   });
+                        // }
+                        addDeviceToDashboard(hostname!);
+                        Navigator.of(context).popUntil((route) => route.isFirst);
+                      },
+                      child: const Text(
+                        "Save",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      color: const Color(0xFF1BC0C5),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void addDeviceToDashboard(String received) {
     print("Adding device to dashboard");
     NetworkRequests().saveDevice(received)
-                        .then((value) async {
-                      EasyLoading.dismiss();
-                      if (value.success == true) {
-                        print("Adding to firebase:");
-                        await FirebaseMessaging.instance
-                            .subscribeToTopic("host_" + received);
-                        EasyLoading.showSuccess("Adding device to dashboard...");
-                        Future.delayed(const Duration(seconds: 1), () {
-                          Navigator.pop(context, true);
-                        });
-                      } else {
-                        EasyLoading.showError(value.message??'Error adding device');
-                      }
-                    }).catchError((error) {
-                      EasyLoading.dismiss();
-                      EasyLoading.showError('Error adding device');
-                    });
+        .then((value) async {
+      EasyLoading.dismiss();
+      if (value.success == true) {
+        print("Adding to firebase:");
+        await FirebaseMessaging.instance
+            .subscribeToTopic("host_" + received);
+        EasyLoading.showSuccess("Adding device to dashboard...");
+        Future.delayed(const Duration(seconds: 1), () {
+          Navigator.pop(context, true);
+        });
+      } else {
+        EasyLoading.showError(value.message??'Error adding device');
+      }
+    }).catchError((error) {
+      EasyLoading.dismiss();
+      EasyLoading.showError('Error adding device');
+    });
   }
 }

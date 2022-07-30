@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       //         ?.startShowCase([_one]));
     });
     WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ShowCaseWidget.of(context)?.startShowCase([_one, _two]));
+        (_) => ShowCaseWidget.of(context).startShowCase([_one, _two]));
   }
 
   @override

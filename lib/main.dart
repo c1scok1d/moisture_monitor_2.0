@@ -53,7 +53,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print('onMessage: $message');
     FirebaseMsgHandler().showMessage(message);
