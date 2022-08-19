@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:rodland_farms/deviceConnection/ble_screen/ble_classic_screen.dart';
+import 'package:rodland_farms/deviceConnection/ble.dart';
 import 'package:rodland_farms/deviceConnection/ble_screen/ble_screen.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/images_response.dart';
@@ -31,22 +31,20 @@ class _HomePageState extends State<HomePage> {
   var _devices = NetworkRequests().getUserDevices();
   var name = "Rodland Farms";
   var _profileImage = "";
-  GlobalKey _one = GlobalKey();
-  GlobalKey _two = GlobalKey();
+  final GlobalKey _one = GlobalKey();
+  final GlobalKey _two = GlobalKey();
   late BuildContext _context;
-
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 7), () {
+   /* Future.delayed(const Duration(seconds: 7), () {
       // WidgetsBinding.instance.addPostFrameCallback(
       //         (_) => ShowCaseWidget.of(context)
       //         ?.startShowCase([_one]));
-    });
+    }); */
     WidgetsBinding.instance.addPostFrameCallback(
         (_) => ShowCaseWidget.of(context).startShowCase([_one, _two]));
   }
-
   @override
   Widget build(BuildContext context) {
     if (FirebaseAuth.instance.currentUser != null &&
@@ -88,7 +86,7 @@ class _HomePageState extends State<HomePage> {
                         await FirebaseAuth.instance.signOut();
                         Navigator.of(context).pushReplacement(
                           MaterialPageRoute(
-                            builder: (context) => RegisterPage(),
+                            builder: (context) => const RegisterPage(),
                           ),
                         );
                       },
@@ -107,7 +105,7 @@ class _HomePageState extends State<HomePage> {
             Text(
               "Hello $name,\nWelcome to your dashboard",
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 22,
                 fontWeight: FontWeight.normal,
               ),
@@ -123,8 +121,8 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     if (snapshot.data?.devices?.isEmpty == true) {
-                      return Center(
-                        child: const Text(
+                      return const Center(
+                        child: Text(
                           "You have no devices",
                           style: TextStyle(fontSize: 20),
                         ),
@@ -153,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                                     description:
                                         'Long press to delete, press once to view details',
                                     blurValue: 1,
-                                    child: Container(
+                                    child: SizedBox(
                                         height: 100,
                                         child: Card(
                                           shape: RoundedRectangleBorder(
@@ -256,14 +254,17 @@ class _HomePageState extends State<HomePage> {
                                                           );
                                                         },
                                                         onTap: () {
-                                                          Navigator.push(
-                                                              context,
+                                                          Navigator.push(context,
                                                               MaterialPageRoute(
                                                                   builder: (context) =>
                                                                       DeviceDetailsScreen(
                                                                           device,
                                                                           record.sensor ??
-                                                                              device.hostname!)));
+                                                                              device.hostname!))).then((_){
+                                                                                setState((){
+                                                                                  // call setState to refresh the page
+                                                                                });
+                                                          });
                                                         },
                                                         child: Row(
                                                             /*mainAxisAlignment:
@@ -295,10 +296,10 @@ class _HomePageState extends State<HomePage> {
                                                                               GaugeRange(
                                                                                 startValue: 0,
                                                                                 endValue: 33,
-                                                                                color: Color(0xFFFE2A25),
+                                                                                color: const Color(0xFFFE2A25),
                                                                                 label: 'Dry',
                                                                                 sizeUnit: GaugeSizeUnit.factor,
-                                                                                labelStyle: GaugeTextStyle(fontSize: 9),
+                                                                                labelStyle: const GaugeTextStyle(fontSize: 9),
                                                                                 startWidth: 0.33,
                                                                                 endWidth: 0.33,
                                                                               ),
@@ -330,7 +331,7 @@ class _HomePageState extends State<HomePage> {
                                                                               )
                                                                             ],
                                                                             annotations: <GaugeAnnotation>[
-                                                                              GaugeAnnotation(widget: Container(child: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold))), angle: 90, positionFactor: .8)
+                                                                              GaugeAnnotation(widget: Text('${record.moisture}%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)), angle: 90, positionFactor: .8)
                                                                             ]),
                                                                       ]),
                                                                 ),
@@ -728,7 +729,7 @@ class _HomePageState extends State<HomePage> {
                                                                           annotations: <
                                                                               GaugeAnnotation>[
                                                                             GaugeAnnotation(
-                                                                                widget: Text('${record.moisture}%', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                                                                                widget: Text('${record.moisture}%', style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                                                                                 angle: 90,
                                                                                 positionFactor: .8)
                                                                           ]),
@@ -967,7 +968,9 @@ class _HomePageState extends State<HomePage> {
                                 }
                               });
                         } else {
-                          print("No data");
+                          if (kDebugMode) {
+                            print("No data");
+                          }
                           return Container();
                         }
                       },
@@ -988,13 +991,15 @@ class _HomePageState extends State<HomePage> {
     blurValue: 1,
     height: 50,
     width: 50,
-    shapeBorder: const CircleBorder(),
-    overlayPadding: const EdgeInsets.all(8),
+    //shapeBorder: const CircleBorder(),
+    //overlayPadding: const EdgeInsets.all(8),
     container: null,
     child: FloatingActionButton(
         onPressed: () async {
           if (await Permission.bluetooth.request().isGranted==true) {
-            final bool args = await Navigator.push(
+            ESPBLE().scanForESPDevice();
+            //_scanForBle();
+           /* final bool args = await Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => BlEScreen(),
@@ -1007,7 +1012,7 @@ class _HomePageState extends State<HomePage> {
               setState(() {
                 _devices = NetworkRequests().getUserDevices();
               });
-            }
+            }*/
           }else{
             if (kDebugMode) {
               print("No permission");
