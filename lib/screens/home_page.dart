@@ -14,6 +14,7 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:battery_indicator/battery_indicator.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../deviceConnection/ble.dart';
 import '../network/get_user_devices_response.dart';
 import 'device_details.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -995,9 +996,10 @@ class _HomePageState extends State<HomePage> {
     container: null,
     child: FloatingActionButton(
         onPressed: () async {
-          if(await Permission.bluetoothScan.request().isGranted){
+          //if(await Permission.bluetoothScan.request().isGranted){
               //permission is enabled
-              final bool args = await Navigator.push(context,
+            ESPBLE().scanForESPDevice();
+              /*final bool args = await Navigator.push(context,
                 MaterialPageRoute(
                   builder: (context) => BlEScreen(),
                 ),
@@ -1009,8 +1011,8 @@ class _HomePageState extends State<HomePage> {
                 setState(() {
                   _devices = NetworkRequests().getUserDevices();
                 });
-              }
-            }
+              } */
+           // }
         },
         child: const Icon(Icons.add),
       ),
