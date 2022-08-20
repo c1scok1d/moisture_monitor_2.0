@@ -40,8 +40,7 @@ class _BlEScreenState extends State<BlEScreen> {
   // BluetoothConnection? _connection;
 
   WiFiAccessPoint? _selectedWifiNetwork;
-  String? _password;
-  String? hostname;
+  String? _password, _sensorLocation, _sensorName, hostname;
 
   @override
   void initState() {
@@ -430,7 +429,7 @@ class _BlEScreenState extends State<BlEScreen> {
                             //   _connection?.output.add(ascii.encode(accessPoint.ssid));
                             //   EasyLoading.showSuccess("Network name set");
                             //   Future.delayed(const Duration(seconds: 1), () {
-                            //     getWifiPassword(accessPoint);
+                                 getWifiPassword(accessPoint);
                             //   });
                             // }
                           },
@@ -493,7 +492,7 @@ class _BlEScreenState extends State<BlEScreen> {
                         //     _connection?.output.add(ascii.encode(_password!));
                         //     EasyLoading.showSuccess("Password sent");
                         //     Future.delayed(const Duration(seconds: 1), () {
-                        //       setUpSensorName();
+                               setUpSensorName();
                         //     });
                         // }
                       },
@@ -512,9 +511,10 @@ class _BlEScreenState extends State<BlEScreen> {
       },
     );
   }
+  String sensorName = "";
   void setUpSensorName() {
     //show sensor name dialog
-    String sensorName = "";
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -538,7 +538,7 @@ class _BlEScreenState extends State<BlEScreen> {
                       hintText: 'Tap to enter plant name',
                     ),
                     onChanged: (String value) {
-                      sensorName = value;
+                      _sensorName = value;
                     },
                   ),
                   SizedBox(
@@ -552,7 +552,7 @@ class _BlEScreenState extends State<BlEScreen> {
                         //   _connection?.output.add(ascii.encode(sensorName));
                         //   EasyLoading.showSuccess("Sensor name sent");
                         //   Future.delayed(const Duration(seconds: 1), () {
-                        //     setUpSensorLocation();
+                             setUpSensorLocation();
                         //   });
                         // }
                       },
@@ -573,8 +573,6 @@ class _BlEScreenState extends State<BlEScreen> {
   }
 
   void setUpSensorLocation() {
-
-    String sensorLocation = "";
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -598,7 +596,7 @@ class _BlEScreenState extends State<BlEScreen> {
                       hintText: 'Tap to enter plant location',
                     ),
                     onChanged: (String value) {
-                      sensorLocation = value;
+                      _sensorLocation = value;
                     },
                   ),
                   SizedBox(
@@ -607,7 +605,7 @@ class _BlEScreenState extends State<BlEScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         EasyLoading.show(status: 'Sending Sensor location...');
-                        print("sensor location: " + sensorLocation);
+                        //print("sensor location: " + sensorLocation);
                         // if (_connection != null) {
                         //   //String message = sensorName;
                         //   _connection?.output.add(ascii.encode(sensorLocation));
@@ -615,6 +613,12 @@ class _BlEScreenState extends State<BlEScreen> {
                         //   Future.delayed(const Duration(seconds: 3), () {
                         //   });
                         // }
+                        /*
+                         should call ESPBLE().scanForESPDevice();
+                         send _selectedWifiNetwork, _password, _sensorLocation,_sensorName
+                         to the device
+                         */
+                        //return ESPBLE().scanForESPDevice(device: r.device);
                         addDeviceToDashboard(hostname!);
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       },
