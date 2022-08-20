@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:rodland_farms/deviceConnection/ble.dart';
 import 'package:rodland_farms/deviceConnection/ble_screen/ble_screen.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/images_response.dart';
@@ -996,29 +995,22 @@ class _HomePageState extends State<HomePage> {
     container: null,
     child: FloatingActionButton(
         onPressed: () async {
-          if (await Permission.bluetooth.request().isGranted==true) {
-            ESPBLE().scanForESPDevice();
-            //_scanForBle();
-           /* final bool args = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BlEScreen(),
-              ),
-            );
-            if (kDebugMode) {
-              print("args $args");
+          if(await Permission.bluetoothScan.request().isGranted){
+              //permission is enabled
+              final bool args = await Navigator.push(context,
+                MaterialPageRoute(
+                  builder: (context) => BlEScreen(),
+                ),
+              );
+              if (kDebugMode) {
+                print("args $args");
+              }
+              if (args == true) {
+                setState(() {
+                  _devices = NetworkRequests().getUserDevices();
+                });
+              }
             }
-            if (args == true) {
-              setState(() {
-                _devices = NetworkRequests().getUserDevices();
-              });
-            }*/
-          }else{
-            if (kDebugMode) {
-              print("No permission");
-            }
-            Permission.bluetooth.request();
-          }
         },
         child: const Icon(Icons.add),
       ),
@@ -1111,5 +1103,20 @@ class _HomePageState extends State<HomePage> {
                 }),
           );
         });
+  }
+
+  Future<bool> requestPermission(Permission setting) async {
+    // setting.request() will return the status ALWAYS
+    // if setting is already requested, it will return the status
+    //final result = await setting.request();
+    switch (await setting.request()) {
+      case PermissionStatus.granted:
+      case PermissionStatus.limited:
+        return true;
+      case PermissionStatus.denied:
+      case PermissionStatus.restricted:
+      case PermissionStatus.permanentlyDenied:
+        return false;
+    }
   }
 }
