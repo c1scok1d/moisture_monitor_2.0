@@ -118,7 +118,7 @@ class ESPBLE {
           deviceId: espDevice!.id);
 
         String name = "testDevice", location = "testLocation";
-        await flutterReactiveBle.writeCharacteristicWithResponse(customDataCharacteristic, value: Uint8List.fromList("name:testDevice&location:testLocation".codeUnits));
+        await flutterReactiveBle.writeCharacteristicWithResponse(customDataCharacteristic, value: Uint8List.fromList("{\"name\":\"$name\",\"location\":\"$location\"}".codeUnits));
         await Future.delayed(const Duration(seconds: 2));
         await flutterReactiveBle.writeCharacteristicWithResponse(provConfigCharacteristic, value: _getWiFiConfigDataToWrite());
         final readconfChar2 = await flutterReactiveBle.readCharacteristic(provConfigCharacteristic);
