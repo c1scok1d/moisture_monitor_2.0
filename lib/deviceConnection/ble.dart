@@ -1,14 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:ffi';
 import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 
-//Version UUID -      021AFF53-0382-4AEA-BFF4-6B3F1C5ADFB4
-//Prov Config UUID -  021AFF51-0382-4AEA-BFF4-6B3F1C5ADFB4
-//Prov Config2 UUID - 021AFF52-0382-4AEA-BFF4-6B3F1C5ADFB4
+
 class ESPBLE {
   final flutterReactiveBle = FlutterReactiveBle();
 
@@ -29,11 +24,12 @@ class ESPBLE {
 
   bool isScanning = false;
   bool isConnecting = false;
+  String _deviceName = "NULL";
+  String _deviceLocation = "NULL";
 
   factory ESPBLE() {
     return _singleton;
   }
-
   ESPBLE._internal();
 
   Uint8List _getWiFiConfigDataToWrite() {
@@ -59,12 +55,15 @@ class ESPBLE {
     return configDataToWrite;
   }
 
-  void scanForESPDevice() {
+  void scanForESPDevice(String deviceName, String deviceLocation) {
+    _deviceName = deviceName;
+    _deviceLocation = deviceLocation;
     if (espDevice == null) {
       StreamSubscription<BleStatus>? statusStreamSubscirption;
       StreamSubscription<DiscoveredDevice>? scanStream;
       statusStreamSubscirption =
           flutterReactiveBle.statusStream.listen((status) async {
+            // @TODO: if ble is not ready make ble ready
         if (status == BleStatus.ready) {
           await statusStreamSubscirption?.cancel();
 
@@ -91,7 +90,9 @@ class ESPBLE {
     StreamSubscription<ConnectionStateUpdate>? connectionStateStream;
     connectionStateStream =
         flutterReactiveBle.connectToDevice(id: espDevice!.id).listen((event) async{
-      print(event);
+      if (kDebugMode) {
+        print(event);
+      }
       if(event.connectionState == DeviceConnectionState.connected) {
         isConnecting = false;
       final infoCharacteristic = QualifiedCharacteristic(
@@ -101,7 +102,9 @@ class ESPBLE {
       await flutterReactiveBle.writeCharacteristicWithResponse(infoCharacteristic,
           value: Uint8List.fromList('ESP'.codeUnits));
       final info = await flutterReactiveBle.readCharacteristic(infoCharacteristic);
-      print(String.fromCharCodes(info));
+      if (kDebugMode) {
+        print(String.fromCharCodes(info));
+      }
       final provConfigCharacteristic = QualifiedCharacteristic(
           serviceId: deviceGATTserviceUUID,
           characteristicId: deviceGATTProvConfigCharUUID,
@@ -109,7 +112,9 @@ class ESPBLE {
 
         await flutterReactiveBle.writeCharacteristicWithResponse(provConfigCharacteristic, value: startOfConfig);
         final readconfChar = await flutterReactiveBle.readCharacteristic(provConfigCharacteristic);
-        print(readconfChar);
+        if (kDebugMode) {
+          print(readconfChar);
+        }
         await Future.delayed(const Duration(seconds: 1));
 
         final customDataCharacteristic = QualifiedCharacteristic(
@@ -117,12 +122,14 @@ class ESPBLE {
           characteristicId: deviceGATTCustomDataCharUUID,
           deviceId: espDevice!.id);
 
-        String name = "testDevice", location = "testLocation";
-        await flutterReactiveBle.writeCharacteristicWithResponse(customDataCharacteristic, value: Uint8List.fromList("{\"name\":\"$name\",\"location\":\"$location\"}".codeUnits));
+        //String name = "testDevice", location = "testLocation";
+        await flutterReactiveBle.writeCharacteristicWithResponse(customDataCharacteristic, value: Uint8List.fromList("{\"name\":\"$_deviceName\",\"location\":\"$_deviceLocation\"}".codeUnits));
         await Future.delayed(const Duration(seconds: 2));
         await flutterReactiveBle.writeCharacteristicWithResponse(provConfigCharacteristic, value: _getWiFiConfigDataToWrite());
         final readconfChar2 = await flutterReactiveBle.readCharacteristic(provConfigCharacteristic);
-        print(readconfChar2);
+        if (kDebugMode) {
+          print(readconfChar2);
+        }
 
 
         await flutterReactiveBle.writeCharacteristicWithResponse(provConfigCharacteristic, value: applyConfigData);
@@ -131,9 +138,13 @@ class ESPBLE {
 
       }
     }, onDone: () {
-      print('connected');
+      if (kDebugMode) {
+        print('connected');
+      }
           }, onError: (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       isConnecting = false;
     });
   }
