@@ -161,7 +161,7 @@ class _BlEScreenState extends State<BlEScreen> {
                               onTap: () => Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 r.device.connect();
-                                ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!);
+                                ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _selectedWifiNetwork!, _password!);
                                 //ESPBLE().connectToDevice();
                                 //scanForWifiNetworks();
                                 return DeviceScreen(device: r.device);
