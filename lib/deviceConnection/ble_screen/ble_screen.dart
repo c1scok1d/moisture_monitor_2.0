@@ -9,11 +9,12 @@ import 'package:flutter/material.dart';
 // import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as classical;
 // import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:permission_handler/permission_handler.dart';
 // import 'package:rodland_farms/deviceConnection/BluetoothDeviceListEntry.dart';
 import 'package:rodland_farms/network/network_requests.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-
+import '../ble.dart';
 import 'device_screen.dart';
 
 class BlEScreen extends StatefulWidget {
@@ -154,7 +155,7 @@ class _BlEScreenState extends State<BlEScreen> {
                       ),
                       StreamBuilder<List<ScanResult>>(
                         stream: FlutterBlue.instance.scanResults,
-                        initialData: [],
+                        initialData: const [],
                         builder: (c, snapshot) => Column(
                           children: snapshot.data!
                               .map(
@@ -163,6 +164,8 @@ class _BlEScreenState extends State<BlEScreen> {
                               onTap: () => Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 r.device.connect();
+                                ESPBLE().scanForESPDevice();
+                                //scanForWifiNetworks();
                                 return DeviceScreen(device: r.device);
                               })),
                             ),
@@ -196,7 +199,31 @@ class _BlEScreenState extends State<BlEScreen> {
             ;
           }
           return Container(
-            child: Center(
+            child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                Text("Press the button to request turning on Bluetooth"),
+            SizedBox(height: 20.0),
+            /*RaisedButton(
+              onPressed: (() {
+                enableBT();
+              }),
+              child: Text('Request to turn on Bluetooth'),
+            ),*/
+            SizedBox(height: 10.0),
+            RaisedButton(
+              onPressed: (() async {
+                if(await Permission.bluetoothConnect.request().isGranted){
+                customEnableBT(context);
+                }
+                if(await Permission.locationWhenInUse.request().isGranted){
+
+                }
+              }),
+              child: Text('Enable Bluetooth'),
+            ),
+            /*child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -221,14 +248,18 @@ class _BlEScreenState extends State<BlEScreen> {
                         if (result == "true"){
                           //Bluetooth has been enabled
                           print("Bluetooth has been enabled");
+                        } else{
+                          enableBT();
                         }
                       });
                     },
                   ),
                 ],
               ),
-            ),
+            ),*/
+          ])
           );
+
         });
     // return Scaffold(
     //   appBar: AppBar(
@@ -657,6 +688,38 @@ class _BlEScreenState extends State<BlEScreen> {
     }).catchError((error) {
       EasyLoading.dismiss();
       EasyLoading.showError('Error adding device');
+    });
+  }
+
+  Future<void> enableBT() async {
+    BluetoothEnable.enableBluetooth.then((value) {
+      print(value);
+    });
+  }
+
+  Future<void> customEnableBT(BuildContext context) async {
+    String dialogTitle = "Hey! Please give me permission to use Bluetooth!";
+    bool displayDialogContent = true;
+    String dialogContent = "This app requires Bluetooth to connect to device.";
+    //or
+    // bool displayDialogContent = false;
+    // String dialogContent = "";
+    String cancelBtnText = "No";
+    String acceptBtnText = "Yes";
+    double dialogRadius = 10.0;
+    bool barrierDismissible = true; //
+
+    BluetoothEnable.customBluetoothRequest(
+        context,
+        dialogTitle,
+        displayDialogContent,
+        dialogContent,
+        cancelBtnText,
+        acceptBtnText,
+        dialogRadius,
+        barrierDismissible)
+        .then((value) {
+      print(value);
     });
   }
 }

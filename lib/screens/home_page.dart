@@ -996,10 +996,20 @@ class _HomePageState extends State<HomePage> {
     container: null,
     child: FloatingActionButton(
         onPressed: () async {
-          //if(await Permission.bluetoothScan.request().isGranted){
-              //permission is enabled
-            ESPBLE().scanForESPDevice();
-              /*final bool args = await Navigator.push(context,
+          var foo = await Permission.locationWhenInUse.status;
+          var bar = await Permission.bluetoothConnect.status;
+          var foobar = await Permission.bluetoothScan.status;
+          var foo2 = await Permission.location.status;
+          var foobar2 = await Permission.locationAlways.status;
+          if(await Permission.bluetoothConnect.status.isDenied){
+            requestPermission(Permission.bluetoothConnect);
+            //customEnableBT(context);
+          }
+          if(await Permission.locationWhenInUse.status.isDenied){
+            requestPermission(Permission.locationWhenInUse);
+            requestPermission(Permission.location);
+          }
+              final bool args = await Navigator.push(context,
                 MaterialPageRoute(
                   builder: (context) => BlEScreen(),
                 ),
@@ -1011,8 +1021,7 @@ class _HomePageState extends State<HomePage> {
                 setState(() {
                   _devices = NetworkRequests().getUserDevices();
                 });
-              } */
-           // }
+              }
         },
         child: const Icon(Icons.add),
       ),
