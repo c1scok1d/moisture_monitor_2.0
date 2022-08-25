@@ -42,7 +42,7 @@ class _BlEScreenState extends State<BlEScreen> {
   // BluetoothConnection? _connection;
 
   WiFiAccessPoint? _selectedWifiNetwork;
-  String? _password, _sensorLocation = "bar", _sensorName = "foo", hostname;
+  String? _password = "password123", _sensorLocation = "bar", _sensorName = "foo", hostname, _network = "sableBusiness";
 
   @override
   void initState() {
@@ -161,7 +161,7 @@ class _BlEScreenState extends State<BlEScreen> {
                               onTap: () => Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 r.device.connect();
-                                ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _selectedWifiNetwork!, _password!);
+                                ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
                                 //ESPBLE().connectToDevice();
                                 //scanForWifiNetworks();
                                 return DeviceScreen(device: r.device);

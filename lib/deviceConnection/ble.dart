@@ -58,10 +58,10 @@ class ESPBLE {
     return configDataToWrite;
   }
 
-  void scanForESPDevice(String deviceName, String deviceLocation, WiFiAccessPoint network, String password) {
+  void scanForESPDevice(String deviceName, String deviceLocation, String network, String password) {
     _deviceName = deviceName;
     _deviceLocation = deviceLocation;
-    _ssid = network.toString();
+    _ssid = network;
     _password = password;
     if (espDevice == null) {
       StreamSubscription<BleStatus>? statusStreamSubscirption;
