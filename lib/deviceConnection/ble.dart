@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
+import 'package:wifi_scan/wifi_scan.dart';
 
 
 class ESPBLE {
@@ -26,6 +27,8 @@ class ESPBLE {
   bool isConnecting = false;
   String _deviceName = "NULL";
   String _deviceLocation = "NULL";
+  String _ssid = "networkSSID";
+  String _password = "networkPassword";
 
   factory ESPBLE() {
     return _singleton;
@@ -34,8 +37,8 @@ class ESPBLE {
 
   Uint8List _getWiFiConfigDataToWrite() {
     //add actual wifi config. hope u don't mind me seeinf the wifi password. to se if it's connecting to wifi
-    final ssid = 'sableBusiness'.codeUnits;
-    final password = 'password123'.codeUnits;
+    final ssid = _ssid.codeUnits;
+    final password = _password.codeUnits;
     final startHeader = [0x08, 0x02, 0x62];
     const configStartByte = 0x0A;
     final ssidLength = ssid.length;
@@ -55,9 +58,11 @@ class ESPBLE {
     return configDataToWrite;
   }
 
-  void scanForESPDevice(String deviceName, String deviceLocation) {
+  void scanForESPDevice(String deviceName, String deviceLocation, WiFiAccessPoint network, String password) {
     _deviceName = deviceName;
     _deviceLocation = deviceLocation;
+    _ssid = network.toString();
+    _password = password;
     if (espDevice == null) {
       StreamSubscription<BleStatus>? statusStreamSubscirption;
       StreamSubscription<DiscoveredDevice>? scanStream;
