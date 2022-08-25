@@ -996,13 +996,9 @@ class _HomePageState extends State<HomePage> {
     container: null,
     child: FloatingActionButton(
         onPressed: () async {
-          var foo = await Permission.locationWhenInUse.status;
-          var bar = await Permission.bluetoothConnect.status;
-          var foobar = await Permission.bluetoothScan.status;
-          var foo2 = await Permission.location.status;
-          var foobar2 = await Permission.locationAlways.status;
-          if(await Permission.bluetoothConnect.status.isDenied){
+          if(await Permission.bluetooth.status.isDenied){
             requestPermission(Permission.bluetoothConnect);
+            requestPermission(Permission.bluetoothScan);
             //customEnableBT(context);
           }
           if(await Permission.locationWhenInUse.status.isDenied){
