@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as classical;
 // import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
@@ -41,7 +42,7 @@ class _BlEScreenState extends State<BlEScreen> {
   // BluetoothConnection? _connection;
 
   WiFiAccessPoint? _selectedWifiNetwork;
-  String? _password, _sensorLocation, _sensorName, hostname;
+  String? _password, _sensorLocation = "bar", _sensorName = "foo", hostname;
 
   @override
   void initState() {
@@ -90,17 +91,13 @@ class _BlEScreenState extends State<BlEScreen> {
     //   });
     // });
     FlutterBlue.instance
-        .startScan(timeout: Duration(seconds: 4));
+        .startScan(timeout: const Duration(seconds: 4));
   }
 
   // @TODO . One day there should be `_pairDevice` on long tap on something... ;)
 
   @override
   void dispose() {
-    // Avoid memory leak (`setState` after dispose) and cancel discovery
-    // _streamSubscription?.cancel();
-    //
-    // FlutterBluetoothSerial.instance.setPairingRequestHandler(null);
     _discoverableTimeoutTimer?.cancel();
     super.dispose();
   }
@@ -115,16 +112,16 @@ class _BlEScreenState extends State<BlEScreen> {
           if (state == BluetoothState.on) {
             return Scaffold(
               appBar: AppBar(
-                title: Text('Find Devices'),
+                title: const Text('Find Devices'),
               ),
               body: RefreshIndicator(
                 onRefresh: () =>
-                    FlutterBlue.instance.startScan(timeout: Duration(seconds: 4)),
+                    FlutterBlue.instance.startScan(timeout: const Duration(seconds: 4)),
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
                       StreamBuilder<List<BluetoothDevice>>(
-                        stream: Stream.periodic(Duration(seconds: 2))
+                        stream: Stream.periodic(const Duration(seconds: 2))
                             .asyncMap((_) => FlutterBlue.instance.connectedDevices),
                         initialData: [],
                         builder: (c, snapshot) => Column(
@@ -164,7 +161,8 @@ class _BlEScreenState extends State<BlEScreen> {
                               onTap: () => Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 r.device.connect();
-                                ESPBLE().scanForESPDevice();
+                                ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!);
+                                //ESPBLE().connectToDevice();
                                 //scanForWifiNetworks();
                                 return DeviceScreen(device: r.device);
                               })),
@@ -183,235 +181,39 @@ class _BlEScreenState extends State<BlEScreen> {
                 builder: (c, snapshot) {
                   if (snapshot.data!) {
                     return FloatingActionButton(
-                      child: Icon(Icons.stop),
                       onPressed: () => FlutterBlue.instance.stopScan(),
                       backgroundColor: Colors.red,
+                      child: const Icon(Icons.stop),
                     );
                   } else {
                     return FloatingActionButton(
-                        child: Icon(Icons.search),
+                        child: const Icon(Icons.search),
                         onPressed: () => FlutterBlue.instance
-                            .startScan(timeout: Duration(seconds: 4)));
+                            .startScan(timeout: const Duration(seconds: 4)));
                   }
                 },
               ),
             );
             ;
           }
-          return Container(
-            child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                Text("Press the button to request turning on Bluetooth"),
-            SizedBox(height: 20.0),
-            /*RaisedButton(
-              onPressed: (() {
-                enableBT();
-              }),
-              child: Text('Request to turn on Bluetooth'),
-            ),*/
-            SizedBox(height: 10.0),
-            RaisedButton(
-              onPressed: (() async {
-                if(await Permission.bluetoothConnect.request().isGranted){
-                customEnableBT(context);
-                }
-                if(await Permission.locationWhenInUse.request().isGranted){
-
-                }
-              }),
-              child: Text('Enable Bluetooth'),
-            ),
-            /*child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    'Bluetooth adapter is ${state.toString().substring(15)}.',
-                  ),
-                  ElevatedButton(
-                    child: Text('Enable'),
-                    onPressed: () {
-                      String dialogTitle = "Bluetooth permission";
-                      bool displayDialogContent = true;
-                      String dialogContent = "This app requires Bluetooth to connect to device.";
-                      //or
-                      // bool displayDialogContent = false;
-                      // String dialogContent = "";
-                      String cancelBtnText = "Nope";
-                      String acceptBtnText = "Sure";
-                      double dialogRadius = 10.0;
-                      bool barrierDismissible = true; //
-
-                      BluetoothEnable.customBluetoothRequest(context, dialogTitle, displayDialogContent, dialogContent, cancelBtnText, acceptBtnText, dialogRadius, barrierDismissible).then((result) {
-                        if (result == "true"){
-                          //Bluetooth has been enabled
-                          print("Bluetooth has been enabled");
-                        } else{
-                          enableBT();
-                        }
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),*/
-          ])
-          );
+          return Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+              const Text("Press the button to request turning on Bluetooth"),
+          const SizedBox(height: 20.0),
+          const SizedBox(height: 10.0),
+          RaisedButton(
+            onPressed: (() async {
+              customEnableBT(context);
+            }),
+            child: const Text('Enable Bluetooth'),
+          ),
+          ]);
 
         });
-    // return Scaffold(
-    //   appBar: AppBar(
-    //     title: isDiscovering
-    //         ? const Text('Discovering devices')
-    //         : const Text('Discovered devices'),
-    //     actions: <Widget>[
-    //       isDiscovering
-    //           ? FittedBox(
-    //               child: Container(
-    //                 margin: const EdgeInsets.all(16.0),
-    //                 child: const CircularProgressIndicator(
-    //                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-    //                 ),
-    //               ),
-    //             )
-    //           : IconButton(
-    //               icon: const Icon(Icons.replay),
-    //               onPressed: _restartDiscovery,
-    //             )
-    //     ],
-    //   ),
-    //   body: ListView.builder(
-    //     itemCount: results.length,
-    //     itemBuilder: (BuildContext context, index) {
-    //       BluetoothDiscoveryResult result = results[index];
-    //       final device = result.device;
-    //       final address = device.address;
-    //       return BluetoothDeviceListEntry(
-    //         device: device,
-    //         rssi: result.rssi,
-    //         onTap: () {
-    //           if (device.isBonded) {
-    //             ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-    //               content: Text('Already bonded'),
-    //             ));
-    //           }
-    //           EasyLoading.show(status: 'Connecting...');
-    //           FlutterBluetoothSerial.instance
-    //               .bondDeviceAtAddress(result.device.address)
-    //               .then((value) {
-    //             print(value);
-    //             if (value == true) {
-    //               print("Bonded:${result.device.bondState}");
-    //               setState(() {
-    //                 results[results.indexOf(result)] = BluetoothDiscoveryResult(
-    //                     device: BluetoothDevice(
-    //                         name: device.name ?? '',
-    //                         address: address,
-    //                         type: device.type,
-    //                         bondState: BluetoothBondState.bonded),
-    //                     rssi: result.rssi);
-    //               });
-    //               EasyLoading.show(status: 'Connected. Communicating...');
-    //               tryEstablishLink(result);
-    //             } else {
-    //               print("Not Bonded");
-    //               EasyLoading.showError(
-    //                   "Something went wrong. Please try again.");
-    //             }
-    //           }).onError((error, stackTrace) {
-    //             print("Error:$error");
-    //             print("StackTrace:$stackTrace");
-    //             if (error.toString().contains("already bonded")) {
-    //               print("Bonded:${result.device.bondState}");
-    //               EasyLoading.show(status: 'Connected. Communicating...');
-    //               setState(() {
-    //                 results[results.indexOf(result)] = BluetoothDiscoveryResult(
-    //                     device: BluetoothDevice(
-    //                         name: device.name ?? '',
-    //                         address: address,
-    //                         type: device.type,
-    //                         bondState: BluetoothBondState.bonded),
-    //                     rssi: result.rssi);
-    //               });
-    //               tryEstablishLink(result);
-    //             } else {
-    //               print("Not Bonded");
-    //               EasyLoading.showError(
-    //                   "Something went wrong. Please try again.");
-    //             }
-    //           });
-    //           // Navigator.of(context).pop(result.device);
-    //         },
-    //         onLongPress: () async {
-    //           try {} catch (ex) {
-    //             showDialog(
-    //               context: context,
-    //               builder: (BuildContext context) {
-    //                 return AlertDialog(
-    //                   title: const Text('Error occured while bonding'),
-    //                   content: Text(ex.toString()),
-    //                   actions: <Widget>[
-    //                     TextButton(
-    //                       child: const Text("Close"),
-    //                       onPressed: () {
-    //                         Navigator.of(context).pop();
-    //                       },
-    //                     ),
-    //                   ],
-    //                 );
-    //               },
-    //             );
-    //           }
-    //         },
-    //       );
-    //     },
-    //   ),
-    // );
-  }
 
-  // Future<void> tryEstablishLink(BluetoothDiscoveryResult result) async {
-  //   if (_connection != null && _connection?.isConnected == true) {
-  //     print("Connection still active");
-  //     EasyLoading.dismiss();
-  //     hostname = result.device.name?.trim().split('-')[1];
-  //     //addDeviceToDashboard(hostname!);
-  //     scanForWifiNetworks();
-  //     return;
-  //   } else {
-  //     BluetoothConnection.toAddress(result.device.address).then((connection) {
-  //       _connection = connection;
-  //       print('Connected to the device ${result.device.name}');
-  //       hostname = result.device.name?.trim().split('-')[1];
-  //       //addDeviceToDashboard(hostname!);
-  //       //connection.input?.listen((Uint8List data) {
-  //       //String received = ascii.decode(data);
-  //       //print('Data incoming: $received');
-  //       //if(received.isNotEmpty){
-  //       /*}
-  //       if (ascii.decode(data).contains('!')) {
-  //         connection.finish(); // Closing connection
-  //         print('Disconnecting by local host');
-  //       }
-  //     }).onDone(() {
-  //       print('Disconnected by remote request');
-  //     }); */
-  //       //Future.delayed(const Duration(seconds: 1), () {
-  //       if (connection.isConnected) {
-  //         EasyLoading.showSuccess("Link established");
-  //         scanForWifiNetworks();
-  //       } else {
-  //         EasyLoading.showError("Could not establish link. Please try again.");
-  //       }
-  //       //});
-  //       /*}).catchError((error) {
-  //     EasyLoading.showError("Could not establish link. Please try again.");
-  //     print('Cannot connect, exception occured');
-  //     print(error); */
-  //     });
-  //   }
-  // }
+  }
 
   Future<void> scanForWifiNetworks() async {
     // EasyLoading.show(status: 'Scanning for wifi networks...');
@@ -456,13 +258,7 @@ class _BlEScreenState extends State<BlEScreen> {
                             Navigator.of(context).pop();
                             _selectedWifiNetwork = accessPoint;
                             EasyLoading.show(status: 'Saving WiFi network name...');
-                            // if (_connection != null) {
-                            //   _connection?.output.add(ascii.encode(accessPoint.ssid));
-                            //   EasyLoading.showSuccess("Network name set");
-                            //   Future.delayed(const Duration(seconds: 1), () {
-                                 getWifiPassword(accessPoint);
-                            //   });
-                            // }
+                            getWifiPassword(accessPoint);
                           },
                         );
                       },
@@ -527,11 +323,11 @@ class _BlEScreenState extends State<BlEScreen> {
                         //     });
                         // }
                       },
+                      color: const Color(0xFF1BC0C5),
                       child: const Text(
                         "Save",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: const Color(0xFF1BC0C5),
                     ),
                   )
                 ],
@@ -587,11 +383,11 @@ class _BlEScreenState extends State<BlEScreen> {
                         //   });
                         // }
                       },
+                      color: const Color(0xFF1BC0C5),
                       child: const Text(
                         "Save",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: const Color(0xFF1BC0C5),
                     ),
                   ),
                 ],
@@ -636,28 +432,15 @@ class _BlEScreenState extends State<BlEScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         EasyLoading.show(status: 'Sending Sensor location...');
-                        //print("sensor location: " + sensorLocation);
-                        // if (_connection != null) {
-                        //   //String message = sensorName;
-                        //   _connection?.output.add(ascii.encode(sensorLocation));
-                        //   EasyLoading.showSuccess("Sensor location sent");
-                        //   Future.delayed(const Duration(seconds: 3), () {
-                        //   });
-                        // }
-                        /*
-                         should call ESPBLE().scanForESPDevice();
-                         send _selectedWifiNetwork, _password, _sensorLocation,_sensorName
-                         to the device
-                         */
-                        //return ESPBLE().scanForESPDevice(device: r.device);
+                        //ESPBLE().connectToDevice();
                         addDeviceToDashboard(hostname!);
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       },
+                      color: const Color(0xFF1BC0C5),
                       child: const Text(
                         "Save",
                         style: TextStyle(color: Colors.white),
                       ),
-                      color: const Color(0xFF1BC0C5),
                     ),
                   ),
                 ],
@@ -677,7 +460,7 @@ class _BlEScreenState extends State<BlEScreen> {
       if (value.success == true) {
         print("Adding to firebase:");
         await FirebaseMessaging.instance
-            .subscribeToTopic("host_" + received);
+            .subscribeToTopic("host_$received");
         EasyLoading.showSuccess("Adding device to dashboard...");
         Future.delayed(const Duration(seconds: 1), () {
           Navigator.pop(context, true);
@@ -698,7 +481,7 @@ class _BlEScreenState extends State<BlEScreen> {
   }
 
   Future<void> customEnableBT(BuildContext context) async {
-    String dialogTitle = "Hey! Please give me permission to use Bluetooth!";
+    String dialogTitle = "Bluetooth Permissino Required";
     bool displayDialogContent = true;
     String dialogContent = "This app requires Bluetooth to connect to device.";
     //or
@@ -719,7 +502,9 @@ class _BlEScreenState extends State<BlEScreen> {
         dialogRadius,
         barrierDismissible)
         .then((value) {
-      print(value);
+      if (kDebugMode) {
+        print(value);
+      }
     });
   }
 }
