@@ -1,8 +1,4 @@
-// import 'package:esp_provisioning_example/wifi_screen/wifi.dart';
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
-
 import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -145,12 +141,11 @@ class _BlEScreenState extends State<BlEScreen> {
                     return FloatingActionButton(
                         child: const Icon(Icons.search),
                         onPressed: () => FlutterBlue.instance
-                            .startScan(timeout: const Duration(seconds: 4)));
+                            .startScan(timeout: const Duration(seconds: 10)));
                   }
                 },
               ),
             );
-            ;
           }
           return Column(
               mainAxisSize: MainAxisSize.min,
@@ -177,14 +172,36 @@ class _BlEScreenState extends State<BlEScreen> {
       // can safely call scan related functionalities
       final error = await WiFiScan.instance.startScan(askPermissions: true);
       if (error != null) {
-        print('Error: $error');
+        if (kDebugMode) {
+          print('Error: $error');
+        }
       } else {
-        print('Scan started');
+        if (kDebugMode) {
+          print('Scan started');
+        }
         final result =
         await WiFiScan.instance.getScannedResults(askPermissions: true);
         if (result.hasError) {
           switch (error) {
           // handle error for values of GetScannedResultErrors
+            case StartScanErrors.notSupported:
+              // TODO: Handle this case.
+              break;
+            case StartScanErrors.noLocationPermissionRequired:
+              // TODO: Handle this case.
+              break;
+            case StartScanErrors.noLocationPermissionDenied:
+              // TODO: Handle this case.
+              break;
+            case StartScanErrors.noLocationPermissionUpgradeAccuracy:
+              // TODO: Handle this case.
+              break;
+            case StartScanErrors.noLocationServiceDisabled:
+              // TODO: Handle this case.
+              break;
+            case StartScanErrors.failed:
+              // TODO: Handle this case.
+              break;
           }
         } else {
           EasyLoading.dismiss();
@@ -410,12 +427,16 @@ class _BlEScreenState extends State<BlEScreen> {
   }
 
   void addDeviceToDashboard(String received) {
-    print("Adding device to dashboard");
+    if (kDebugMode) {
+      print("Adding device to dashboard");
+    }
     NetworkRequests().saveDevice(received)
         .then((value) async {
       EasyLoading.dismiss();
       if (value.success == true) {
-        print("Adding to firebase:");
+        if (kDebugMode) {
+          print("Adding to firebase:");
+        }
         await FirebaseMessaging.instance
             .subscribeToTopic("host_$received");
         EasyLoading.showSuccess("Adding device to dashboard...");
@@ -434,7 +455,9 @@ class _BlEScreenState extends State<BlEScreen> {
 
   Future<void> enableBT() async {
     BluetoothEnable.enableBluetooth.then((value) {
-      print(value);
+      if (kDebugMode) {
+        print(value);
+      }
     });
   }
 
