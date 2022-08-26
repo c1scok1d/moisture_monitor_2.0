@@ -7,11 +7,7 @@ import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart' as classical;
-// import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:permission_handler/permission_handler.dart';
-// import 'package:rodland_farms/deviceConnection/BluetoothDeviceListEntry.dart';
 import 'package:rodland_farms/network/network_requests.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 import 'package:flutter_blue/flutter_blue.dart';
@@ -29,17 +25,9 @@ class BlEScreen extends StatefulWidget {
 
 class _BlEScreenState extends State<BlEScreen> {
 
-  // StreamSubscription<BluetoothDiscoveryResult>? _streamSubscription;
-  // List<BluetoothDiscoveryResult> results =
-  //     List<BluetoothDiscoveryResult>.empty(growable: true);
-  // bool isDiscovering = false;
-
   BluetoothState state = BluetoothState.unknown;
 
   Timer? _discoverableTimeoutTimer;
-  //int _discoverableTimeoutSecondsLeft = 0;
-  //bool _autoAcceptPairingRequests = false;
-  // BluetoothConnection? _connection;
 
   WiFiAccessPoint? _selectedWifiNetwork;
   String? _password = "password123", _sensorLocation = "bar", _sensorName = "foo", hostname, _network = "sableBusiness";
@@ -47,54 +35,19 @@ class _BlEScreenState extends State<BlEScreen> {
   @override
   void initState() {
     super.initState();
-    // Get current state
-    // FlutterBluetoothSerial.instance.state.then((state) {
-    //   setState(() {
-    //     _bluetoothState = state;
-    //   });
-    // });
-    // if (!_bluetoothState.isEnabled) {
-    //   FlutterBluetoothSerial.instance.requestEnable();
-    // }
-    // isDiscovering = widget.start;
-    // if (isDiscovering) {
-    //   _startDiscovery();
-    // }
   }
 
   void _restartDiscovery() {
     setState(() {
-      // results.clear();
-      // isDiscovering = true;
     });
 
     _startDiscovery();
   }
 
   void _startDiscovery() {
-    // _streamSubscription =
-    //     FlutterBluetoothSerial.instance.startDiscovery().listen((r) {
-    //   setState(() {
-    //     final existingIndex = results.indexWhere(
-    //         (element) => element.device.address == r.device.address);
-    //     if (existingIndex >= 0) {
-    //       results[existingIndex] = r;
-    //     } else {
-    //       results.add(r);
-    //     }
-    //   });
-    // });
-    //
-    // _streamSubscription!.onDone(() {
-    //   setState(() {
-    //     isDiscovering = false;
-    //   });
-    // });
     FlutterBlue.instance
         .startScan(timeout: const Duration(seconds: 4));
   }
-
-  // @TODO . One day there should be `_pairDevice` on long tap on something... ;)
 
   @override
   void dispose() {
@@ -120,13 +73,13 @@ class _BlEScreenState extends State<BlEScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
+                      //  @ TODO add if statement to only display ble devices that being with "Rodland"
                       StreamBuilder<List<BluetoothDevice>>(
                         stream: Stream.periodic(const Duration(seconds: 2))
                             .asyncMap((_) => FlutterBlue.instance.connectedDevices),
-                        initialData: [],
+                        initialData: const [],
                         builder: (c, snapshot) => Column(
-                          children: snapshot.data!
-                              .map((d) => ListTile(
+                          children: snapshot.data!.map((d) => ListTile(
                             title: Text(d.name),
                             subtitle: Text(d.id.toString()),
                             trailing: StreamBuilder<BluetoothDeviceState>(
@@ -158,12 +111,15 @@ class _BlEScreenState extends State<BlEScreen> {
                               .map(
                                 (r) => ScanResultTile(
                               result: r,
-                              onTap: () => Navigator.of(context)
+                              onTap:
+                              //  @TODO if device not paired, _pairDevice
+                              //  @TODO onConnect to device read input to hostname variable
+                              //  @TODO call scanForWifiNetworks()
+                              //  @TODO move ESP.BLE call to device addDeviceToDashboard
+                                  () => Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 r.device.connect();
                                 ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
-                                //ESPBLE().connectToDevice();
-                                //scanForWifiNetworks();
                                 return DeviceScreen(device: r.device);
                               })),
                             ),
@@ -233,7 +189,9 @@ class _BlEScreenState extends State<BlEScreen> {
         } else {
           EasyLoading.dismiss();
           final accessPoints = result.value;
-          print('Scan result: $accessPoints');
+          if (kDebugMode) {
+            print('Scan result: $accessPoints');
+          }
           //show access points in a dialog list
           showDialog(
             context: context,
@@ -277,7 +235,7 @@ class _BlEScreenState extends State<BlEScreen> {
         }
       }
     } else {
-      // fallback mechanism, like - show user that "scan" is not possible
+      // @TODO fallback mechanism, like - show user that "scan" is not possible
     }
   }
 
@@ -432,7 +390,6 @@ class _BlEScreenState extends State<BlEScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         EasyLoading.show(status: 'Sending Sensor location...');
-                        //ESPBLE().connectToDevice();
                         addDeviceToDashboard(hostname!);
                         Navigator.of(context).popUntil((route) => route.isFirst);
                       },
@@ -462,6 +419,7 @@ class _BlEScreenState extends State<BlEScreen> {
         await FirebaseMessaging.instance
             .subscribeToTopic("host_$received");
         EasyLoading.showSuccess("Adding device to dashboard...");
+        //  @TODO call to ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
         Future.delayed(const Duration(seconds: 1), () {
           Navigator.pop(context, true);
         });
@@ -481,7 +439,7 @@ class _BlEScreenState extends State<BlEScreen> {
   }
 
   Future<void> customEnableBT(BuildContext context) async {
-    String dialogTitle = "Bluetooth Permissino Required";
+    String dialogTitle = "Bluetooth Permission Required";
     bool displayDialogContent = true;
     String dialogContent = "This app requires Bluetooth to connect to device.";
     //or
