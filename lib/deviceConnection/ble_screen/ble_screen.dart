@@ -32,7 +32,7 @@ class _BlEScreenState extends State<BlEScreen> {
   void initState() {
     super.initState();
   }
-
+/*
   void _restartDiscovery() {
     setState(() {
     });
@@ -43,7 +43,7 @@ class _BlEScreenState extends State<BlEScreen> {
   void _startDiscovery() {
     FlutterBlue.instance
         .startScan(timeout: const Duration(seconds: 4));
-  }
+  } */
 
   @override
   void dispose() {
@@ -69,12 +69,13 @@ class _BlEScreenState extends State<BlEScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: <Widget>[
-                      //  @ TODO add if statement to only display ble devices that being with "Rodland"
+                      //  @ TODO add if statement to only display ble devices that begins with "Rodland"
                       StreamBuilder<List<BluetoothDevice>>(
                         stream: Stream.periodic(const Duration(seconds: 2))
                             .asyncMap((_) => FlutterBlue.instance.connectedDevices),
                         initialData: const [],
-                        builder: (c, snapshot) => Column(
+                        builder:
+                            (c, snapshot) => Column(
                           children: snapshot.data!.map((d) => ListTile(
                             title: Text(d.name),
                             subtitle: Text(d.id.toString()),
@@ -86,10 +87,12 @@ class _BlEScreenState extends State<BlEScreen> {
                                     BluetoothDeviceState.connected) {
                                   return ElevatedButton(
                                     child: const Text('OPEN'),
-                                    onPressed: () => Navigator.of(context).push(
+                                      onPressed: ()=> scanForWifiNetworks()
+                                    //onPressed: () =>
+                                    /*Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (context) =>
-                                                DeviceScreen(device: d))),
+                                                DeviceScreen(device: d)))*/
                                   );
                                 }
                                 return Text(snapshot.data.toString());
@@ -103,19 +106,16 @@ class _BlEScreenState extends State<BlEScreen> {
                         stream: FlutterBlue.instance.scanResults,
                         initialData: const [],
                         builder: (c, snapshot) => Column(
-                          children: snapshot.data!
-                              .map(
-                                (r) => ScanResultTile(
+                          children: snapshot.data!.map((r) => ScanResultTile(
                               result: r,
                               onTap:
                               //  @TODO if device not paired, _pairDevice
                               //  @TODO onConnect to device read input to hostname variable
                               //  @TODO call scanForWifiNetworks()
-                              //  @TODO move ESP.BLE call to device addDeviceToDashboard
                                   () => Navigator.of(context)
                                   .push(MaterialPageRoute(builder: (context) {
                                 r.device.connect();
-                                ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
+                               // ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
                                 return DeviceScreen(device: r.device);
                               })),
                             ),
@@ -168,6 +168,7 @@ class _BlEScreenState extends State<BlEScreen> {
 
   Future<void> scanForWifiNetworks() async {
     // EasyLoading.show(status: 'Scanning for wifi networks...');
+    var foo = await WiFiScan.instance.hasCapability();
     if (await WiFiScan.instance.hasCapability()) {
       // can safely call scan related functionalities
       final error = await WiFiScan.instance.startScan(askPermissions: true);
@@ -407,8 +408,9 @@ class _BlEScreenState extends State<BlEScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         EasyLoading.show(status: 'Sending Sensor location...');
+                        //ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
                         addDeviceToDashboard(hostname!);
-                        Navigator.of(context).popUntil((route) => route.isFirst);
+                        //Navigator.of(context).popUntil((route) => route.isFirst);
                       },
                       color: const Color(0xFF1BC0C5),
                       child: const Text(
@@ -434,15 +436,17 @@ class _BlEScreenState extends State<BlEScreen> {
         .then((value) async {
       EasyLoading.dismiss();
       if (value.success == true) {
+        //EasyLoading.show(status: 'Adding to dashboard...');
         if (kDebugMode) {
           print("Adding to firebase:");
         }
         await FirebaseMessaging.instance
             .subscribeToTopic("host_$received");
         EasyLoading.showSuccess("Adding device to dashboard...");
-        //  @TODO call to ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
+        ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
         Future.delayed(const Duration(seconds: 1), () {
-          Navigator.pop(context, true);
+          Navigator.of(context).popUntil((route) => route.isFirst);
+          //Navigator.pop(context, true);
         });
       } else {
         EasyLoading.showError(value.message??'Error adding device');
@@ -465,9 +469,6 @@ class _BlEScreenState extends State<BlEScreen> {
     String dialogTitle = "Bluetooth Permission Required";
     bool displayDialogContent = true;
     String dialogContent = "This app requires Bluetooth to connect to device.";
-    //or
-    // bool displayDialogContent = false;
-    // String dialogContent = "";
     String cancelBtnText = "No";
     String acceptBtnText = "Yes";
     double dialogRadius = 10.0;
