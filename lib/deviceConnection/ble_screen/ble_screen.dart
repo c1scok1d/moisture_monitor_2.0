@@ -13,7 +13,7 @@ import 'device_screen.dart';
 class BlEScreen extends StatefulWidget {
   bool start = true;
 
-  BlEScreen();
+  BlEScreen({Key? key}) : super(key: key);
 
   @override
   _BlEScreenState createState() => _BlEScreenState();
@@ -408,7 +408,7 @@ class _BlEScreenState extends State<BlEScreen> {
                       onPressed: () {
                         Navigator.of(context).pop();
                         EasyLoading.show(status: 'Sending Sensor location...');
-                        //ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
+                        ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
                         addDeviceToDashboard(hostname!);
                         //Navigator.of(context).popUntil((route) => route.isFirst);
                       },
