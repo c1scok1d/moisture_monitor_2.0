@@ -3,7 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:rodland_farms/deviceConnection/ble_screen/ble_screen.dart';
+import 'package:rodland_farms/deviceConnection/ble_screen/ble_scr.dart';
+//import 'package:rodland_farms/deviceConnection/ble_screen/ble_screen.dart';
 import 'package:rodland_farms/network/get_device_data_response.dart';
 import 'package:rodland_farms/network/images_response.dart';
 import 'package:rodland_farms/network/network_requests.dart';
@@ -1007,7 +1008,7 @@ class _HomePageState extends State<HomePage> {
           }
               final bool args = await Navigator.push(context,
                 MaterialPageRoute(
-                  builder: (context) => BlEScreen(),
+                  builder: (context) => const BLESCR(),
                 ),
               );
               if (kDebugMode) {
