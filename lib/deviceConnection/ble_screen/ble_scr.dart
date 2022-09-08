@@ -353,6 +353,9 @@ class _BLESCRState extends State<BLESCR> {
                       itemCount: accessPoints?.length,
                       itemBuilder: (BuildContext context, int index) {
                         final accessPoint = accessPoints![index];
+                        if(accessPoint.ssid != ""){
+
+                        }
                         return ListTile(
                           title: Text(accessPoint.ssid),
                           //subtitle: Text(accessPoint.bssid),
