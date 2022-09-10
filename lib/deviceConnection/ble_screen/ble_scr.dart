@@ -32,17 +32,17 @@ class _BLESCRState extends State<BLESCR> {
   late QualifiedCharacteristic _rxCharacteristic;
 // These are the UUIDs
   final deviceGATTserviceUUID =
-  Uuid.parse('1775244D-6B43-439B-877C-060F2D9BED07');
-  //Uuid.parse('021A9004-0382-4AEA-BFF4-6B3F1C5ADFB4');
+  //Uuid.parse('1775244D-6B43-439B-877C-060F2D9BED07');
+  Uuid.parse('021A9004-0382-4AEA-BFF4-6B3F1C5ADFB4');
   final deviceGATTInfoCharUUID =
-  Uuid.parse('1775FF53-6B43-439B-877C-060F2D9BED07');
-  //Uuid.parse('021AFF53-0382-4AEA-BFF4-6B3F1C5ADFB4');
+  //Uuid.parse('1775FF53-6B43-439B-877C-060F2D9BED07');
+  Uuid.parse('021AFF53-0382-4AEA-BFF4-6B3F1C5ADFB4');
   final deviceGATTCustomDataCharUUID =
-  Uuid.parse('1775FF55-6B43-439B-877C-060F2D9BED07');
-  //Uuid.parse('021AFF55-0382-4AEA-BFF4-6B3F1C5ADFB4');
+  //Uuid.parse('1775FF55-6B43-439B-877C-060F2D9BED07');
+  Uuid.parse('021AFF55-0382-4AEA-BFF4-6B3F1C5ADFB4');
   final deviceGATTProvConfigCharUUID =
-  Uuid.parse('1775FF52-6B43-439B-877C-060F2D9BED07');
-  //Uuid.parse('021AFF52-0382-4AEA-BFF4-6B3F1C5ADFB4');
+  //Uuid.parse('1775FF52-6B43-439B-877C-060F2D9BED07');
+  Uuid.parse('021AFF52-0382-4AEA-BFF4-6B3F1C5ADFB4');
   final applyConfigData = Uint8List.fromList([0x08, 0x04, 0x72, 0x00]);
   final startOfConfig = Uint8List.fromList([0x52, 0x03, 0xA2, 0x01, 0x00]);
 
@@ -226,6 +226,14 @@ class _BLESCRState extends State<BLESCR> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Back to dashboard"),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
       backgroundColor: Colors.white,
       body: Container(),
       persistentFooterButtons: [
@@ -293,6 +301,7 @@ class _BLESCRState extends State<BLESCR> {
   }
 
   Future<void> scanForWifiNetworks() async {
+    EasyLoading.dismiss();
     // EasyLoading.show(status: 'Scanning for wifi networks...');
     //var foo = await WiFiScan.instance.hasCapability();
     if (await WiFiScan.instance.hasCapability()) {
@@ -619,5 +628,4 @@ class _BLESCRState extends State<BLESCR> {
       }
     });
   }
-
 }
