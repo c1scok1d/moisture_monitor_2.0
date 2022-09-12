@@ -890,7 +890,7 @@ class _HomePageState extends State<HomePage> {
                                                                         style: BatteryIndicatorStyle.skeumorphism,
                                                                         colorful: true,
                                                                         showPercentNum: true,
-                                                                        mainColor: ( record.batt! < 15 ? Colors.red : record.batt! < 30 ? Colors.orange : Colors.green),
+                                                                        mainColor: ( record.batt! < 15 ? Colors.red : record.batt! < 30 ? Colors.yellow : Colors.green),
                                                                         size: 8.0,
                                                                         ratio: 2.5,
                                                                         showPercentSlide: true,
