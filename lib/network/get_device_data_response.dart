@@ -196,8 +196,8 @@ class ChartData {
         xValueMapper: (Records d, _) => d.getGraphTime(),
         yValueMapper: (Records d, _) => d.humidity ?? 0,
         //markerSettings: const MarkerSettings(isVisible: true),
-        name: 'Humidity (%)',
-        legendItemText: 'Humidity%',
+        name: 'Humidity: ${deviceRecords![0].humidity}',
+        //legendItemText: 'Humidity%',
         color: Colors.green,
       ),
     ];
@@ -210,8 +210,8 @@ class ChartData {
         xValueMapper: (Records d, _) => d.getGraphTime(),
         yValueMapper: (Records d, _) => d.batt ?? 0,
         //markerSettings: const MarkerSettings(isVisible: true),
-        name: 'Battery (%)',
-        legendItemText: 'Battery%',
+        name: 'Battery: ${deviceRecords![0].batt}%',
+        //legendItemText: 'Battery%',
         color: Colors.green,
       ),
     ];
