@@ -200,7 +200,7 @@ class _HomePageState extends State<HomePage> {
                                                               content: Text(
                                                                   "Are you sure you want to delete ${device.hostname ?? 'this'} device?"),
                                                               actions: [
-                                                                FlatButton(
+                                                                ElevatedButton(
                                                                   child: const Text(
                                                                       "Cancel"),
                                                                   onPressed:
@@ -210,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                                                                         .pop();
                                                                   },
                                                                 ),
-                                                                FlatButton(
+                                                                ElevatedButton(
                                                                   child: const Text(
                                                                       "Delete"),
                                                                   onPressed:
@@ -597,7 +597,7 @@ class _HomePageState extends State<HomePage> {
                                                             content: Text(
                                                                 "Are you sure you want to delete ${device.hostname ?? 'this'} device?"),
                                                             actions: [
-                                                              FlatButton(
+                                                              ElevatedButton(
                                                                 child: const Text(
                                                                     "Cancel"),
                                                                 onPressed: () {
@@ -606,7 +606,7 @@ class _HomePageState extends State<HomePage> {
                                                                       .pop();
                                                                 },
                                                               ),
-                                                              FlatButton(
+                                                              ElevatedButton(
                                                                 child: const Text(
                                                                     "Delete"),
                                                                 onPressed:
@@ -796,7 +796,8 @@ class _HomePageState extends State<HomePage> {
                                                                                 '${record.moisture}%',
                                                                             style:
                                                                                 TextStyle(
-                                                                              color: (record.moisture! < 20 ? Colors.red : Colors.green),
+                                                                              color: (record.moisture! < 33 ? Colors.red : record.moisture! < 66 ? Colors.orange: Colors.green),
+                                                                                    //record.batt! < 15 ? Colors.red : record.batt! < 30 ? Colors.yellow : Colors.green
                                                                             )),
                                                                       ],
                                                                     ),
