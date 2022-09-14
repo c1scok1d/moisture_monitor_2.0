@@ -7,6 +7,7 @@ import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:wifi_scan/wifi_scan.dart';
@@ -46,16 +47,11 @@ class _BLESCRState extends State<BLESCR> {
   final applyConfigData = Uint8List.fromList([0x08, 0x04, 0x72, 0x00]);
   final startOfConfig = Uint8List.fromList([0x52, 0x03, 0xA2, 0x01, 0x00]);
 
-  //final String deviceName = "NULL";
-  //final String deviceLocation = "NULL";
-  WiFiAccessPoint? _selectedWifiNetwork;
   String _password = "networkPassword";
   String _ssid = "RodlandFarms";
   String _sensorLocation = "bar";
   String _sensorName = "foo";
   String _hostname = "hostname";
-
-  //WiFiAccessPoint? _selectedWifiNetwork;
 
   void _startScan() async {
   // Main scanning logic happens here ⤵️
@@ -63,7 +59,6 @@ class _BLESCRState extends State<BLESCR> {
       _scanStarted = true;
     });
       _scanStream = flutterReactiveBle.scanForDevices(withServices: [deviceGATTserviceUUID]).listen((device) {
-        // Change this string to what you defined in Zephyr
         if (device.name.startsWith('Rodland')) {
           setState(() {
             _ubiqueDevice = device;
@@ -134,6 +129,8 @@ class _BLESCRState extends State<BLESCR> {
                 characteristicId: deviceGATTInfoCharUUID,
                 deviceId: event.deviceId);
 
+            // method to get hostname string from device
+
             final infoCharacteristic = QualifiedCharacteristic(
                 serviceId: deviceGATTserviceUUID,
                 characteristicId: deviceGATTInfoCharUUID,
@@ -161,7 +158,6 @@ class _BLESCRState extends State<BLESCR> {
                 characteristicId: deviceGATTCustomDataCharUUID,
                 deviceId: event.deviceId);
 
-            //String name = "testDevice", location = "testLocation";
             await flutterReactiveBle.writeCharacteristicWithResponse(customDataCharacteristic, value: Uint8List.fromList("{\"name\":\"$_sensorName\",\"location\":\"$_sensorLocation\"}".codeUnits));
             await Future.delayed(const Duration(seconds: 2));
             await flutterReactiveBle.writeCharacteristicWithResponse(provConfigCharacteristic, value: _getWiFiConfigDataToWrite());
@@ -173,9 +169,7 @@ class _BLESCRState extends State<BLESCR> {
 
             await flutterReactiveBle.writeCharacteristicWithResponse(provConfigCharacteristic, value: applyConfigData);
             await Future.delayed(const Duration(seconds: 1));
-            /*
-            #end mystuff
-             */
+
             setState(() {
               _foundDeviceWaitingToConnect = false;
               _connected = true;
@@ -214,96 +208,32 @@ class _BLESCRState extends State<BLESCR> {
     return configDataToWrite;
   }
 
-  void _partyTime() {
-    if (_connected) {
-      flutterReactiveBle
-          .writeCharacteristicWithResponse(_rxCharacteristic, value: [
-        0xff,
-      ]);
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Back to dashboard"),
-        automaticallyImplyLeading: false,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: Container(),
-      persistentFooterButtons: [
-        // We want to enable this button if the scan has NOT started
-        // If the scan HAS started, it should be disabled.
-        _scanStarted
-        // True condition
-            ? ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.grey, // background
-            onPrimary: Colors.white, // foreground
-          ),
-          onPressed: () {},
-          child: const Icon(Icons.search),
-        )
-        // False condition
-            : ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.blue, // background
-            onPrimary: Colors.white, // foreground
-          ),
-          onPressed: _startScan,
-          child: const Icon(Icons.search),
-        ),
-        _foundDeviceWaitingToConnect
-        // True condition
-            ? ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.blue, // background
-            onPrimary: Colors.white, // foreground
-          ),
-          onPressed: ()=> scanForWifiNetworks(),
-          child: const Icon(Icons.bluetooth),
-        )
-        // False condition
-            : ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.grey, // background
-            onPrimary: Colors.white, // foreground
-          ),
-          onPressed: () {},
-          child: const Icon(Icons.bluetooth),
-        ),
-        _connected
-        // True condition
-            ? ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.blue, // background
-            onPrimary: Colors.white, // foreground
-          ),
-          onPressed: _partyTime,
-          child: const Icon(Icons.celebration_rounded),
-        )
-        // False condition
-            : ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.grey, // background
-            onPrimary: Colors.white, // foreground
-          ),
-          onPressed: () {},
-          child: const Icon(Icons.celebration_rounded),
-        ),
-      ],
-    );
+    return StreamBuilder<BluetoothState>(
+        stream: FlutterBlue.instance.state,
+        initialData: BluetoothState.unknown,
+        builder: (c, snapshot) {
+          final state = snapshot.data;
+          switch(state) {
+            case BluetoothState.on: {
+              _startScan;
+            }
+            break;
+            case BluetoothState.unknown: {
+              break;
+            }
+            default: {
+              customEnableBT(context);
+            }
+            break;
+          }
+            return Text(snapshot.data.toString());
+        });
   }
 
   Future<void> scanForWifiNetworks() async {
     EasyLoading.dismiss();
-    // EasyLoading.show(status: 'Scanning for wifi networks...');
-    //var foo = await WiFiScan.instance.hasCapability();
     if (await WiFiScan.instance.hasCapability()) {
       // can safely call scan related functionalities
       final error = await WiFiScan.instance.startScan(askPermissions: true);
@@ -367,10 +297,8 @@ class _BLESCRState extends State<BLESCR> {
                         }
                         return ListTile(
                           title: Text(accessPoint.ssid),
-                          //subtitle: Text(accessPoint.bssid),
                           onTap: () {
                             Navigator.of(context).pop();
-                            //_selectedWifiNetwork = accessPoint;
                             _ssid = accessPoint.ssid;
                             EasyLoading.show(status: 'Saving WiFi network name...');
                             getWifiPassword(accessPoint);
@@ -425,25 +353,15 @@ class _BLESCRState extends State<BLESCR> {
                     },
                   ),
                   SizedBox(
+
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      child: const Text("Save"),
                       onPressed: () {
                         Navigator.of(context).pop();
                         EasyLoading.show(status: 'Sending password...');
-                        //   if (_connection != null) {
-                        //     //String? message = _password;
-                        //     _connection?.output.add(ascii.encode(_password!));
-                        //     EasyLoading.showSuccess("Password sent");
-                        //     Future.delayed(const Duration(seconds: 1), () {
                         setUpSensorName();
-                        //     });
-                        // }
                       },
-                      color: const Color(0xFF1BC0C5),
-                      child: const Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white),
-                      ),
                     ),
                   )
                 ],
@@ -475,7 +393,6 @@ class _BLESCRState extends State<BLESCR> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  //const Text('Tap to enter plant name'),
                   TextField(
                     decoration: const InputDecoration(
                       border: InputBorder.none,
@@ -487,19 +404,13 @@ class _BLESCRState extends State<BLESCR> {
                   ),
                   SizedBox(
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      child: const Text("Save"),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        EasyLoading.show(status: 'Sending Sensor name...');
+                        EasyLoading.show(status: 'Saving sensor name...');
                         setUpSensorLocation();
-                        //   });
-                        // }
                       },
-                      color: const Color(0xFF1BC0C5),
-                      child: const Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white),
-                      ),
                     ),
                   ),
                 ],
@@ -541,21 +452,14 @@ class _BLESCRState extends State<BLESCR> {
                   ),
                   SizedBox(
                     width: 320.0,
-                    child: RaisedButton(
+                    child: ElevatedButton(
+                      child: const Text("Save"),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        EasyLoading.show(status: 'Sending Sensor location...');
+                        EasyLoading.show(status: 'Saving sensor location...');
                         _connectToDevice();
                         EasyLoading.dismiss();
-                        //ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
-                        //addDeviceToDashboard(_hostname!);
-                        //Navigator.of(context).popUntil((route) => route.isFirst);
                       },
-                      color: const Color(0xFF1BC0C5),
-                      child: const Text(
-                        "Save",
-                        style: TextStyle(color: Colors.white),
-                      ),
                     ),
                   ),
                 ],
@@ -582,10 +486,8 @@ class _BLESCRState extends State<BLESCR> {
         await FirebaseMessaging.instance
             .subscribeToTopic("host_$received");
         EasyLoading.showSuccess("Adding device to dashboard...");
-        //ESPBLE().scanForESPDevice(_sensorName!, _sensorLocation!, _network!, _password!);
         Future.delayed(const Duration(seconds: 1), () {
           Navigator.of(context).popUntil((route) => route.isFirst);
-          //Navigator.pop(context, true);
         });
       } else {
         EasyLoading.showError(value.message??'Error adding device');
