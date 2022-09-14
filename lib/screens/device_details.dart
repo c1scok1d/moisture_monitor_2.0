@@ -156,6 +156,38 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
                           tooltipBehavior: TooltipBehavior(enable: true),
                         ),
                       ),
+                    ),
+                    Visibility(
+                      visible: snapshot.data?.data != null &&
+                          snapshot.data?.data?.isNotEmpty == true &&
+                          snapshot.data?.data![0].batt != 0,
+                      child: Card(
+                        margin: const EdgeInsets.all(8),
+                        child: SfCartesianChart(
+                          zoomPanBehavior: _zoom1Behavior,
+
+                          plotAreaBorderWidth: 0,
+                          title: ChartTitle(text: 'Battery'),
+                          legend: Legend(
+                              isVisible: true,
+                              position: LegendPosition.bottom,
+                              overflowMode: LegendItemOverflowMode.scroll),
+                          primaryXAxis: DateTimeCategoryAxis(
+                            majorGridLines: const MajorGridLines(width: 0),
+                            dateFormat: DateFormat('h:mm a'),
+                          ),
+                          primaryYAxis: NumericAxis(
+                              minimum: 0,
+                              maximum: 100,
+                              axisLine: const AxisLine(width: 0),
+                              edgeLabelPlacement: EdgeLabelPlacement.shift,
+                              labelFormat: '{value}%',
+                              majorTickLines: const MajorTickLines(size: 0)),
+                          series: ChartData(deviceRecords: snapshot.data?.data!)
+                              .getAreaBattData(),
+                          tooltipBehavior: TooltipBehavior(enable: true),
+                        ),
+                      ),
                     ),//vpd chart
                   ],
                 );
