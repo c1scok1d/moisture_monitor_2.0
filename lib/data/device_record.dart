@@ -34,7 +34,7 @@ class DeviceRecord{
   }
 
   String getGraphTime(){
-    return DateTime.parse(readingTime!).day.toString() + ", " + DateTime.parse(readingTime!).hour.toString() + ":" + DateTime.parse(readingTime!).minute.toString();
+    return "${DateTime.parse(readingTime!).day}, ${DateTime.parse(readingTime!).hour}:${DateTime.parse(readingTime!).minute}";
   }
 
   Map<String, dynamic> toJson() {

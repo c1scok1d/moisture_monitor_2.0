@@ -1,13 +1,10 @@
 import 'dart:async';
 import 'dart:io' show Platform;
 import 'dart:typed_data';
-
-//import 'package:location_permissions/location_permissions.dart';
 import 'package:bluetooth_enable/bluetooth_enable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_blue/flutter_blue.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:wifi_scan/wifi_scan.dart';
@@ -28,7 +25,7 @@ class _BLESCRState extends State<BLESCR> {
   bool _connected = false;
 
 // Bluetooth related variables
-  late DiscoveredDevice _ubiqueDevice;
+  late DiscoveredDevice _uniqueDevice;
   final flutterReactiveBle = FlutterReactiveBle();
   late StreamSubscription<DiscoveredDevice> _scanStream;
   late QualifiedCharacteristic _rxCharacteristic;
@@ -53,7 +50,8 @@ class _BLESCRState extends State<BLESCR> {
   String _ssid = "RodlandFarms";
   String _sensorLocation = "bar";
   String _sensorName = "foo";
-  String _hostname = "hostname";
+
+  //String _hostname = "hostname";
 
   void _startScan() async {
     // Main scanning logic happens here ⤵️
@@ -64,7 +62,7 @@ class _BLESCRState extends State<BLESCR> {
         .scanForDevices(withServices: [deviceGATTserviceUUID]).listen((device) {
       if (device.name.startsWith('Rodland')) {
         setState(() {
-          _ubiqueDevice = device;
+          _uniqueDevice = device;
           _foundDeviceWaitingToConnect = true;
           _foo(device.name);
         });
@@ -113,15 +111,18 @@ class _BLESCRState extends State<BLESCR> {
   }
 
   void _connectToDevice() {
+    EasyLoading.dismiss();
     // Let's listen to our connection so we can make updates on a state change
+
     Stream<ConnectionStateUpdate> currentConnectionStream = flutterReactiveBle
         .connectToAdvertisingDevice(
-            id: _ubiqueDevice.id,
-            prescanDuration: const Duration(seconds: 1),
+            id: _uniqueDevice.id,
+            prescanDuration: const Duration(seconds: 3),
             withServices: [
           deviceGATTserviceUUID,
           deviceGATTProvConfigCharUUID
         ]);
+
     currentConnectionStream.listen((event) async {
       switch (event.connectionState) {
         // We're connected and good to go!
@@ -224,67 +225,86 @@ class _BLESCRState extends State<BLESCR> {
 
     return configDataToWrite;
   }
+
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<BluetoothState>(
-        stream: FlutterBlue.instance.state,
-        initialData: BluetoothState.unknown,
-        builder: (c, snapshot) {
-          final state = snapshot.data;
-          switch (state) {
-            case BluetoothState.on:
-              {
-                _startScan;
-                break;
-              }
-              break;
-            case BluetoothState.unknown:
-              {
-                break;
-              }
-            default:
-              {
-                return MaterialApp(
-                  home: Scaffold(
-                    appBar: AppBar(
-                      title: const Text("Back to dashboard"),
-                      automaticallyImplyLeading: false,
-                      leading: IconButton(
-                        icon: const Icon(Icons.arrow_back, color: Colors.white),
-                        onPressed: () => Navigator.of(context).pop(),
-                      ),
-                    ),
-                    body: Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          const Text(
-                              "This app requires bluetooth to connect to your device"),
-                          const SizedBox(height: 20.0),
-                          ElevatedButton(
-                            onPressed: (() {
-                              enableBT();
-                            }),
-                            child: const Text('Turn on Bluetooth'),
-                          ),
-                        /*  const SizedBox(height: 10.0),
-                          ElevatedButton(
-                            onPressed: (() {
-                              customEnableBT(context);
-                            }),
-                            child: const Text('Custom request to turn on Bluetooth'),
-                          ), */
-                        ],
-                      ),
-                    ),
-                  ),
-                );
-              }
-              break;
-          }
-          return Text(snapshot.data.toString());
-        });
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Back to dashboard"),
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      backgroundColor: Colors.white,
+      body: Container(),
+      persistentFooterButtons: [
+        // We want to enable this button if the scan has NOT started
+        // If the scan HAS started, it should be disabled.
+        _scanStarted
+            // True condition
+            ? ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey, // background
+                  foregroundColor: Colors.white, // foreground
+                ),
+                onPressed: () {},
+                child: const Icon(Icons.search),
+              )
+            // False condition
+            : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, // background
+                  foregroundColor: Colors.white, // foreground
+                ),
+                // if bluetooth not enabled:
+                // customEnableBT(context)
+                // or
+                //enableBT()
+                onPressed: _startScan,
+                child: const Icon(Icons.search),
+              ),
+        _foundDeviceWaitingToConnect
+            // True condition
+            ? ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.blue, // background
+                  foregroundColor: Colors.white, // foreground
+                ),
+                onPressed: () => scanForWifiNetworks(),
+                child: const Icon(Icons.bluetooth),
+              )
+            // False condition
+            : ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey, // background
+                  foregroundColor: Colors.white, // foreground
+                ),
+                onPressed: () {},
+                child: const Icon(Icons.bluetooth),
+              ),
+        /*_connected
+        // True condition
+            ? ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.blue, // background
+            onPrimary: Colors.white, // foreground
+          ),
+          onPressed: _partyTime,
+          child: const Icon(Icons.celebration_rounded),
+        )
+        // False condition
+            : ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.grey, // background
+            onPrimary: Colors.white, // foreground
+          ),
+          onPressed: () {},
+          child: const Icon(Icons.celebration_rounded),
+        ), */
+      ],
+    );
   }
 
   Future<void> scanForWifiNetworks() async {
@@ -522,6 +542,7 @@ class _BLESCRState extends State<BLESCR> {
   }
 
   void addDeviceToDashboard(String received) {
+    EasyLoading.dismiss();
     if (kDebugMode) {
       print("Adding device to dashboard");
     }
@@ -534,7 +555,7 @@ class _BLESCRState extends State<BLESCR> {
         }
         await FirebaseMessaging.instance.subscribeToTopic("host_$received");
         EasyLoading.showSuccess("Adding device to dashboard...");
-        Future.delayed(const Duration(seconds: 1), () {
+        Future.delayed(const Duration(seconds: 3), () {
           Navigator.of(context).popUntil((route) => route.isFirst);
         });
       } else {

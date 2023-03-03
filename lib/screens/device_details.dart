@@ -21,6 +21,7 @@ class _DeviceDetailsScreenState extends State<DeviceDetailsScreen> {
   late ZoomPanBehavior _zoom1Behavior;
   late ZoomPanBehavior _zoom2Behavior;
   late ZoomPanBehavior _zoom3Behavior;
+  @override
   initState() {
     _zoom1Behavior=ZoomPanBehavior(
         enablePinching: true,

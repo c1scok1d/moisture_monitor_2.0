@@ -57,7 +57,9 @@ class _HomePageState extends State<HomePage> {
         FirebaseAuth.instance.currentUser?.photoURL?.isNotEmpty == true) {
       _profileImage = (FirebaseAuth.instance.currentUser?.photoURL)!;
     }
-    print("HomePage: ${widget.id}");
+    if (kDebugMode) {
+      print("HomePage: ${widget.id}");
+    }
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -104,7 +106,7 @@ class _HomePageState extends State<HomePage> {
               height: 20,
             ),
             Text(
-              "Hello $name,\nWelcome to your dashboard",
+              "Hello $name,\nand welcome to your dashboard",
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 22,
@@ -166,9 +168,11 @@ class _HomePageState extends State<HomePage> {
                                                       .getLatestDeviceData(
                                                           device.hostname!),
                                                   builder: (context, snapshot) {
-                                                    print("DeviceRecord:" +
+                                                    if (kDebugMode) {
+                                                      print("DeviceRecord:" +
                                                         snapshot.connectionState
                                                             .name);
+                                                    }
                                                     if (snapshot.hasData) {
                                                       if (snapshot.data?.data
                                                               ?.isEmpty ==
@@ -363,7 +367,7 @@ class _HomePageState extends State<HomePage> {
                                                                         children: <
                                                                             TextSpan>[
                                                                           const TextSpan(
-                                                                              text: 'Sensor: ',
+                                                                              text: 'Name: ',
                                                                               style: TextStyle(fontWeight: FontWeight.bold)),
                                                                           TextSpan(
                                                                               text: '${record.sensor}'),
@@ -764,7 +768,7 @@ class _HomePageState extends State<HomePage> {
                                                                           TextSpan>[
                                                                         const TextSpan(
                                                                             text:
-                                                                                'Sensor: ',
+                                                                                'Name: ',
                                                                             style:
                                                                                 TextStyle(fontWeight: FontWeight.bold)),
                                                                         TextSpan(
@@ -1007,7 +1011,7 @@ class _HomePageState extends State<HomePage> {
             requestPermission(Permission.locationWhenInUse);
             requestPermission(Permission.location);
           }
-              final bool args = await Navigator.push(context,
+          final bool args = await Navigator.push(context,
                 MaterialPageRoute(
                   builder: (context) => const BLESCR(),
                 ),

@@ -86,7 +86,7 @@ class _RegisterPageState extends State<RegisterPage> {
               Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
-                    Text("Sign-in using your Google or Facebook accout.  \nYou can also sign in using your mobile number.",
+                    Text("Sign-in using your Google or Facebook account.  \nYou can also sign in using your mobile number.",
                       style: TextStyle(
                         fontSize: 10,
                         color: Colors.black,
