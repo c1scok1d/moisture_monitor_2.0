@@ -64,14 +64,28 @@ class _BLESCRState extends State<BLESCR> {
         setState(() {
           _uniqueDevice = device;
           _foundDeviceWaitingToConnect = true;
-          _foo(device.name);
+          _foundDevice(device.name);
         });
+      } else {
+        // todo
+        // display all bluetooth devices as ios devices do not recognize device name
+        // or, find a way for ios device to recognize device name
+        // on press of device name:
+        // _foundDevice(deviceName);
+        if(device.id == this.deviceGATTserviceUUID){
+          setState(() {
+            _uniqueDevice = device;
+            _foundDeviceWaitingToConnect = true;
+            _foundDevice(device.id);
+            //_foundDevice(device.name);
+          });
+        }
       }
     });
     //}
   }
 
-  void _foo(String deviceName) {
+  void _foundDevice(String deviceName) {
     // We're done scanning, we can cancel it
     _scanStream.cancel();
     showDialog(
