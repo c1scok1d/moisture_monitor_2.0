@@ -141,14 +141,20 @@ class MyApp extends StatelessWidget {
       ),
       home: ShowCaseWidget(
         onStart: (index, key) {
-          print('onStart: $index, $key');
+          if (kDebugMode) {
+            print('onStart: $index, $key');
+          }
           SharedPreferences.getInstance().then((prefs) {
-            print('INIT:isFirstTime: ${prefs.getBool('isFirstTime')}');
+            if (kDebugMode) {
+              print('INIT:isFirstTime: ${prefs.getBool('isFirstTime')}');
+            }
             // prefs.remove('isFirstTime');
           });
         },
         onComplete: (index, key) {
-          print('onComplete: $index, $key');
+          if (kDebugMode) {
+            print('onComplete: $index, $key');
+          }
           SharedPreferences.getInstance().then((prefs) {
             prefs.setBool('isFirstTime', false);
           });
@@ -166,12 +172,14 @@ class MyApp extends StatelessWidget {
           return FutureBuilder<User?>(
             future: getCurrentUser(),
             builder: (context, snapshot) {
-              print("MaterialApp:" + snapshot.connectionState.name);
+              if (kDebugMode) {
+                print("MaterialApp:${snapshot.connectionState.name}");
+              }
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData) {
-                  return HomePage();
+                  return const HomePage();
                 } else {
-                  return RegisterPage();
+                  return const RegisterPage();
                 }
               } else {
                 return const Center(child: CircularProgressIndicator());
@@ -189,9 +197,13 @@ class MyApp extends StatelessWidget {
     // GoogleSignIn().signOut();
     // await FirebaseAuth.instance.signOut();
     // print(Dummy().getRecords("deviceId")[0].humid);
-    User? _user = await FirebaseAuth.instance.currentUser;
-    print("UserUID: ${_user?.uid ?? "None"}");
-    print("User: ${_user == null ? "Null" : _user.uid}");
-    return _user;
+    User? user = FirebaseAuth.instance.currentUser;
+    if (kDebugMode) {
+      print("UserUID: ${user?.uid ?? "None"}");
+    }
+    if (kDebugMode) {
+      print("User: ${user == null ? "Null" : user.uid}");
+    }
+    return user;
   }
 }

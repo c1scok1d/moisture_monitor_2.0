@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_reactive_ble/flutter_reactive_ble.dart';
 import 'package:wifi_scan/wifi_scan.dart';
-
+import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import '../../network/network_requests.dart';
 
 class BLESCR extends StatefulWidget {
@@ -84,7 +84,6 @@ class _BLESCRState extends State<BLESCR> {
     });
     //}
   }
-
   void _foundDevice(String deviceName) {
     // We're done scanning, we can cancel it
     _scanStream.cancel();
@@ -272,10 +271,9 @@ class _BLESCRState extends State<BLESCR> {
                   backgroundColor: Colors.blue, // background
                   foregroundColor: Colors.white, // foreground
                 ),
-                // if bluetooth not enabled:
+                //if bluetooth not enabled:
                 // customEnableBT(context)
                 // or
-                //enableBT()
                 onPressed: _startScan,
                 child: const Icon(Icons.search),
               ),
@@ -507,6 +505,43 @@ class _BLESCRState extends State<BLESCR> {
     );
   }
 
+  Future<bool> isBluetoothEnabled() async {
+    final BluetoothState bluetoothState = await FlutterBluetoothSerial.instance.state;
+    if(bluetoothState){
+    return bluetoothState == BluetoothState.STATE_ON;
+  }
+
+  Future<bool?> enableBluetooth() async {
+    if (Platform.isAndroid) {
+      // On Android, open Bluetooth settings
+      return await FlutterBluetoothSerial.instance.requestEnable();
+    } else if (Platform.isIOS) {
+      // On iOS, show a dialog prompting the user to enable Bluetooth
+      return await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Enable Bluetooth"),
+            content: const Text("Please enable Bluetooth in the device settings."),
+            actions: <Widget>[
+              TextButton(
+                child: const Text("Cancel"),
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+              TextButton(
+                child: const Text("Enable"),
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+            ],
+          );
+        },
+      ) ??
+          false;
+    }
+    return false;
+  }
+
+
   void setUpSensorLocation() {
     EasyLoading.dismiss();
     showDialog(
@@ -617,3 +652,49 @@ class _BLESCRState extends State<BLESCR> {
     });
   }
 }
+
+  import 'package:flutter/material.dart';
+
+  class MyHomePage extends StatefulWidget {
+  const MyHomePage({Key? key}) : super(key: key);
+
+  @override
+  _MyHomePageState createState() => _MyHomePageState();
+  }
+
+  class _MyHomePageState extends State<MyHomePage> {
+  List<String> items = [
+  'Item 1',
+  'Item 2',
+  'Item 3',
+  ];
+
+  Future<void> _refresh() async {
+  // Simulate a delay for the refresh action
+  await Future.delayed(Duration(seconds: 1));
+  setState(() {
+  items.add('Item ${items.length + 1}');
+  });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+  return Scaffold(
+  appBar: AppBar(
+  title: Text('Refresh Demo'),
+  ),
+  body: RefreshIndicator(
+  onRefresh: _refresh,
+  child: ListView.builder(
+  itemCount: items.length,
+  itemBuilder: (BuildContext context, int index) {
+  return ListTile(
+  title: Text(items[index]),
+  );
+  },
+  ),
+  ),
+  );
+  }
+  }
+

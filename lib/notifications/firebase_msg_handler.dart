@@ -38,17 +38,23 @@ class FirebaseMsgHandler {
       '}';
 
   Future<void> onBackgroundMessage(RemoteMessage message) async {
-    print(
+    if (kDebugMode) {
+      print(
         'Handling a background message ${message.messageId}: ${message.data['hostname']}');
+    }
     if (message.data.containsKey('hostname')) {
       showMessage(message);
     } else {
-      print('No hostname found in message');
+      if (kDebugMode) {
+        print('No hostname found in message');
+      }
     }
   }
 
   Future<void> showMessage(RemoteMessage message) async {
-    print('Showing message:' + message.data['id']);
+    if (kDebugMode) {
+      print('Showing message:' + message.data['id']);
+    }
 
     await Firebase.initializeApp();
     flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -81,7 +87,7 @@ class FirebaseMsgHandler {
           channel.name,
           icon: 'ic_launcher',
         ),
-        iOS: IOSNotificationDetails(
+        iOS: const IOSNotificationDetails(
           presentBadge: true,
           presentSound: true,
         ),

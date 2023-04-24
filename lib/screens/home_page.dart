@@ -73,10 +73,6 @@ class _HomePageState extends State<HomePage> {
                     radius: 70,
                     backgroundColor: Colors.transparent,
                     child: Image.asset('assets/images/logo.png'),
-
-                    /*backgroundImage: NetworkImage(_profileImage == ""
-                        ? "https://www.shareicon.net/download/128x128//2016/07/26/802016_man_512x512.png"
-                        : _profileImage),*/
                   ),
                 ),
                 Align(

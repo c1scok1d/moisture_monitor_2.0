@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:rodland_farms/network/get_user_devices_response.dart';
 import 'package:rodland_farms/network/images_response.dart';
@@ -12,12 +13,12 @@ import 'get_device_data_response.dart';
 class NetworkRequests {
   String base = "https://athome.rodlandfarms.com";
   String baseUrl = "https://athome.rodlandfarms.com/api";
-  Future<String?> apiToken = FlutterSecureStorage().read(key: 'api_token');
+  Future<String?> apiToken = const FlutterSecureStorage().read(key: 'api_token');
 
   NetworkRequests();
 
   Future<SaveUserResponse> saveUser(String login_token) async {
-    final response = await http.post(Uri.parse(base + "/user/save"),
+    final response = await http.post(Uri.parse("$base/user/save"),
         body: {"login_token": login_token});
 
     if (response.statusCode == 200) {
@@ -35,9 +36,9 @@ class NetworkRequests {
   }
 
   Future<GetUserDeviceResponse> getUserDevices() async {
-    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
+    String? apiToken = await const FlutterSecureStorage().read(key: 'api_token');
     final response = await http
-        .get(Uri.parse(baseUrl + "/user/devices?api_token=" + apiToken!));
+        .get(Uri.parse("$baseUrl/user/devices?api_token=${apiToken!}"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -54,16 +55,18 @@ class NetworkRequests {
   }
 
   Future<SaveDeviceResponse> deleteDevice(String hostname) async {
-    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
+    String? apiToken = await const FlutterSecureStorage().read(key: 'api_token');
     final response = await http
-        .get(Uri.parse(baseUrl + "/user/delete/"+hostname+"?api_token=" + apiToken!));
+        .get(Uri.parse("$baseUrl/user/delete/$hostname?api_token=${apiToken!}"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       return SaveDeviceResponse.fromJson(jsonDecode(response.body));
     } else {
-      print(response.body);
+      if (kDebugMode) {
+        print(response.body);
+      }
       // If the server did not return a 200 OK response,
       // then throw an exception.
       return SaveDeviceResponse(
@@ -74,9 +77,9 @@ class NetworkRequests {
   }
 
   Future<GetDeviceDataResponse> getLatestDeviceData(String hostname) async {
-    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
+    String? apiToken = await const FlutterSecureStorage().read(key: 'api_token');
     final response = await http.get(Uri.parse(
-        baseUrl + "/user/" + hostname + "/latest?api_token=" + apiToken!));
+        "$baseUrl/user/$hostname/latest?api_token=${apiToken!}"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -94,12 +97,8 @@ class NetworkRequests {
 
   Future<GetDeviceDataResponse> getFullDeviceData(String hostname) async {
     // await Future.delayed(Duration(seconds: 100));
-    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
-    final response = await http.get(Uri.parse(baseUrl +
-        "/user/devices/" +
-        hostname +
-        "/data?api_token=" +
-        apiToken!));
+    String? apiToken = await const FlutterSecureStorage().read(key: 'api_token');
+    final response = await http.get(Uri.parse("$baseUrl/user/devices/$hostname/data?api_token=${apiToken!}"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -117,12 +116,8 @@ class NetworkRequests {
 
   Future<ImagesResponse> getAllImages(String hostname) async {
     // await Future.delayed(Duration(seconds: 100));
-    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
-    final response = await http.get(Uri.parse(baseUrl +
-        "/user/" +
-        hostname +
-        "/images?api_token=" +
-        apiToken!));
+    String? apiToken = await const FlutterSecureStorage().read(key: 'api_token');
+    final response = await http.get(Uri.parse("$baseUrl/user/$hostname/images?api_token=${apiToken!}"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -139,16 +134,18 @@ class NetworkRequests {
   }
 
   Future<SaveDeviceResponse> saveDevice(String hostname) async {
-    String? apiToken = await FlutterSecureStorage().read(key: 'api_token');
+    String? apiToken = await const FlutterSecureStorage().read(key: 'api_token');
     final response = await http.post(Uri.parse(
-        baseUrl + "/user/save/" + hostname + "?api_token=" + apiToken!));
+        "$baseUrl/user/save/$hostname?api_token=${apiToken!}"));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
       return SaveDeviceResponse.fromJson(jsonDecode(response.body));
     } else {
-      print(response.body);
+      if (kDebugMode) {
+        print(response.body);
+      }
       // If the server did not return a 200 OK response,
       // then throw an exception.
       return SaveDeviceResponse(
